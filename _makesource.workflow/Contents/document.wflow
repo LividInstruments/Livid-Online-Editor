@@ -52,7 +52,7 @@
 				<dict>
 					<key>fileNames</key>
 					<array>
-						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/src.zip</string>
+						<string>/Volumes/Satellite/gitbins/Livid Online Editor/src.zip</string>
 					</array>
 				</dict>
 				<key>BundleIdentifier</key>
@@ -105,7 +105,7 @@
 				<key>isViewVisible</key>
 				<true/>
 				<key>location</key>
-				<string>309.500000:704.000000</string>
+				<string>302.000000:704.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Get Specified Finder Items.action/Contents/Resources/English.lproj/main.nib</string>
 			</dict>
@@ -217,28 +217,28 @@
 				<dict>
 					<key>fileNames</key>
 					<array>
-						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/css</string>
-						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/faceplate_0.gif</string>
-						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/faceplate_2.gif</string>
-						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/faceplate_3.gif</string>
-						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/faceplate_4.gif</string>
-						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/faceplate_7.gif</string>
-						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/faceplate_8.gif</string>
-						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/faceplate_11.gif</string>
-						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/faceplate_12.gif</string>
-						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/favicon.ico</string>
-						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/font</string>
-						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/How This Works.rtf</string>
-						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/index.html</string>
-						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/js</string>
-						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/labels.html</string>
-						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/livid_logo_corner.png</string>
-						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/livid_logo_select.png</string>
-						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/logo.gif</string>
-						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/raphael-min.js</string>
-						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/style.css</string>
-						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/t.gif</string>
-						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/cur_fw.json</string>
+						<string>/Volumes/Satellite/gitbins/Livid Online Editor/css</string>
+						<string>/Volumes/Satellite/gitbins/Livid Online Editor/cur_fw.json</string>
+						<string>/Volumes/Satellite/gitbins/Livid Online Editor/faceplate_0.gif</string>
+						<string>/Volumes/Satellite/gitbins/Livid Online Editor/faceplate_2.gif</string>
+						<string>/Volumes/Satellite/gitbins/Livid Online Editor/faceplate_3.gif</string>
+						<string>/Volumes/Satellite/gitbins/Livid Online Editor/faceplate_4.gif</string>
+						<string>/Volumes/Satellite/gitbins/Livid Online Editor/faceplate_7.gif</string>
+						<string>/Volumes/Satellite/gitbins/Livid Online Editor/faceplate_8.gif</string>
+						<string>/Volumes/Satellite/gitbins/Livid Online Editor/faceplate_11.gif</string>
+						<string>/Volumes/Satellite/gitbins/Livid Online Editor/faceplate_12.gif</string>
+						<string>/Volumes/Satellite/gitbins/Livid Online Editor/favicon.ico</string>
+						<string>/Volumes/Satellite/gitbins/Livid Online Editor/font</string>
+						<string>/Volumes/Satellite/gitbins/Livid Online Editor/How This Works.rtf</string>
+						<string>/Volumes/Satellite/gitbins/Livid Online Editor/index.html</string>
+						<string>/Volumes/Satellite/gitbins/Livid Online Editor/js</string>
+						<string>/Volumes/Satellite/gitbins/Livid Online Editor/labels.html</string>
+						<string>/Volumes/Satellite/gitbins/Livid Online Editor/livid_logo_corner.png</string>
+						<string>/Volumes/Satellite/gitbins/Livid Online Editor/livid_logo_select.png</string>
+						<string>/Volumes/Satellite/gitbins/Livid Online Editor/logo.gif</string>
+						<string>/Volumes/Satellite/gitbins/Livid Online Editor/raphael-min.js</string>
+						<string>/Volumes/Satellite/gitbins/Livid Online Editor/style.css</string>
+						<string>/Volumes/Satellite/gitbins/Livid Online Editor/t.gif</string>
 					</array>
 				</dict>
 				<key>BundleIdentifier</key>
@@ -291,7 +291,7 @@
 				<key>isViewVisible</key>
 				<true/>
 				<key>location</key>
-				<string>309.500000:400.000000</string>
+				<string>302.000000:400.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Get Specified Finder Items.action/Contents/Resources/English.lproj/main.nib</string>
 			</dict>
@@ -355,7 +355,7 @@
 					<key>archiveName</key>
 					<string>src.zip</string>
 					<key>destinationPath</key>
-					<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot</string>
+					<string>/Volumes/Satellite/gitbins/Livid Online Editor</string>
 					<key>ignoreUnreadableItems</key>
 					<false/>
 				</dict>
@@ -439,7 +439,7 @@
 				<key>isViewVisible</key>
 				<true/>
 				<key>location</key>
-				<string>309.500000:162.000000</string>
+				<string>302.000000:162.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Create Archive.action/Contents/Resources/English.lproj/main.nib</string>
 			</dict>
@@ -449,21 +449,21 @@
 	</array>
 	<key>connectors</key>
 	<dict>
-		<key>8549326F-7575-494B-B9D9-9E7FC3C76466</key>
+		<key>1D2256FB-48DA-4C28-99A2-F1B912FA0E81</key>
 		<dict>
 			<key>from</key>
 			<string>48C82D90-7455-4E72-9271-52F2B713FF72 - 48C82D90-7455-4E72-9271-52F2B713FF72</string>
 			<key>to</key>
 			<string>ED4F8412-7DD4-4387-A3BE-7035EB7EFC8E - ED4F8412-7DD4-4387-A3BE-7035EB7EFC8E</string>
 		</dict>
-		<key>BAB942DE-AA81-4632-93D8-ED6F4FDEDF4D</key>
+		<key>379489AF-871B-4B1B-9D16-94C6E3E65684</key>
 		<dict>
 			<key>from</key>
 			<string>A13C3D3E-C79F-4AD5-A917-8735E0296F6A - A13C3D3E-C79F-4AD5-A917-8735E0296F6A</string>
 			<key>to</key>
 			<string>3E96116D-46EB-4220-A462-ACD881515634 - 3E96116D-46EB-4220-A462-ACD881515634</string>
 		</dict>
-		<key>CF6B9D01-E2F7-44D3-8E64-FBB423CF6458</key>
+		<key>7CE93A4C-E4C7-40BD-8339-EC7851626447</key>
 		<dict>
 			<key>to</key>
 			<string>48C82D90-7455-4E72-9271-52F2B713FF72 - 48C82D90-7455-4E72-9271-52F2B713FF72</string>
