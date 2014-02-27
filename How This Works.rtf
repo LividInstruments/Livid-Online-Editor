@@ -1,11 +1,11 @@
-{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf360
-{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fmodern\fcharset0 Courier;}
+{\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf400
+\cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fmodern\fcharset0 Courier;}
 {\colortbl;\red255\green255\blue255;}
 {\info
 {\author Peter Nyboer}
 {\*\company Livid Instruments}
 {\*\copyright 2012 Livid Instruments}}\margl1440\margr1440\vieww12000\viewh10200\viewkind0
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 
 \f0\fs24 \cf0 Guide to the web based editor code.\
 ADDING A CONTROLLER\'85\
@@ -125,7 +125,17 @@ When a user makes a change in the inspectors (forms), the jquery listener has a 
 \b0  functions.\
 \
 WHEN A MIDI (note,cc) MESSAGE IS SENT FROM THE CONTROLLER\
+\
 WHEN A CONTROL ELEMENT IS CLICKED\
+call function 
+\b getid()
+\b0  to parse the DOM name into type and index\
+which calls function 
+\b updatectlinspector()
+\b0  which gets all the relevant data for the index at that type of control in the livid object, and updates the DOM ui. There is a similar function for the globals 
+\b updateglobalinspector()\
+
+\b0 \
 WHEN A CONTROL ELEMENT IS MOUSED-OVER\
 \
 }

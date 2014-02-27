@@ -1298,7 +1298,7 @@ function beginfaceplate(){
 		//in the stored values in the livid object and send sysex to the controller to make it so.
 		var theform=$(this).closest("form");
 		var type=$(this).closest("form").attr('id'); //type, like "btn" or "ledring"
-		log("you are using form id "+type);
+		clog("you are using form id "+type);
 		if(type!="sendmidi" && type!="colormap"){
 			var index=theform.find(":input[type=hidden]").val(); //control ID
 			var test=theform.find(":input[type=hidden]").attr('name'); //control ID

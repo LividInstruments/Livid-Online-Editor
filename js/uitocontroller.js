@@ -939,7 +939,7 @@ function UI(id,type,param,val){ //e.g. 1 btn nn 10
 		}
 		
 		//assign value to parameter in livid object:
-		//clog("to livid type: "+type+" id: "+id+" param: "+param+" val: "+val);
+		clog("to livid type: "+type+" id: "+id+" param: "+param+" val: "+val);
 		livid[type][id][param]=val;
 		//update the controller:
 		if(updatenow){
@@ -1040,7 +1040,7 @@ function getid(){
 	if(!requesting){	
 		var a = Array.prototype.slice.call(arguments, 0); //arg are sth like "btn_25" or "enc_7" 
 		var p = a[0].split("_");
-		log("get ctl id "+p[0]+" "+p[1]);
+		//clog("get ctl id "+p[0]+" "+p[1]);
 		var type = p[0];
 		var id = parseInt(p[1]);
 		undobuffer[0] = clone(livid[type][id]);
@@ -1132,7 +1132,7 @@ function colormapper(CMD){
 //used for converting livid object to Sysex for cmds 35 and 36
 function ledmapper(CMD,ctl,p){
 	//clog("LED cc "+sx[36]);
-	//clog("ledmapper "+CMD+" "+ctl+" "+p+" len "+sx[CMD].length);
+	clog("ledmapper "+CMD+" "+ctl+" "+p+" len "+sx[CMD].length);
 	//first, use the undo buffer that is created in the UI() to determine what note or cc# is being used:
 	var nncheck=undothis[0][2];
 	var crcheck=sx[CMD][nncheck]; //what cr is at this note or cc #?
@@ -2046,7 +2046,8 @@ function updatectlinspector(type,id){
 		if(ele_type!="submit" && ele_type!="hidden"){
 			if(ele_type == "checkbox"){
 				var ischeck = thesetting; //boolean
-				$(this).attr("checked",ischeck);
+				//clog("type "+type+" name "+ele_name+" setting "+thesetting);
+				$(this).prop("checked",ischeck);
 			}else{
 				//log("type "+type+" name "+ele_name+" setting "+thesetting);
 				$(this).val(thesetting);
@@ -2074,7 +2075,7 @@ function updatectlinspector(type,id){
 			ele_name = this.name;
 			if(ele_name!="ctlid"){
 				thesetting = livid[type][id][ele_name]; //name of html element, such as "nn"or "mode"
-				log("raw setting "+type+" "+id+" "+ele_name+" "+thesetting);
+				//clog("raw setting "+type+" "+id+" "+ele_name+" "+thesetting);
 			}
 			
 			if(this.type == "select-one" || this.type == "menu"){
@@ -2104,10 +2105,11 @@ function updatectlinspector(type,id){
 			if(this.type!="submit"){
 				if(this.type == "checkbox"){
 					var ischeck = thesetting; //boolean
-					$(this).attr("checked",ischeck);
+					$(this).prop("checked",thesetting);
+					//clog("--"+this.type+" : populate "+this.name+" with "+thesetting+" type "+typeof thesetting);
 				}else{
 					$(this).val(thesetting);
-					log("--"+this.type+" : populate "+this.name+" with "+thesetting);
+					//clog("--"+this.type+" : populate "+this.name+" with "+thesetting);
 				}
 			}
 			if(this.type == "hidden"){
@@ -2122,6 +2124,7 @@ function updatectlinspector(type,id){
 	//log("end select "+"[ID: "+id+"]");
 }
 
+//update the ui for the globals panel
 function updateglobalinspector(ctlui,val){
 	var speedhash = ["1x","2x","3x","4x","5x","6x","7x","8x","9x","10x","11x","12x","13x","14x","15x","1/2x","1/3x","1/4x","1/5x","1/6x","1/7x","1/8x","1/9x","1/10x","1/11x","1/12x","1/13x","1/14x","1/15x"];
 	var thesetting=val;
@@ -2143,7 +2146,7 @@ function updateglobalinspector(ctlui,val){
 		break;
 		case "checkbox":
 		var ischeck = thesetting>0; //make it bool
-		formele.attr("checked",ischeck);
+		formele.prop("checked",ischeck);
 		break;
 	}
 }
