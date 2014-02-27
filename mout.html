@@ -1,0 +1,232 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Select MIDI Out</title>
+
+<style type="text/css">
+.hidden {
+ visibility: hidden;
+ width: 0px;
+ height: 0px;
+ margin: 0px;
+ padding: 0px;
+ border-style: none;
+ border-width: 0px;
+ max-width: 0px;
+ max-height: 0px;
+}
+</style>
+
+<script type="text/javascript" charset="utf-8">
+	var inquiry =  [240,126,127,6,1,247]; //generic inquiry sysex message
+	var pid = 7; //product id. using OhmRGB
+	var head = [240, 0, 1, 97, pid]; //sysex header for Livid products
+	var eom = 247; //end of message byte for sysex
+	var requests = []; //container for the request commands
+	requests[4]=[4,8,11,12,13,15,16,17,22,23,26,30,31,32,35,36,37,38,39,50,54]; //all the settings requests we need for the code v2
+	requests[7]=[4,8,10,11]; //some settings requests we need for tests
+		
+	var sysexbuffer = new Array(); //buffer for sysex data, in midiProc
+	var issysex = false;
+	
+	var settings = new Array(); //used to store sysex settings data when received from the controller
+	
+	function log(s){
+		console.log(s);
+	}
+	
+	//print info to the browser window
+	function blog(s) {
+	  var d = document.getElementById("console");
+	  d.innerHTML = d.innerHTML+s+"<br />";
+	}
+	
+	//open the MIDI port selected by the menu
+	function midioutports(){
+		Jazz.MidiOutOpen(outports.options[outports.selectedIndex].value);
+	}	
+	
+	//generic function that I re-write as needed for testing!
+	function testfcn(v){
+		if(Jazz.isJazz){
+			if(v==0){
+				counter=0;
+				Jazz.MidiOutLong(inquiry);
+				log("send inquiry");
+			}
+		}
+	}
+	
+	var tnote=0;
+	function testnote(){
+		if(Jazz.isJazz){
+				var note = tnote%64;
+				Jazz.MidiOut(144,note-1,2);
+				Jazz.MidiOut(144,note,64);
+				tnote++;
+		}
+	}
+	
+	function testsx(){
+		if(Jazz.isJazz){
+				Jazz.MidiOutLong([240,0,1,97,12,7,4,247]);
+				tnote++;
+		}
+	}
+	//send the inquiry sysex message to each port on successive clicks of the the "inquiry" button
+	var counter=0;
+	function testloop(){
+		log("begin test "+inlist.length);
+		//for(var i=0;i<list.length;i++){
+			log("send inquiry to port "+counter+" "+inlist[counter]);
+			//Jazz.MidiInOpen(inlist[counter],function(t,a){ midiProc(a);});			
+			Jazz.MidiOutOpen(inlist[counter]);			
+			Jazz.MidiOutLong(inquiry);
+		//}
+		counter++;
+	}
+	
+	//sets the MIDI input port when selected with menu.
+	function midiinports(){
+		Jazz.MidiInOpen(inports.options[inports.selectedIndex].value,function(t,a){ midiProc(a);});
+	}
+	
+	//begin the request routine. sends the first request, successive requests are sent after reception of requests - a sort of handshake loop.
+	var cmdno=0;
+	var requesting=0;
+	function request(){
+		log("BEGIN REQUEST ROUTINE");
+		cmdno=0;
+		requesting = 1;
+		var req=requests[pid][cmdno];
+		log('>first REQ '+req+" ("+cmdno+" of "+requests[pid].length+")");
+		cmdout(req);
+	}
+	
+	function midiProc(){
+		var arg = Array.prototype.slice.call(arguments, 0);
+		var lasti = (arg[0].length-1);
+		log( "in "+arg[0] ); 
+		//working around a bug in the MIDI plug in where it breaks up long sysex strings: we detect start and end of sysex, and gather it into a buffer.
+		if(issysex){
+			sysexbuffer = sysexbuffer.concat(arg[0]);
+		}
+		if(arg[0][0]==240){
+			sysexbuffer = new Array();
+			sysexbuffer = sysexbuffer.concat(arg[0]);
+			issysex = true;
+		}
+		if(arg[0][lasti]==247){
+			issysex = false;
+			if(requesting){
+				settings[cmdno]=sysexbuffer.slice(0); //clone the buffer into the settings container.
+				cmdno++;
+				if(cmdno<requests[pid].length){ //if we still have items left in the "requests" array
+					var req=requests[pid][cmdno]; //get the request ID
+					log(">next REQ "+req+" ("+cmdno+" of "+requests[pid].length+")");
+					cmdout(req); //send the request
+					//var output = setTimeout(function(){ cmdout(req) },60); //schedule the next one
+				}else{
+					blog("REQ DONE");
+					
+				}
+			}
+		}else if(!issysex){
+			//log( "midi "+arg[0] ); 
+		}
+	}
+
+	function cmdout(v){
+		var cmd;
+		var midiout=[];	
+		cmd = v;
+		//now that we know the cmd number of the sysex string,
+		//we can use that to output midi:
+		if(v=="inquiry"){
+			midiout = inquiry;
+		}else{
+			if(requesting){ 
+				midiout = midiout.concat(head,7,cmd,eom); //request settings for "cmd" from controller, for example, 240,0,1,97,4,7,11,247 gets the settings for all buttons
+			}
+		}
+		mout(midiout); //send the midi data to the controller.
+	}
+	
+	function mout(){
+		var arg = Array.prototype.slice.call(arguments, 0);
+		log("midiout "+arg[0]+" len: "+arg[0].length );
+		//Jazz.MidiOutLong([240,0,1,97,12,7,4,247]);
+		Jazz.MidiOutLong(arg[0]);
+		//testnote();
+	}
+	
+	function printsx(){
+		if(settings.length){
+			for(i in settings){
+				log("settings: "+settings[i]);
+			}
+		}else{
+			log("----nothing stored in settings array----");
+		}
+	}
+</script>
+
+</head>
+
+<body>
+<h3>TEST MIDI</h3>
+
+<div id=midiio class="hidden">
+MIDI Out: <select id=outports onchange='midioutports();'></select><br/>
+MIDI In: <select id=inports onchange='midiinports();'></select>
+</div>
+
+<!--<p><button onmousedown='testloop();'> test</button></p>
+<p><button onmousedown='testfcn(0);'> inquiry</button></p>
+<p><button onmousedown='printsx();'> print the sysex settings that have been stored</button></p>-->
+<p><button onmousedown='testnote();'> note</button></p>
+<p><button onmousedown='testsx();'> sx</button></p>
+<p><button onmousedown='request();'> request settings</button></p>
+
+<div id="console"></div>
+
+<object id="Jazz1" classid="CLSID:1ACE1618-1C7D-4561-AEE1-34842AA85E90" class="hidden">
+  <object id="Jazz2" type="audio/x-jazz" class="hidden">
+<p style="visibility:visible;">This page requires <a href=http://jazz-soft.net>Jazz-Plugin</a> ...</p>
+  </object>
+</object>
+
+<script><!--
+
+var Jazz = document.getElementById("Jazz1"); if(!Jazz || !Jazz.isJazz) Jazz = document.getElementById("Jazz2");
+var outports=document.getElementById('outports');
+try{
+	var list=Jazz.MidiOutList();
+	for(var i in list){
+		outports[i]=new Option(list[i],list[i],i==0,i==0);
+	}
+	log("outs "+list);
+		document.getElementById('midiio').className=''; //change class to nothing so it's visible
+	}
+catch(err){}
+
+var inports=document.getElementById('inports');
+var inlist=[];
+try{
+	inlist=Jazz.MidiInList();
+	for(var i in list){
+		inports[i]=new Option(list[i],list[i],i==0,i==0);
+	}
+	log("ins "+list);
+	document.getElementById('midiio').className=''; //change class to nothing so it's visible
+}
+catch(err){}
+
+--></script>
+
+
+
+
+
+</body>
+</html>

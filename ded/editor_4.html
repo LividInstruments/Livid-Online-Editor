@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta http-equiv="Page-Enter" content="blendtrans(duration=1.0)" /><!--for IE-->
+		<meta http-equiv="Page-Exit" content="blendtrans(duration=1.0)" />
+        <title>Livid Editor</title>
+        <style type="text/css" media="screen">
+            #canvas {
+                position: absolute;
+                width: 647px;
+                height: 359px;
+                top: 0px
+            	left: 0px;
+                padding: 0px;
+                margin: 0px;
+            }
+            #console {
+            	position: absolute;
+            	top: 360px;
+            	left: 0px;
+            	padding: 0px;
+                margin: 0px;
+            }
+            #paper {
+                position: absolute;
+                width: 647px;
+                height: 359px;
+                z-index: 10;
+                top: 0px
+            	left: 0px;
+            	padding: 0px;
+                margin: 0px;
+            }
+            #background {
+                position: absolute;
+                width: 647px;
+                height: 359px;
+                z-index = 0;
+                top: 0px
+            	left: 0px;
+            	padding: 0px;
+                margin: 0px;
+            }
+            h2 {
+                text-align: center;
+            }
+            body{
+            	margin: 0px;
+            	padding: 0px;
+            	background-color: white;
+                background-image: url('faceplate_4.gif');
+            }
+        </style>
+        <script src="raphael-min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/jquery-1.7.2.min.js"></script>
+		<script src="js/faceplate_4.js"></script>
+		<script type="text/javascript" charset="utf-8">
+			function log(s) {
+			  var d = document.getElementById("console");
+			  d.innerHTML = d.innerHTML+s;
+			}       
+        </script>
+    </head>
+    <body>
+        <div id="canvas">
+            <div id="paper"></div>
+           <div id="background"></div>
+        </div>
+    	<!--<div id="console"></div>-->
+    </body>
+</html>

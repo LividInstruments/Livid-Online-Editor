@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AMApplicationBuild</key>
+	<string>346</string>
+	<key>AMApplicationVersion</key>
+	<string>2.3</string>
+	<key>AMDocumentVersion</key>
+	<string>2</string>
+	<key>actions</key>
+	<array>
+		<dict>
+			<key>action</key>
+			<dict>
+				<key>AMAccepts</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Optional</key>
+					<true/>
+					<key>Types</key>
+					<array>
+						<string>com.apple.cocoa.path</string>
+					</array>
+				</dict>
+				<key>AMActionVersion</key>
+				<string>1.1.2</string>
+				<key>AMApplication</key>
+				<array>
+					<string>Finder</string>
+				</array>
+				<key>AMParameterProperties</key>
+				<dict>
+					<key>fileNames</key>
+					<dict/>
+				</dict>
+				<key>AMProvides</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Types</key>
+					<array>
+						<string>com.apple.cocoa.path</string>
+					</array>
+				</dict>
+				<key>ActionBundlePath</key>
+				<string>/System/Library/Automator/Get Specified Finder Items.action</string>
+				<key>ActionName</key>
+				<string>Get Specified Finder Items</string>
+				<key>ActionParameters</key>
+				<dict>
+					<key>fileNames</key>
+					<array>
+						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/src.zip</string>
+					</array>
+				</dict>
+				<key>BundleIdentifier</key>
+				<string>com.apple.Automator.SpecifiedFiles</string>
+				<key>CFBundleVersion</key>
+				<string>1.1.2</string>
+				<key>CanShowSelectedItemsWhenRun</key>
+				<false/>
+				<key>CanShowWhenRun</key>
+				<true/>
+				<key>Category</key>
+				<array>
+					<string>AMCategoryFilesAndFolders</string>
+				</array>
+				<key>Class Name</key>
+				<string>SpecifiedFilesAction</string>
+				<key>InputUUID</key>
+				<string>7E4F0718-66FB-4B02-9C7E-B203A2D41B31</string>
+				<key>Keywords</key>
+				<array>
+					<string>File</string>
+					<string>Choose</string>
+					<string>Find</string>
+					<string>Get</string>
+				</array>
+				<key>OutputUUID</key>
+				<string>C31427F2-A32B-4E39-AF6D-B29EF6D7D0BF</string>
+				<key>UUID</key>
+				<string>A13C3D3E-C79F-4AD5-A917-8735E0296F6A</string>
+				<key>UnlocalizedApplications</key>
+				<array>
+					<string>Finder</string>
+				</array>
+				<key>arguments</key>
+				<dict>
+					<key>0</key>
+					<dict>
+						<key>default value</key>
+						<array/>
+						<key>name</key>
+						<string>fileNames</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>0</string>
+					</dict>
+				</dict>
+				<key>isViewVisible</key>
+				<true/>
+				<key>location</key>
+				<string>309.500000:704.000000</string>
+				<key>nibPath</key>
+				<string>/System/Library/Automator/Get Specified Finder Items.action/Contents/Resources/English.lproj/main.nib</string>
+			</dict>
+			<key>isViewVisible</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>action</key>
+			<dict>
+				<key>AMAccepts</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Optional</key>
+					<false/>
+					<key>Types</key>
+					<array>
+						<string>com.apple.cocoa.path</string>
+					</array>
+				</dict>
+				<key>AMActionVersion</key>
+				<string>1.1.2</string>
+				<key>AMApplication</key>
+				<array>
+					<string>Finder</string>
+				</array>
+				<key>AMParameterProperties</key>
+				<dict/>
+				<key>ActionBundlePath</key>
+				<string>/System/Library/Automator/Move Finder Items to Trash.action</string>
+				<key>ActionName</key>
+				<string>Move Finder Items to Trash</string>
+				<key>ActionParameters</key>
+				<dict/>
+				<key>BundleIdentifier</key>
+				<string>com.apple.Automator.MoveToTrash</string>
+				<key>CFBundleVersion</key>
+				<string>1.1.2</string>
+				<key>CanShowSelectedItemsWhenRun</key>
+				<true/>
+				<key>CanShowWhenRun</key>
+				<false/>
+				<key>Category</key>
+				<array>
+					<string>AMCategoryUtilities</string>
+					<string>AMCategoryFilesAndFolders</string>
+				</array>
+				<key>Class Name</key>
+				<string>MoveToTrashAction</string>
+				<key>InputUUID</key>
+				<string>1D2707ED-DF16-4CCE-8412-86193FE9524D</string>
+				<key>Keywords</key>
+				<array>
+					<string>File</string>
+					<string>Folder</string>
+					<string>Move</string>
+					<string>Trash</string>
+					<string>Delete</string>
+				</array>
+				<key>UUID</key>
+				<string>3E96116D-46EB-4220-A462-ACD881515634</string>
+				<key>UnlocalizedApplications</key>
+				<array>
+					<string>Finder</string>
+				</array>
+				<key>arguments</key>
+				<dict/>
+			</dict>
+		</dict>
+		<dict>
+			<key>action</key>
+			<dict>
+				<key>AMAccepts</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Optional</key>
+					<true/>
+					<key>Types</key>
+					<array>
+						<string>com.apple.cocoa.path</string>
+					</array>
+				</dict>
+				<key>AMActionVersion</key>
+				<string>1.1.2</string>
+				<key>AMApplication</key>
+				<array>
+					<string>Finder</string>
+				</array>
+				<key>AMParameterProperties</key>
+				<dict>
+					<key>fileNames</key>
+					<dict/>
+				</dict>
+				<key>AMProvides</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Types</key>
+					<array>
+						<string>com.apple.cocoa.path</string>
+					</array>
+				</dict>
+				<key>ActionBundlePath</key>
+				<string>/System/Library/Automator/Get Specified Finder Items.action</string>
+				<key>ActionName</key>
+				<string>Get Specified Finder Items</string>
+				<key>ActionParameters</key>
+				<dict>
+					<key>fileNames</key>
+					<array>
+						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/css</string>
+						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/faceplate_0.gif</string>
+						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/faceplate_2.gif</string>
+						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/faceplate_3.gif</string>
+						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/faceplate_4.gif</string>
+						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/faceplate_7.gif</string>
+						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/faceplate_8.gif</string>
+						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/faceplate_11.gif</string>
+						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/faceplate_12.gif</string>
+						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/favicon.ico</string>
+						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/font</string>
+						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/How This Works.rtf</string>
+						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/index.html</string>
+						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/js</string>
+						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/labels.html</string>
+						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/livid_logo_corner.png</string>
+						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/livid_logo_select.png</string>
+						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/logo.gif</string>
+						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/raphael-min.js</string>
+						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/style.css</string>
+						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/t.gif</string>
+						<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot/cur_fw.json</string>
+					</array>
+				</dict>
+				<key>BundleIdentifier</key>
+				<string>com.apple.Automator.SpecifiedFiles</string>
+				<key>CFBundleVersion</key>
+				<string>1.1.2</string>
+				<key>CanShowSelectedItemsWhenRun</key>
+				<false/>
+				<key>CanShowWhenRun</key>
+				<true/>
+				<key>Category</key>
+				<array>
+					<string>AMCategoryFilesAndFolders</string>
+				</array>
+				<key>Class Name</key>
+				<string>SpecifiedFilesAction</string>
+				<key>InputUUID</key>
+				<string>00A077CC-8668-4D41-866F-A949A6016221</string>
+				<key>Keywords</key>
+				<array>
+					<string>File</string>
+					<string>Choose</string>
+					<string>Find</string>
+					<string>Get</string>
+				</array>
+				<key>OutputUUID</key>
+				<string>468FAD19-8EA1-4523-A617-3174FF5094C3</string>
+				<key>UUID</key>
+				<string>48C82D90-7455-4E72-9271-52F2B713FF72</string>
+				<key>UnlocalizedApplications</key>
+				<array>
+					<string>Finder</string>
+				</array>
+				<key>arguments</key>
+				<dict>
+					<key>0</key>
+					<dict>
+						<key>default value</key>
+						<array/>
+						<key>name</key>
+						<string>fileNames</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>0</string>
+					</dict>
+				</dict>
+				<key>isViewVisible</key>
+				<true/>
+				<key>location</key>
+				<string>309.500000:400.000000</string>
+				<key>nibPath</key>
+				<string>/System/Library/Automator/Get Specified Finder Items.action/Contents/Resources/English.lproj/main.nib</string>
+			</dict>
+			<key>isViewVisible</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>action</key>
+			<dict>
+				<key>AMAccepts</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Optional</key>
+					<false/>
+					<key>Types</key>
+					<array>
+						<string>com.apple.cocoa.path</string>
+					</array>
+				</dict>
+				<key>AMActionVersion</key>
+				<string>1.3.2</string>
+				<key>AMApplication</key>
+				<array>
+					<string>Finder</string>
+				</array>
+				<key>AMParameterProperties</key>
+				<dict>
+					<key>archiveName</key>
+					<dict>
+						<key>tokenizedValue</key>
+						<array>
+							<string>src.zip</string>
+						</array>
+					</dict>
+					<key>destinationPath</key>
+					<dict>
+						<key>isPathPopUp</key>
+						<true/>
+						<key>variableUUIDsInMenu</key>
+						<array/>
+					</dict>
+					<key>ignoreUnreadableItems</key>
+					<dict/>
+				</dict>
+				<key>AMProvides</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Types</key>
+					<array>
+						<string>com.apple.cocoa.path</string>
+					</array>
+				</dict>
+				<key>ActionBundlePath</key>
+				<string>/System/Library/Automator/Create Archive.action</string>
+				<key>ActionName</key>
+				<string>Create Archive</string>
+				<key>ActionParameters</key>
+				<dict>
+					<key>archiveName</key>
+					<string>src.zip</string>
+					<key>destinationPath</key>
+					<string>/Volumes/Satellite/Livid Max/Livid Editor/webroot</string>
+					<key>ignoreUnreadableItems</key>
+					<false/>
+				</dict>
+				<key>BundleIdentifier</key>
+				<string>com.apple.Automator.CreateZipArchive</string>
+				<key>CFBundleVersion</key>
+				<string>1.3.2</string>
+				<key>CanShowSelectedItemsWhenRun</key>
+				<true/>
+				<key>CanShowWhenRun</key>
+				<true/>
+				<key>Category</key>
+				<array>
+					<string>AMCategoryFilesAndFolders</string>
+				</array>
+				<key>Class Name</key>
+				<string>Create_Archive</string>
+				<key>InputUUID</key>
+				<string>01AD533F-C2A6-4227-A4FB-C3C9A1F6C710</string>
+				<key>Keywords</key>
+				<array>
+					<string>Archive</string>
+					<string>Create</string>
+					<string>Make</string>
+					<string>File</string>
+					<string>Folder</string>
+					<string>Stuff</string>
+					<string>StuffIt</string>
+					<string>Zip</string>
+				</array>
+				<key>OutputUUID</key>
+				<string>67C53AE3-BB7A-48B6-AF7E-F039140E8943</string>
+				<key>UUID</key>
+				<string>ED4F8412-7DD4-4387-A3BE-7035EB7EFC8E</string>
+				<key>UnlocalizedApplications</key>
+				<array>
+					<string>Finder</string>
+				</array>
+				<key>arguments</key>
+				<dict>
+					<key>0</key>
+					<dict>
+						<key>default value</key>
+						<string>~/Desktop</string>
+						<key>name</key>
+						<string>destinationPath</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>0</string>
+					</dict>
+					<key>1</key>
+					<dict>
+						<key>default value</key>
+						<false/>
+						<key>name</key>
+						<string>ignoreUnreadableItems</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>1</string>
+					</dict>
+					<key>2</key>
+					<dict>
+						<key>default value</key>
+						<string></string>
+						<key>name</key>
+						<string>archiveName</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>2</string>
+					</dict>
+				</dict>
+				<key>isViewVisible</key>
+				<true/>
+				<key>location</key>
+				<string>309.500000:162.000000</string>
+				<key>nibPath</key>
+				<string>/System/Library/Automator/Create Archive.action/Contents/Resources/English.lproj/main.nib</string>
+			</dict>
+			<key>isViewVisible</key>
+			<true/>
+		</dict>
+	</array>
+	<key>connectors</key>
+	<dict>
+		<key>8549326F-7575-494B-B9D9-9E7FC3C76466</key>
+		<dict>
+			<key>from</key>
+			<string>48C82D90-7455-4E72-9271-52F2B713FF72 - 48C82D90-7455-4E72-9271-52F2B713FF72</string>
+			<key>to</key>
+			<string>ED4F8412-7DD4-4387-A3BE-7035EB7EFC8E - ED4F8412-7DD4-4387-A3BE-7035EB7EFC8E</string>
+		</dict>
+		<key>BAB942DE-AA81-4632-93D8-ED6F4FDEDF4D</key>
+		<dict>
+			<key>from</key>
+			<string>A13C3D3E-C79F-4AD5-A917-8735E0296F6A - A13C3D3E-C79F-4AD5-A917-8735E0296F6A</string>
+			<key>to</key>
+			<string>3E96116D-46EB-4220-A462-ACD881515634 - 3E96116D-46EB-4220-A462-ACD881515634</string>
+		</dict>
+		<key>CF6B9D01-E2F7-44D3-8E64-FBB423CF6458</key>
+		<dict>
+			<key>to</key>
+			<string>48C82D90-7455-4E72-9271-52F2B713FF72 - 48C82D90-7455-4E72-9271-52F2B713FF72</string>
+		</dict>
+	</dict>
+	<key>workflowMetaData</key>
+	<dict>
+		<key>workflowTypeIdentifier</key>
+		<string>com.apple.Automator.workflow</string>
+	</dict>
+</dict>
+</plist>

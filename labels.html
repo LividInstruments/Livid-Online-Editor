@@ -1,0 +1,53 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>MIDI Labels</title>
+<script src="js/jquery-1.7.2.min.js"></script>
+<script>
+	function getUrlVars(){
+		var vars = [], hash;
+		var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+		for(var i = 0; i < hashes.length; i++){
+			hash = hashes[i].split('=');
+			vars.push(hash[0]);
+			vars[hash[0]] = hash[1];
+		}
+		return vars;
+	}
+
+    function init() {
+
+      var canvas = document.getElementById("canvas");
+      var ctx = canvas.getContext("2d");
+      draw(ctx);
+    }
+
+    function draw(ctx) {
+    var labelcoords = {
+	"ledring_0": [7.0, 32.0],	"btn_43": [261.0, 90.0],	"fsr_0": [150.0, 222.0],	"fsr_1": [263.0, 222.0],	"fsr_2": [376.0, 222.0],	"fsr_3": [489.0, 222.0],	"fsr_5": [150.0, 339.0],	"fsr_6": [263.0, 339.0],	"fsr_7": [376.0, 339.0],	"fsr_8": [489.0, 339.0],	"enc_0": [317.0, 35.0],	"ledring_1": [7.0, 132.0],	"ledring_2": [7.0, 231.0],	"enc_1": [90.0, 42.0],	"pot_0": [137.0, 79.0],	"pot_2": [71.0, 452.0],	"pot_3": [649.0, 452.0],	"pot_4": [424.0, 690.0],	"btn_38": [404.0, 46.0],	"btn_41": [352.0, 86.0],	"btn_42": [455.0, 86.0],	"btn_39": [403.0, 87.0],	"btn_40": [403.0, 130.0],	"pot_1": [535.0, 79.0],	"enc_2": [90.0, 141.0],	"enc_3": [90.0, 241.0],	"btn_44": [44.0, 81.0],	"btn_45": [44.0, 180.0],	"btn_46": [44.0, 279.0],	"btn_32": [41.0, 352.0],	"btn_33": [41.0, 398.0],	"btn_0": [130.0, 445.0],	"btn_1": [189.0, 445.0],	"btn_2": [247.0, 445.0],	"btn_3": [306.0, 445.0],	"btn_4": [364.0, 445.0],	"btn_5": [422.0, 445.0],	"btn_6": [481.0, 445.0],	"btn_7": [539.0, 445.0],	"btn_8": [130.0, 503.0],	"btn_9": [189.0, 503.0],	"btn_10": [247.0, 503.0],	"btn_11": [306.0, 503.0],	"btn_12": [364.0, 503.0],	"btn_13": [422.0, 503.0],	"btn_14": [481.0, 503.0],	"btn_15": [539.0, 503.0],	"btn_16": [130.0, 562.0],	"btn_17": [189.0, 562.0],	"btn_18": [247.0, 562.0],	"btn_19": [306.0, 562.0],	"btn_20": [364.0, 562.0],	"btn_21": [422.0, 562.0],	"btn_22": [481.0, 562.0],	"btn_23": [539.0, 562.0],	"btn_24": [130.0, 620.0],	"btn_25": [189.0, 620.0],	"btn_26": [247.0, 620.0],	"btn_27": [306.0, 620.0],	"btn_28": [364.0, 620.0],	"btn_29": [422.0, 620.0],	"btn_30": [481.0, 620.0],	"btn_31": [539.0, 620.0],	"btn_34": [41.0, 703.0],	"btn_35": [619.0, 352.0],	"btn_36": [619.0, 398.0],	"btn_37": [619.0, 703.0],	"ledring_3": [584.0, 32.0],	"ledring_4": [584.0, 132.0],	"ledring_5": [584.0, 231.0],	"enc_4": [667.0, 42.0],	"enc_5": [667.0, 141.0],	"enc_6": [667.0, 241.0],	"btn_47": [621.0, 81.0],	"btn_48": [621.0, 180.0],	"btn_49": [621.0, 279.0]
+	}
+	var notelabels = getUrlVars();
+
+      // backgroundImage
+      ctx.save();
+      ctx.drawImage(document.getElementById("tweakerbg"), 0.0, 0.0);
+
+      // 
+      ctx.font = "12px Arial";
+		for(var i in labelcoords){
+			var toprint;
+			if(notelabels[i]){
+				ctx.fillText(notelabels[i], labelcoords[i][0],labelcoords[i][1]);
+			}else{
+				ctx.fillText(i, labelcoords[i][0],labelcoords[i][1]);
+			}
+      	}
+      ctx.restore();
+    }
+  </script>
+ </head>
+ <body onload="init()">
+   <canvas id="canvas" width="702" height="752"></canvas>
+   <img alt="backgroundImage" id="tweakerbg" style="display: none" src="tweakerbg.png" />
+ </body>
+</html>

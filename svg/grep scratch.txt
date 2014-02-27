@@ -1,0 +1,56 @@
+<rect id=("pot_[0-9]+") x="([0-9]+.[0-9]+)" y="([0-9]+.[0-9]+)" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" stroke="#000000" width="([0-9]+)" height="([0-9]+)"/>
+<rect id=("btn_[0-9]+") x="([0-9]+)" y="([0-9]+)" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" stroke="#000000" width="([0-9]+)" height="([0-9]+)"/>
+<rect id=("exp_[0-9]+") x="([0-9]+.[0-9]+)" y="([0-9]+.[0-9]+)" fill="#FFFFFF" stroke="#000000" stroke-width="1.0489" width="([0-9]+.[0-9]+)" height="([0-9]+.[0-9]+)"/>
+<rect id="btn_0" x="42.5" y="327.5" fill="none" stroke="#000000" width="43" height="43"/>
+<rect id=("btn_[0-9]+") x="([0-9]+.[0-9]+)" y="([0-9]+.[0-9]+)" fill="none" stroke="#000000" width="([0-9]+)" height="([0-9]+)"/>
+<rect id=("exp_[0-9]+") x="([0-9]+.[0-9]+)" y="([0-9]+.[0-9]+)" fill="none" stroke="#000000" width="([0-9]+)" height="([0-9]+)"/>
+<rect id=("btn_[0-9]+") x="([0-9]+)" y="([0-9]+)" fill="none" stroke="#000000" width="([0-9]+)" height="([0-9]+)"/>
+\1 : R.rect(\2 , \3 , \4 , \5, 20).attr(attr),
+
+<circle id="pot_[0-9]+" fill="#FFFFFF" stroke="#000000" cx="([0-9]+.[0-9]+)" cy="([0-9]+.[0-9]+)" r="([0-9]+)"/>
+<circle id=("enc_[0-9]+") fill="none" stroke="#000000" cx="([0-9]+)" cy="([0-9]+.[0-9]+)" r="([0-9]+.[0-9]+)"/>
+<circle id=("enc_[0-9]+") fill="none" stroke="#FF463F" stroke-miterlimit="10" cx="([0-9]+)" cy="([0-9]+.[0-9]+)" r="([0-9]+.[0-9]+)"/>
+
+\1 : R.circle(\2 , \3 , \4).attr(attr),
+
+<path id=("pot_[0-9]") fill-rule="evenodd" clip-rule="evenodd" stroke="#000000" stroke-width="0.9805" d=("M.+
+				c.+
+				C.+z")/>
+<path id=("pot_[0-9]+") fill="none" stroke="#000000" d=("M.+")/>
+\1 : R.path(\2).attr(attr),
+
+
+<circle id=("btn_[0-9]+") fill-rule="evenodd" clip-rule="evenodd" stroke="#000000" cx="([0-9]+.[0-9]+)" cy="([0-9]+)" r="([0-9]+)"/>
+<circle id=("pot_[0-9]+") fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" stroke="#000000" cx="([0-9]+.[0-9]+)" cy="([0-9]+.[0-9]+)" r="([0-9]+)"/>
+<circle id=("enc_[0-9]+") fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" stroke="#000000" cx="([0-9]+.[0-9]+)" cy="([0-9]+.[0-9]+)" r="([0-9]+)"/>
+<circle id=("exp_[0-9]+") fill="#FFFFFF" stroke="#000000" stroke-width="0.7097" cx="([0-9]+.[0-9]+)" cy="([0-9]+.[0-9]+)" r="([0-9]+.[0-9]+)"/>
+<circle id=("exp_[0-9]+") fill="none" stroke="#000000" stroke-miterlimit="10" cx="([0-9]+)" cy="([0-9]+)" r="([0-9]+)"/>
+<circle id=("pot_[0-9]+") fill="none" stroke="#000000" cx="([0-9]+)" cy="([0-9]+.[0-9]+)" r="([0-9]+)"/>
+<circle id=("exp_[0-9]+") fill="none" stroke="#000000" cx="([0-9]+)" cy="([0-9]+)" r="([0-9]+)"/>
+\1 : R.circle(\2 , \3 , \4).attr(attr),
+
+
+<path id=("ledring_[0-9]+") fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" stroke="#000000" d=("M.+z")/>
+<path id=("pot_[0-9]+") fill="none" stroke="#000000" d=("M.+z")/>
+<path id=("ledring_[0-9]+") fill="none" stroke="#FF463F" d=("M.+")/>
+<path id="pot_8" fill="none" stroke="#000000" d=("M.+")/>
+\1 : R.path(\2).attr(attr),
+
+
+<rect id=("btn_[0-9]+") x="([0-9]+.[0-9]+)" y="([0-9]+.[0-9]+)" fill-rule="evenodd" clip-rule="evenodd" fill="none" stroke="#000000" width="([0-9]+)" height="([0-9]+)"/>
+<rect id=("btn_[0-9]+") x="([0-9]+)" y="([0-9]+)" fill="none" stroke="#FFE01F" width="([0-9]+)" height="([0-9]+)"/>
+<rect id=("btn_[0-9]+") x="([0-9]+.[0-9]+)" y="([0-9]+)" fill="none" stroke="#FF4900" width="([0-9]+)" height="([0-9]+)"/>
+\1 : R.rect(\2 , \3 , \4 , \5, 10).attr(attr),
+
+<circle id=("pot_[0-9]+") fill="#FFFFFF" stroke="#231F20" cx="([0-9]+.[0-9]+)" cy="([0-9]+.[0-9]+)" r="([0-9]+)"/>
+\1 : R.circle(\2 , \3 , \4).attr(attr),
+
+<rect id=("[a-z]+[0-9]+") x=("[0-9]+") y=("[0-9]+") fill="none" stroke="#000000" width=("[0-9]+") height="("[0-9]+")"/>
+\1 : R.rect(\2 , \3 , \4 , \5, 10).attr(attr),
+
+
+<circle id=("pot_[0-9]+") fill="none" stroke="#000000"  cx="([0-9]+.[0-9]+)" cy="([0-9]+)" r="([0-9]+)"/>
+\1 : R.circle(\2 , \3 , \4).attr(attr),
+
+<polygon id=("[a-z]+_[0-9]") fill="none" stroke="#000000" points=("[0-9].+")/>
+\1 : R.path(\2).attr(attr),
