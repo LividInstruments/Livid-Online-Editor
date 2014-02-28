@@ -256,6 +256,16 @@
 			</div>
 			<!--MIDI monitor-->
 			<div id="midimonitor">MIDI MONITOR</div>
+			
+			<div name="sendsysex_insp" id="sendsysex_div" class="inspector" style="margin-top:3%">
+				<h4>send sysex</h4>
+				<form action="#" id="sendsysex" method="get">
+				<ul class="listv">				
+        <li><input type="text" value="" placeholder="sysex" style="width:10em;height:3em" id="sysexvalue"></li>
+				<li><input type="submit" value="send" class="submitbtn" style="float:right"/></li>
+				</ul>
+				</form>
+			</div>
 		</div>
 		<!--end left container div-->
 		<!--controller graphics UI-->
@@ -444,6 +454,7 @@
 				</ul>
 				</form>
 			</div>
+						
 			<div name="saveload_insp" id="saveload_div" class="inspector" style="margin-top:3%">
 			  <h4>save settings to file</h4>
 			    <script src="js/downloadjson.js"></script>

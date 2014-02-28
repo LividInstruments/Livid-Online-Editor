@@ -1966,8 +1966,8 @@ function updatectlinspector(type,id){
 		//var filterhash = ["Low","Medium","High"];
 		var filterhash = ['Low', 'Mid', 'Medium','High', 'Highest'];
 		var outmodehash = ["abs+fine","precision","fine","inc/dec"];
-		var ledstylehash = ["walk","fill","spread","eq"];
-		var typehash = ["absoute","relative"];
+		var ledstylehash = ["walk","fill","eq","spread"];
+		var typehash = ["absolute","relative"];
 		var colorhash = ["invert","red","green","blue","cyan","magenta","white"];
 		var ele_type = $(this).attr('type');
 		var ele_name = this.name;
@@ -1988,6 +1988,7 @@ function updatectlinspector(type,id){
 			}
 		}
 		if(ele_type == "select-one" || ele_type == "menu"){
+      clog("menu setting "+ele_type+" "+id+" "+ele_name+" "+thesetting);
 			if(this.name=="special"){ //for btns special - look at the settings and populate the menu as needed.
 				var note=livid[type][id]["nn"];
 				var mode=livid[type][id]["mode"];
@@ -2018,10 +2019,15 @@ function updatectlinspector(type,id){
 				if(typeof thesetting=="number"){
 					switch(this.name){
 						case "mode":
-						if(type=="btn" ||type=="enc")
+						if(type=="btn" ||type=="enc"){
 							thesetting=modehash[thesetting];
-						else
+							//CNTRL:R encoder modes are different than codes - no 'note' setting:
+							if(CNTRLR){
+							  thesetting="cc";
+							}
+						}else{
 							thesetting=algmodehash[thesetting];
+						}
 						break;
 						case "type":
 						thesetting=typehash[thesetting];
@@ -2049,7 +2055,7 @@ function updatectlinspector(type,id){
 				//clog("type "+type+" name "+ele_name+" setting "+thesetting);
 				$(this).prop("checked",ischeck);
 			}else{
-				//log("type "+type+" name "+ele_name+" setting "+thesetting);
+				clog("POPULATE: type "+type+" name "+ele_name+" setting "+thesetting);
 				$(this).val(thesetting);
 			}
 		}

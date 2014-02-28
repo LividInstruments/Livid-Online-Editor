@@ -29,7 +29,7 @@ sxToObj[2]={
 					if(ID>=0){
 						if(!livid[ctl][ID]) livid[ctl][ID]={}; //make the object if it's not here
 						livid[ctl][ID][p]=1-flagger(val,k); //check if a bit is 1 or 0. remember: OHM64 is such that 0 is on, 1 is off. Ugh.
-						//log("LEDS "+i+" "+ID+" val "+livid[ctl][ID][p]);
+						//clog("LEDS "+i+" "+ID+" val "+livid[ctl][ID][p]);
 					}
 					id_++;
 				//}
@@ -41,7 +41,7 @@ sxToObj[2]={
 		CNO=8;
 		var ctl = "globl";
 		var val = sx[CNO][0]; //only one byte is of interest
-		//log("sxToObj"+CNO+ctl+"local"+val);
+		//clog("sxToObj"+CNO+ctl+"local"+val);
 		//turn the byte into flags. each flag turns on/off a specific local control
 		var flags = dtob(val,7);
 		//post("\nlocal","sec",flags[0],"btn_mom",flags[1],"btn_tog",flags[2],"abs",flags[3],"rel",flags[4],"pot",flags[5],"fsr",flags[6]);
@@ -60,14 +60,14 @@ sxToObj[2]={
 	10: function(){ //map analogs	[64]
 		CNO=10;
 		var ctl = "pot";
-		//log("\nsxToObj"+" "+CNO+" "+ctl);
+		//clog("\nsxToObj"+" "+CNO+" "+ctl);
 		mapbytes(CNO,ctl);
 	},
 	
 	11: function(){ //map buttons	[120]
 		CNO=11;
 		var ctl = "btn";
-		//log("sxToObj"+" "+CNO+" "+ctl);
+		//clog("sxToObj"+" "+CNO+" "+ctl);
 		mapbytes(CNO,ctl);
 	},
 	
@@ -86,7 +86,7 @@ sxToObj[2]={
 	
 	13: function(){ //midi out merge	[1]
 		CNO=13;
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		mapone(CNO,"merge",sx[CNO][0]); //cmd,p,val
 	},	
 	
@@ -103,7 +103,7 @@ sxToObj[2]={
 		CNO=35;
 		var ctl = "led";
 		var p = "nn";
-		//log("\nsxToObj"+" "+CNO+" "+sx[CNO]);
+		//clog("\nsxToObj"+" "+CNO+" "+sx[CNO]);
 		var mode = 0; //note
 		var id_=0;
 		for (var nn in sx[CNO]){ //in this command, position is related to note number
@@ -116,7 +116,7 @@ sxToObj[2]={
 				}
 				livid[ctl][id_][p]=nn;
 				livid[ctl][id_].mode=mode;
-				//log("note id "+id_+" nn "+nn+" mode "+mode);
+				//clog("note id "+id_+" nn "+nn+" mode "+mode);
 			}
 		}
 	},
@@ -124,7 +124,7 @@ sxToObj[2]={
 		CNO=36;
 		var ctl = "led";
 		var p = "nn";
-		//log("\nsxToObj"+" "+CNO+" "+sx[CNO]);
+		//clog("\nsxToObj"+" "+CNO+" "+sx[CNO]);
 		var mode = 1; //cc
 		var id_=0;
 		for (var nn in sx[CNO]){ //in this command, position is related to note number
@@ -136,7 +136,7 @@ sxToObj[2]={
 				}
 				livid[ctl][id_][p]=nn;
 				livid[ctl][id_].mode=mode;
-				//log("cc id "+id_+" nn "+nn+" mode "+mode);
+				//clog("cc id "+id_+" nn "+nn+" mode "+mode);
 			}		
 		};
 		
@@ -150,7 +150,7 @@ sxToObj[3]={
 		var ctl = "led";
 		var p = "onoff";
 		var id_=0;
-		//log("sxToObj"+CNO+ctl+p);
+		//clog("sxToObj"+CNO+ctl+p);
 		//position in bitstream (l-r) to ID map:
 		var pos = [	0, 8 ,16,24,32,40,48,
 					56,5 ,13,-1,21,29,37,
@@ -173,7 +173,7 @@ sxToObj[3]={
 					if(ID>=0){
 						if(!livid[ctl][ID]) livid[ctl][ID]={}; //make the object if it's not here
 						livid[ctl][ID][p]=flagger(val,k); //check if a bit is 1 or 0.
-						//log("LEDS "+i+" "+ID+" val "+livid[ctl][ID][p]);
+						//clog("LEDS "+i+" "+ID+" val "+livid[ctl][ID][p]);
 					}
 					id_++;
 				//}
@@ -185,7 +185,7 @@ sxToObj[3]={
 		CNO=8;
 		var ctl = "globl";
 		var val = sx[CNO][0]; //only one byte is of interest
-		//log("sxToObj"+CNO+ctl+"local"+val);
+		//clog("sxToObj"+CNO+ctl+"local"+val);
 		//turn the byte into flags. each flag turns on/off a specific local control
 		var flags = dtob(val,7);
 		//post("\nlocal","sec",flags[0],"btn_mom",flags[1],"btn_tog",flags[2],"abs",flags[3],"rel",flags[4],"pot",flags[5],"fsr",flags[6]);
@@ -204,14 +204,14 @@ sxToObj[3]={
 	10: function(){ //map analogs	[64]
 		CNO=10;
 		var ctl = "pot";
-		//log("\nsxToObj"+" "+CNO+" "+ctl);
+		//clog("\nsxToObj"+" "+CNO+" "+ctl);
 		mapbytes(CNO,ctl);
 	},
 	
 	11: function(){ //map buttons	[120]
 		CNO=11;
 		var ctl = "btn";
-		//log("sxToObj"+" "+CNO+" "+ctl);
+		//clog("sxToObj"+" "+CNO+" "+ctl);
 		mapbytes(CNO,ctl);
 	},
 	
@@ -230,15 +230,15 @@ sxToObj[3]={
 	
 	13: function(){ //midi out merge	[1]
 		CNO=13;
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		mapone(CNO,"merge",sx[CNO][0]); //cmd,p,val
 	},
 	33: function(){ //Expansion analogs	[20] //240 0 1 97 7 33 25 0 26 0 27 0 28 0 29 0 30 0 31 0 32 0 33 0 34 0 247
 		CNO=33;
 		var ctl = "exp";
-		//log("\nsxToObj"+" "+CNO+" "+ctl);
+		//clog("\nsxToObj"+" "+CNO+" "+ctl);
 		mapbytes(CNO,ctl);
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		
 	},
 	//35 and 36 are not actually part of Ohm64 sysex, but we create them for convenience's sake in procSysex
@@ -246,7 +246,7 @@ sxToObj[3]={
 		CNO=35;
 		var ctl = "led";
 		var p = "nn";
-		//log("\nsxToObj"+" "+CNO+" "+sx[CNO]);
+		//clog("\nsxToObj"+" "+CNO+" "+sx[CNO]);
 		var mode = 0; //note
 		var id_=0;
 		for (var nn in sx[CNO]){ //in this command, position is related to note number
@@ -267,7 +267,7 @@ sxToObj[3]={
 		CNO=36;
 		var ctl = "led";
 		var p = "nn";
-		//log("\nsxToObj"+" "+CNO+" "+sx[CNO]);
+		//clog("\nsxToObj"+" "+CNO+" "+sx[CNO]);
 		var mode = 1; //cc
 		var id_=0;
 		for (var nn in sx[CNO]){ //in this command, position is related to note number
@@ -279,7 +279,7 @@ sxToObj[3]={
 				}
 				livid[ctl][id_][p]=nn;
 				livid[ctl][id_].mode=mode;
-				//log("cc id "+id_+" nn "+nn+" mode "+mode);
+				//clog("cc id "+id_+" nn "+nn+" mode "+mode);
 			}		
 		};
 		
@@ -325,7 +325,7 @@ sxToObj[4]={
 		CNO=8;
 		var ctl = "globl";
 		var val = sx[CNO][0]; //only one byte is of interest
-		//log("sxToObj"+CNO+ctl+"local"+val);
+		//clog("sxToObj"+CNO+ctl+"local"+val);
 		//turn the byte into flags. each flag turns on/off a specific local control
 		var flags = dtob(val,7);
 		//post("\nlocal","sec",flags[0],"btn_mom",flags[1],"btn_tog",flags[2],"abs",flags[3],"rel",flags[4],"pot",flags[5],"fsr",flags[6]);
@@ -340,26 +340,26 @@ sxToObj[4]={
 	10: function(){ 
 		CNO=10;
 		var ctl = "pot";
-		//log("\nsxToObj"+" "+CNO+" "+ctl);
+		//clog("\nsxToObj"+" "+CNO+" "+ctl);
 		mapbytes(CNO,ctl);
 	},
 	//map buttons	code:[90]
 	11: function(){ 
 		CNO=11;
 		var ctl = "btn";
-		//log("sxToObj"+" "+CNO+" "+ctl);
+		//clog("sxToObj"+" "+CNO+" "+ctl);
 		mapbytes(CNO,ctl);
 	},
 	//midi settings ch	[1]
 	12: function(){ 
 		CNO=12;
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		mapone(CNO,"settingsch",sx[CNO][0],1); //cmd,p,val
 	},
 	//midi out merge	[1]
 	13: function(){ 
 		CNO=13;
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		mapone(CNO,"merge",sx[CNO][0]); //cmd,p,val
 	},
 	//Controller Option Flags
@@ -368,14 +368,14 @@ sxToObj[4]={
 		var p = "omni";
 		var ctl = "globl";
 		var val = sx[CNO][0]; //only one byte is of interest
-		//log("\nsxToObj"+" "+CNO+" "+ctl+" "+p+" "+val);
+		//clog("\nsxToObj"+" "+CNO+" "+ctl+" "+p+" "+val);
 		livid[ctl][p] = Math.floor((val/2)%2);		
 	},
-	//map encs	code:[64] (mode 1 is cc, 0 is note!)
+	//map encs	code:[64] (mode 1 is cc, 0 is note!). for CNTRLR, 1 is note, 0 is cc
 	16: function(){ 
 		CNO=16; 
 		var ctl = "enc";
-		//log("\nsxToObj"+" "+CNO+" "+ctl);
+		//clog("\nsxToObj"+" "+CNO+" "+ctl);
 		mapbytes(CNO,ctl);
 	},
 	//encoder style	code:[8]
@@ -384,7 +384,7 @@ sxToObj[4]={
 		var flags = [];
 		var ctl = "enc";
 		var p = "type";
-		//log("\nsxToObj"+" "+CNO+" "+ctl+" "+p);
+		//clog("\nsxToObj"+" "+CNO+" "+ctl+" "+p);
 		var id_=0;
 		var max_id=32; //32 encoders on code
 		//for code and cntrlr
@@ -403,7 +403,7 @@ sxToObj[4]={
 	//bank ch	[1]
 	22: function(){ 
 		CNO=22;
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		mapone(CNO,"bankch",sx[CNO][0],1); //cmd,p,val,dosub
 	},
 	//bank chs	[4]
@@ -411,7 +411,7 @@ sxToObj[4]={
 		CNO=23;
 		var ctl = "globl";
 		var p = "bankchs";
-		//log("sxToObj"+" "+CNO+" "+ctl+" "+p);
+		//clog("sxToObj"+" "+CNO+" "+ctl+" "+p);
 		for (var i in sx[CNO]){
 			var val = sx[CNO][i]+1;
 			if(!livid[ctl][p]) livid[ctl][p]={}; //make the object if it's not here
@@ -423,7 +423,7 @@ sxToObj[4]={
 		CNO=26;
 		var p = "bank";
 		var val = 1+sx[CNO][0];
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		mapone(CNO,p,val); //cmd,p,val
 	},
 	//ring mode (walk or fill)	[8]
@@ -432,7 +432,7 @@ sxToObj[4]={
 		var flags = [];
 		var ctl = "ledring";
 		var p = "style";
-		//log("sxToObj"+" "+CNO+" "+ctl+" "+p);
+		//clog("sxToObj"+" "+CNO+" "+ctl+" "+p);
 		var id_=0;
 		//for code and cntrlr, not for code v2?
 		for (var i in sx[CNO]){
@@ -453,7 +453,7 @@ sxToObj[4]={
 		CNO=30;
 		var ctl = "globl";
 		var p = "encspeedA";
-		//log("sxToObj"+" "+CNO+" "+ctl+" "+p);
+		//clog("sxToObj"+" "+CNO+" "+ctl+" "+p);
 		if(!livid[ctl][p]) livid[ctl][p]={}; 
 		var val = sx[CNO][0];
 		livid[ctl][p] = e_speedtoUI[val]; //eg, so a val of 66 returns 15 for ui widget
@@ -468,7 +468,7 @@ sxToObj[4]={
 		var flags = [];
 		var ctl = "ledring";
 		var p = "eachled";
-		//log("sxToObj"+" "+CNO+" "+ctl+" "+p);
+		//clog("sxToObj"+" "+CNO+" "+ctl+" "+p);
 		var id_=0;
 		//for code and cntrlr
 		for (var i in sx[CNO]){
@@ -478,7 +478,7 @@ sxToObj[4]={
 				if(!skipit){
 					if(!livid[ctl][id_]) livid[ctl][id_]={}; //make the object if it's not here
 					livid[ctl][id_][p]=flagger(val,k); //check if a bit is 1 or 0.
-					//log("\nID?",id_);
+					//clog("\nID?",id_);
 				}
 			}
 			if(i%2) id_++; //only inc on the odd bytes.
@@ -488,7 +488,7 @@ sxToObj[4]={
 	32: function(){ 
 		CNO=32;
 		var val = 1-sx[CNO][0];
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		mapone(CNO,"ringlocal",val); //cmd,p,val -Note the value is inverted. The command is to Disable local ctl, but the UI is an "enabler"
 	},
 	//LED note map	[128]
@@ -496,7 +496,7 @@ sxToObj[4]={
 		CNO=35;
 		var ctl = "led";
 		var p = "nn";
-		//log("\nsxToObj"+" "+CNO+" "+ctl+" "+p);
+		//clog("\nsxToObj"+" "+CNO+" "+ctl+" "+p);
 		var mode = 0; //cc
 		var id_=0;
 		for (var nn in sx[CNO]){ //in this command, position is related to note number
@@ -527,7 +527,7 @@ sxToObj[4]={
 		CNO=36;
 		var ctl = "led";
 		var p = "nn";
-		//log("sxToObj"+" "+CNO+" "+ctl+" "+p);
+		//clog("sxToObj"+" "+CNO+" "+ctl+" "+p);
 		var mode = 1; //cc
 		var id_=0;
 		for (var nn in sx[CNO]){ //in this command, position is related to note number
@@ -559,7 +559,7 @@ sxToObj[4]={
 		CNO=38;
 		var ctl = "enc";
 		var p = "value";
-		//log("sxToObj"+" "+CNO+" "+ctl+" "+p);
+		//clog("sxToObj"+" "+CNO+" "+ctl+" "+p);
 		for (var i in sx[CNO]){
 			var val = sx[CNO][i];
 			if(!livid[ctl][i]) livid[ctl][i]={};
@@ -570,7 +570,7 @@ sxToObj[4]={
 	39: function(){ 
 		CNO=39;
 		var ctl = "encvalues"; //no "p" because this is just a regular array. probably not used.
-		//log("sxToObj"+" "+CNO+" "+ctl);
+		//clog("sxToObj"+" "+CNO+" "+ctl);
 		for (var i in sx[CNO]){
 			var val = sx[CNO][i];
 			if(!livid[ctl][i]) livid[ctl][i]={}; 
@@ -582,11 +582,22 @@ sxToObj[4]={
 		CNO=50;
 		var ctl = "ledring";
 		var p = "style";
-		//log("\nsxToObj"+" "+CNO+" "+ctl+" "+p);
+    var pos = [	
+      0,8 ,16,24,
+      1,9 ,17,25,
+      2,10,18,26,
+      3,11,19,27,
+      4,12,20,28,
+      5,13,21,29,
+      6,14,22,30,
+      7,15,23,31
+      ];
 		for (var i in sx[CNO]){
+		  var id_ = pos[i];
 			var val = sx[CNO][i];
-			if(!livid[ctl][i]) livid[ctl][i]={}; 
-			livid[ctl][i][p] = val;
+			if(!livid[ctl][id_]) livid[ctl][id_]={}; 
+			livid[ctl][id_][p] = val;
+		  clog(">>sxToObj"+" LEDRING style ctl "+ctl+" i "+i+" id "+id_+" val "+val);
 		}
 		
 	},
@@ -596,7 +607,7 @@ sxToObj[4]={
 		var flags = [];
 		var ctl = "btn";
 		var p = "toggle";
-		//log("sxToObj"+" "+CNO+" "+ctl+" "+p+" "+"string:"+" "+sx[CNO]);
+		//clog("sxToObj"+" "+CNO+" "+ctl+" "+p+" "+"string:"+" "+sx[CNO]);
 		var id_=0;
 		//for code and cntrlr
 		for (var i in sx[CNO]){
@@ -651,7 +662,7 @@ sxToObj[7]={
 		CNO=8;
 		var ctl = "globl";
 		var val = sx[CNO][0]; //only one byte is of interest
-		//log("sxToObj"+CNO+ctl+"local"+val);
+		//clog("sxToObj"+CNO+ctl+"local"+val);
 		//turn the byte into flags. each flag turns on/off a specific local control
 		var flags = dtob(val,7);
 		//post("\nlocal","sec",flags[0],"btn_mom",flags[1],"btn_tog",flags[2],"abs",flags[3],"rel",flags[4],"pot",flags[5],"fsr",flags[6]);
@@ -666,26 +677,26 @@ sxToObj[7]={
 	10: function(){ //map analogs	[64]
 		CNO=10;
 		var ctl = "pot";
-		//log("\nsxToObj"+" "+CNO+" "+ctl);
+		//clog("\nsxToObj"+" "+CNO+" "+ctl);
 		mapbytes(CNO,ctl);
 	},
 	
 	11: function(){ //map buttons	[120]
 		CNO=11;
 		var ctl = "btn";
-		//log("sxToObj"+" "+CNO+" "+ctl);
+		//clog("sxToObj"+" "+CNO+" "+ctl);
 		mapbytes(CNO,ctl);
 	},
 	
 	12: function(){ //midi settings ch	[1]
 		CNO=12;
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		mapone(CNO,"settingsch",sx[CNO][0],1); //cmd,p,val
 	},
 	
 	13: function(){ //midi out merge	[1]
 		CNO=13;
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		mapone(CNO,"merge",sx[CNO][0]); //cmd,p,val
 	},	
 	
@@ -694,13 +705,13 @@ sxToObj[7]={
 		var p = "omni";
 		var ctl = "globl";
 		var val = sx[CNO][0]; //only one byte is of interest
-		//log("\nsxToObj"+" "+CNO+" "+ctl+" "+p+" "+val);
+		//clog("\nsxToObj"+" "+CNO+" "+ctl+" "+p+" "+val);
 		livid[ctl][p] = Math.floor((val/2)%2);		
 	},
 		
 	22: function(){ //bank ch	[1]
 		CNO=22;
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		mapone(CNO,"bankch",sx[CNO][0],1); //cmd,p,val,dosub
 	},
 	
@@ -708,7 +719,7 @@ sxToObj[7]={
 		CNO=23;
 		var ctl = "globl";
 		var p = "bankchs";
-		//log("sxToObj"+" "+CNO+" "+ctl+" "+p);
+		//clog("sxToObj"+" "+CNO+" "+ctl+" "+p);
 		for (var i in sx[CNO]){
 			var val = sx[CNO][i]+1;
 			if(!livid[ctl][p]) livid[ctl][p]={}; //make the object if it's not here
@@ -720,16 +731,16 @@ sxToObj[7]={
 		CNO=26;
 		var p = "bank";
 		var val = 1+sx[CNO][0];
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		mapone(CNO,p,val); //cmd,p,val
 	},
 	
 	33: function(){ //Expansion analogs	[20] //240 0 1 97 7 33 25 0 26 0 27 0 28 0 29 0 30 0 31 0 32 0 33 0 34 0 247
 		CNO=33;
 		var ctl = "exp";
-		//log("\nsxToObj"+" "+CNO+" "+ctl);
+		//clog("\nsxToObj"+" "+CNO+" "+ctl);
 		mapbytes(CNO,ctl);
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		
 	},	
 	
@@ -743,7 +754,7 @@ sxToObj[7]={
 		CNO=35;
 		var ctl = "led";
 		var p = "nn";
-		//log("\nsxToObj"+" "+CNO+" "+ctl+" "+p);
+		//clog("\nsxToObj"+" "+CNO+" "+ctl+" "+p);
 		var mode = 0; //cc
 		var id_=0;
 		for (var nn in sx[CNO]){ //in this command, position is related to note number
@@ -764,7 +775,7 @@ sxToObj[7]={
 		CNO=36;
 		var ctl = "led";
 		var p = "nn";
-		//log("sxToObj"+" "+CNO+" "+ctl+" "+p);
+		//clog("sxToObj"+" "+CNO+" "+ctl+" "+p);
 		var mode = 1; //cc
 		var id_=0;
 		for (var nn in sx[CNO]){ //in this command, position is related to note number
@@ -784,7 +795,7 @@ sxToObj[7]={
 	37: function(){ //LEDS all banks	[120]
 		CNO=37;
 		var val = 1-sx[CNO][0];
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		
 	},	
 	
@@ -793,7 +804,7 @@ sxToObj[7]={
 		var flags = [];
 		var ctl = "btn";
 		var p = "toggle";
-		//log("sxToObj"+" "+CNO+" "+ctl+" "+p+" "+"string:"+" "+sx[CNO]);
+		//clog("sxToObj"+" "+CNO+" "+ctl+" "+p+" "+"string:"+" "+sx[CNO]);
 		var id_=0;
 		//for code, cntrlr and ohmrgb
 		for (var i in sx[CNO]){
@@ -820,7 +831,7 @@ sxToObj[8]={
 		var p; //filled by red,green,blue
 		var p_arr = ["red","green","blue"];
 		var id_=-1;
-		//log("sxToObj"+CNO+ctl+p);
+		//clog("sxToObj"+CNO+ctl+p);
 		//unravel the bytes into RGB on/off states:
 		for (var i in sx[CNO]){
 			var val = sx[CNO][i];
@@ -841,7 +852,7 @@ sxToObj[8]={
 		CNO=8;
 		var ctl = "globl";
 		var val = sx[CNO][0]; //only one byte is of interest
-		//log("sxToObj"+CNO+ctl+"local"+val);
+		//clog("sxToObj"+CNO+ctl+"local"+val);
 		//turn the byte into flags. each flag turns on/off a specific local control
 		var flags = dtob(val,7);
 		//post("\nlocal","sec",flags[0],"btn_mom",flags[1],"btn_tog",flags[2],"abs",flags[3],"rel",flags[4],"pot",flags[5],"fsr",flags[6]);
@@ -856,33 +867,33 @@ sxToObj[8]={
 	10: function(){ //map analogs	[64]
 		CNO=10;
 		var ctl = "pot";
-		//log("\nsxToObj"+" "+CNO+" "+ctl);
+		//clog("\nsxToObj"+" "+CNO+" "+ctl);
 		mapbytes(CNO,ctl);
 	},
 	
 	11: function(){ //map buttons	[120]
 		CNO=11;
 		var ctl = "btn";
-		//log("sxToObj"+" "+CNO+" "+ctl);
+		//clog("sxToObj"+" "+CNO+" "+ctl);
 		mapbytes(CNO,ctl);
 	},
 	
 	12: function(){ //midi settings ch	[1]
 		CNO=12;
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		mapone(CNO,"settingsch",sx[CNO][0],1); //cmd,p,val
 	},
 	
 	13: function(){ //midi out merge	[1]
 		CNO=13;
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		mapone(CNO,"merge",sx[CNO][0]); //cmd,p,val
 	},
 	
-	16: function(){ //map encs	[24] (mode 1 is cc, 0 is note!)
+	16: function(){ //map encs	[24] for CNTRLR, 1 is note, 0 is cc
 		CNO=16; 
 		var ctl = "enc";
-		//log("sxToObj"+" "+CNO+" "+ctl);
+		//clog("sxToObj"+" "+CNO+" "+ctl);
 		mapbytes(CNO,ctl);
 	},
 	
@@ -891,7 +902,7 @@ sxToObj[8]={
 		var flags = [];
 		var ctl = "enc";
 		var p = "type";
-		//log("sxToObj"+" "+CNO+" "+ctl+" "+p+"<b> "+livid["enc"].length+"<b/>");
+		//clog("sxToObj"+" "+CNO+" "+ctl+" "+p+"<b> "+livid["enc"].length+"<b/>");
 		var id_=0;
 		var max_id=12; //12 encoders on CNTRL:R
 		//for code and cntrlr
@@ -913,7 +924,7 @@ sxToObj[8]={
 	
 	22: function(){ //bank ch	[1]
 		CNO=22;
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		mapone(CNO,"bankch",sx[CNO][0],1); //cmd,p,val,dosub
 	},
 	
@@ -921,7 +932,7 @@ sxToObj[8]={
 		CNO=23;
 		var ctl = "globl";
 		var p = "bankchs";
-		//log("sxToObj"+" "+CNO+" "+ctl+" "+p);
+		//clog("sxToObj"+" "+CNO+" "+ctl+" "+p);
 		for (var i in sx[CNO]){
 			var val = sx[CNO][i]+1;
 			if(!livid[ctl][p]) livid[ctl][p]={}; //make the object if it's not here
@@ -933,7 +944,7 @@ sxToObj[8]={
 		CNO=26;
 		var p = "bank";
 		var val = 1+sx[CNO][0];
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		mapone(CNO,p,val); //cmd,p,val
 	},
 	
@@ -942,7 +953,7 @@ sxToObj[8]={
 		var flags = [];
 		var ctl = "enc";
 		var p = "style";
-		//log("sxToObj"+" "+CNO+" "+ctl+" "+p);
+		//clog("sxToObj"+" "+CNO+" "+ctl+" "+p);
 		var id_=0;
 		var max_id=12; //12 encoders on CNTRL:R
 		//for code and cntrlr, not for code v2?
@@ -965,7 +976,7 @@ sxToObj[8]={
 		CNO=30;
 		var ctl = "globl";
 		var p = "encspeedA";
-		//log("sxToObj"+" "+CNO+" "+ctl+" "+p);
+		//clog("sxToObj"+" "+CNO+" "+ctl+" "+p);
 		if(!livid[ctl][p]) livid[ctl][p]={}; 
 		var val = sx[CNO][0];
 		livid[ctl][p] = e_speedtoUI[val]; //eg, so a val of 66 returns 15 for ui widget
@@ -980,7 +991,7 @@ sxToObj[8]={
 		var flags = [];
 		var ctl = "ledring";
 		var p = "eachled";
-		//log("sxToObj"+" "+CNO+" "+ctl+" "+p);
+		//clog("sxToObj"+" "+CNO+" "+ctl+" "+p);
 		var id_=0;
 		//for code and cntrlr
 		for (var i in sx[CNO]){
@@ -990,7 +1001,7 @@ sxToObj[8]={
 				if(!skipit){
 					if(!livid[ctl][id_]) livid[ctl][id_]={}; //make the object if it's not here
 					livid[ctl][id_][p]=flagger(val,k); //check if a bit is 1 or 0.
-					//log("\nID?",id_);
+					//clog("\nID?",id_);
 				}
 			}
 			if(i%2) id_++; //only inc on the odd bytes.
@@ -1000,16 +1011,16 @@ sxToObj[8]={
 	32: function(){ //LED ring local	[1]
 		CNO=32;
 		var val = 1-sx[CNO][0];
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		mapone(CNO,"ringlocal",val); //cmd,p,val -Note the value is inverted. The command is to Disable local ctl, but the UI is an "enabler"
 	},
 	
 	33: function(){ //Expansion analogs	[20] //240 0 1 97 7 33 25 0 26 0 27 0 28 0 29 0 30 0 31 0 32 0 33 0 34 0 247
 		CNO=33;
 		var ctl = "exp";
-		//log("\nsxToObj"+" "+CNO+" "+ctl);
+		//clog("\nsxToObj"+" "+CNO+" "+ctl);
 		mapbytes(CNO,ctl);
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 	},		
 	
 	34: function(){ //Color map	[8]
@@ -1022,7 +1033,7 @@ sxToObj[8]={
 		CNO=35;
 		var ctl = "led";
 		var p = "nn";
-		//log("\nsxToObj"+" "+CNO+" "+ctl+" "+p);
+		//clog("\nsxToObj"+" "+CNO+" "+ctl+" "+p);
 		var mode = 0; //note
 		var id_=0;
 		var ledring = 60;
@@ -1052,7 +1063,7 @@ sxToObj[8]={
 		CNO=36;
 		var ctl = "led";
 		var p = "nn";
-		//log("sxToObj"+" "+CNO+" "+ctl+" "+p);
+		//clog("sxToObj"+" "+CNO+" "+ctl+" "+p);
 		var mode = 1; //cc
 		var id_=0;//in this command, position is related to note number
 		var ledring = 60;
@@ -1081,7 +1092,7 @@ sxToObj[8]={
 	37: function(){ //LEDS all banks	[120]
 		CNO=37;
 		var val = 1-sx[CNO][0];
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		
 	},	
 	
@@ -1089,7 +1100,7 @@ sxToObj[8]={
 		CNO=38;
 		var ctl = "enc";
 		var p = "value";
-		//log("sxToObj"+" "+CNO+" "+ctl+" "+p);
+		//clog("sxToObj"+" "+CNO+" "+ctl+" "+p);
 		for (var i in sx[CNO]){
 			var val = sx[CNO][i];
 			if(!livid[ctl][i]) livid[ctl][i]={};
@@ -1100,7 +1111,7 @@ sxToObj[8]={
 	39: function(){ //enc values all banks	[48]
 		CNO=39;
 		var ctl = "encvalues"; //no "p" because this is just a regular array. probably not used.
-		//log("sxToObj"+" "+CNO+" "+ctl);
+		//clog("sxToObj"+" "+CNO+" "+ctl);
 		for (var i in sx[CNO]){
 			var val = sx[CNO][i];
 			if(!livid[ctl][i]) livid[ctl][i]={}; 
@@ -1112,7 +1123,7 @@ sxToObj[8]={
 		CNO=50;
 		var ctl = "ledring";
 		var p = "style";
-		//log("sxToObj"+" "+CNO+" "+ctl+" "+p+" len "+sx[CNO].length);
+		//clog("sxToObj"+" "+CNO+" "+ctl+" "+p+" len "+sx[CNO].length);
 		for (var i in sx[CNO]){
 			var val = sx[CNO][i];
 			if(!livid[ctl][i]) livid[ctl][i]={}; 
@@ -1124,7 +1135,7 @@ sxToObj[8]={
 		var flags = [];
 		var ctl = "btn";
 		var p = "toggle";
-		//log("sxToObj"+" "+CNO+" "+ctl+" "+p+" "+"string:"+" "+sx[CNO]);
+		//clog("sxToObj"+" "+CNO+" "+ctl+" "+p+" "+"string:"+" "+sx[CNO]);
 		var id_=0;
 		//for code and cntrlr
 		for (var i in sx[CNO]){
@@ -1157,7 +1168,7 @@ sxToObj[11]={
 		var p; //filled by red,green,blue
 		var p_arr = ["red","green","blue"];
 		var id_=-1;
-		//log("sxToObj"+CNO+' '+ctl+' '+p+'sx: '+sx[CNO]);
+		//clog("sxToObj"+CNO+' '+ctl+' '+p+'sx: '+sx[CNO]);
 		//unravel the bytes into RGB on/off states:
 		for (var i in sx[CNO]){
 			var val = sx[CNO][i];
@@ -1170,17 +1181,17 @@ sxToObj[11]={
 				}
 				p=p_arr[k%3]; //red,green,or blue
 				livid[ctl][pos[id_]][p]=flagger(val,k); //check if a bit is 1 or 0.
-				//log("rbg "+pos[id_]+" v "+livid[ctl][pos[id_]][p]);
+				//clog("rbg "+pos[id_]+" v "+livid[ctl][pos[id_]][p]);
 			}
 		};
-		//log("sxToObj"+CNO+' sx: '+sx[CNO]+' len '+sx[CNO].length);
+		//clog("sxToObj"+CNO+' sx: '+sx[CNO]+' len '+sx[CNO].length);
 	},
 	
 	8: function(){ //local control [1]
 		CNO=8;
 		var ctl = "globl";
 		var val = sx[CNO][0]; //only one byte is of interest
-		//log("sxToObj"+CNO+ctl+"local"+val);
+		//clog("sxToObj"+CNO+ctl+"local"+val);
 		//turn the byte into flags. each flag turns on/off a specific local control
 		var flags = dtob(val,7);
 		//post("\nlocal","sec",flags[0],"btn_mom",flags[1],"btn_tog",flags[2],"abs",flags[3],"rel",flags[4],"pot",flags[5],"fsr",flags[6]);
@@ -1195,27 +1206,27 @@ sxToObj[11]={
 	10: function(){ //map analogs	[84]
 		CNO=10;
 		var ctl = "pot";
-		//log("\nsxToObj"+" "+CNO+" "+ctl);
+		//clog("\nsxToObj"+" "+CNO+" "+ctl);
 		mapbytes(CNO,ctl);
 	},
 	
 	11: function(){ //map buttons	[32]
 		CNO=11;
 		var ctl = "btn";
-		//log("sxToObj"+" "+CNO+" "+ctl);
+		//clog("sxToObj"+" "+CNO+" "+ctl);
 		mapbytes(CNO,ctl);
 	},
 	
 	12: function(){ //midi settings ch	[1]
 		CNO=12;
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		mapone(CNO,"settingsch",sx[CNO][0],1); //cmd,p,val
 	},
 	
 	16: function(){ //map encs	[8] (mode 1 is cc, 0 is note!)
 		CNO=16; 
 		var ctl = "enc";
-		//log("sxToObj"+" "+CNO+" "+ctl);
+		//clog("sxToObj"+" "+CNO+" "+ctl);
 		mapbytes(CNO,ctl);
 	},
 	
@@ -1224,7 +1235,7 @@ sxToObj[11]={
 		var flags = [];
 		var ctl = "enc";
 		var p = "type";
-		//log("sxToObj"+" "+CNO+" "+ctl+" "+p+"<b> "+livid["enc"].length+"<b/>");
+		//clog("sxToObj"+" "+CNO+" "+ctl+" "+p+"<b> "+livid["enc"].length+"<b/>");
 		var id_=0;
 		var max_id=12; //12 encoders on CNTRL:R
 		//for code and cntrlr
@@ -1246,7 +1257,7 @@ sxToObj[11]={
 	
 	22: function(){ //bank ch	[1]
 		CNO=22;
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		mapone(CNO,"bankch",sx[CNO][0],1); //cmd,p,val,dosub
 	},
 	
@@ -1254,7 +1265,7 @@ sxToObj[11]={
 		CNO=23;
 		var ctl = "globl";
 		var p = "bankchs";
-		//log("sxToObj"+" "+CNO+" "+ctl+" "+p);
+		//clog("sxToObj"+" "+CNO+" "+ctl+" "+p);
 		for (var i in sx[CNO]){
 			var val = sx[CNO][i]+1;
 			if(!livid[ctl][p]) livid[ctl][p]={}; //make the object if it's not here
@@ -1266,7 +1277,7 @@ sxToObj[11]={
 		CNO=26;
 		var p = "bank";
 		var val = 1+sx[CNO][0];
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		mapone(CNO,p,val); //cmd,p,val
 	},
 	
@@ -1274,7 +1285,7 @@ sxToObj[11]={
 		CNO=30;
 		var ctl = "globl";
 		var p = "encspeedA";
-		//log("sxToObj"+" "+CNO+" "+ctl+" "+p);
+		//clog("sxToObj"+" "+CNO+" "+ctl+" "+p);
 		if(!livid[ctl][p]) livid[ctl][p]={}; 
 		var val = sx[CNO][0];
 		livid[ctl][p] = e_speedtoUI[val]; //eg, so a val of 66 returns 15 for ui widget
@@ -1286,7 +1297,7 @@ sxToObj[11]={
 	
 	33: function(){ //Expansion analogs	[20]
 		CNO=33;
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		
 	},	
 	
@@ -1300,7 +1311,7 @@ sxToObj[11]={
 		CNO=35;
 		var ctl = "led";
 		var p = "nn";
-		//log("\nsxToObj"+" "+CNO+" "+ctl+" "+p);
+		//clog("\nsxToObj"+" "+CNO+" "+ctl+" "+p);
 		var mode = 0; //cc
 		var id_=0;
 		for (var nn in sx[CNO]){ //in this command, position is related to note number
@@ -1321,7 +1332,7 @@ sxToObj[11]={
 		CNO=36;
 		var ctl = "led";
 		var p = "nn";
-		//log("sxToObj"+" "+CNO+" "+ctl+" "+p);
+		//clog("sxToObj"+" "+CNO+" "+ctl+" "+p);
 		var mode = 1; //cc
 		var id_=0;
 		for (var nn in sx[CNO]){ //in this command, position is related to note number
@@ -1343,7 +1354,7 @@ sxToObj[11]={
 		var ctl = "led";
 		var p; //filled by red,green,blue
 		var p_arr = ["red","green","blue"];
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		
 	},	
 	
@@ -1351,7 +1362,7 @@ sxToObj[11]={
 		CNO=38;
 		var ctl = "enc";
 		var p = "value";
-		//log("sxToObj"+" "+CNO+" "+ctl+" "+p);
+		//clog("sxToObj"+" "+CNO+" "+ctl+" "+p);
 		for (var i in sx[CNO]){
 			var val = sx[CNO][i];
 			if(!livid[ctl][i]) livid[ctl][i]={};
@@ -1362,7 +1373,7 @@ sxToObj[11]={
 	39: function(){ //enc values all banks	[60]
 		CNO=39;
 		var ctl = "encvalues"; //no "p" because this is just a regular array. probably not used.
-		//log("sxToObj"+" "+CNO+" "+ctl);
+		//clog("sxToObj"+" "+CNO+" "+ctl);
 		for (var i in sx[CNO]){
 			var val = sx[CNO][i];
 			if(!livid[ctl][i]) livid[ctl][i]={}; 
@@ -1374,7 +1385,7 @@ sxToObj[11]={
 		var flags = [];
 		var ctl = "btn";
 		var p = "toggle";
-		//log("sxToObj"+" "+CNO+" "+ctl+" "+p+" "+"len:"+" "+sx[CNO].length);
+		//clog("sxToObj"+" "+CNO+" "+ctl+" "+p+" "+"len:"+" "+sx[CNO].length);
 		var id_=0;
 		//for code and cntrlr
 		for (var i in sx[CNO]){
@@ -1412,7 +1423,7 @@ sxToObj[12]={
 		var p; //filled by red,green,blue
 		var p_arr = ["red","green","blue"];
 		var id_=-1;
-		//log("sxToObj"+CNO+' '+ctl+' '+p+'sx: '+sx[CNO]);
+		//clog("sxToObj"+CNO+' '+ctl+' '+p+'sx: '+sx[CNO]);
 		//unravel the bytes into RGB on/off states:
 		for (var i in sx[CNO]){
 			var val = sx[CNO][i];
@@ -1425,14 +1436,14 @@ sxToObj[12]={
 				}
 				p=p_arr[k%3]; //red,green,or blue
 				livid[ctl][id_][p]=flagger(val,k); //check if a bit is 1 or 0.
-				//log("rbg "+id_+" v "+livid[ctl][id_][p]);
+				//clog("rbg "+id_+" v "+livid[ctl][id_][p]);
 			}
 		};
 		//temp: flesh out to length 72
 		for(var i=sx[CNO].length;i<72;i++){
 			sx[CNO][i]=0;
 		}
-		//log("sxToObj"+CNO+' sx: '+sx[CNO]+' len '+sx[CNO].length);
+		//clog("sxToObj"+CNO+' sx: '+sx[CNO]+' len '+sx[CNO].length);
 	},
 	 //local control
 	8: function(){
@@ -1452,26 +1463,26 @@ sxToObj[12]={
 		CNO=10;
 		var ctl = "fsr";
 		var p = "cc";
-		//log("\nsxToObj"+" "+CNO+" "+ctl);
+		//clog("\nsxToObj"+" "+CNO+" "+ctl);
 		mapbytes(CNO,ctl,p);
 	},
 	//map buttons
 	11: function(){ 
 		CNO=11;
 		var ctl = "btn";
-		//log("sxToObj"+" "+CNO+" "+ctl);
+		//clog("sxToObj"+" "+CNO+" "+ctl);
 		mapbytes(CNO,ctl);
 	},
 	//midi settings ch
 	12: function(){
 		CNO=12;
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		mapone(CNO,"settingsch",sx[CNO][0],1); //cmd,p,val
 	},
 	//bank ch
 	22: function(){ 
 		CNO=22;
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		mapone(CNO,"bankch",sx[CNO][0],1); //cmd,p,val,dosub
 	},
 	//bank chs
@@ -1479,7 +1490,7 @@ sxToObj[12]={
 		CNO=23;
 		var ctl = "globl";
 		var p = "bankchs";
-		//log("sxToObj"+" "+CNO+" "+ctl+" "+p);
+		//clog("sxToObj"+" "+CNO+" "+ctl+" "+p);
 		for (var i in sx[CNO]){
 			var val = sx[CNO][i]+1;
 			if(!livid[ctl][p]) livid[ctl][p]={}; //make the object if it's not here
@@ -1491,7 +1502,7 @@ sxToObj[12]={
 		CNO=26;
 		var p = "bank";
 		var val = 1+sx[CNO][0];
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		mapone(CNO,p,val); //cmd,p,val
 	},
 	
@@ -1506,7 +1517,7 @@ sxToObj[12]={
 		CNO=35;
 		var ctl = "led";
 		var p = "nn";
-		//log("\nsxToObj"+" "+CNO+" "+ctl+" "+p);
+		//clog("\nsxToObj"+" "+CNO+" "+ctl+" "+p);
 		var mode = 0; //note
 		var id_=0;
 		var ledring = 64;//64+ are LED rings (strips) on Base, the others are for button leds
@@ -1563,7 +1574,7 @@ sxToObj[12]={
 		var ctl = "led";
 		var p; //filled by red,green,blue
 		var p_arr = ["red","green","blue"];
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		
 	},
 	//analog filter mode (sensitivity)	[32]
@@ -1571,7 +1582,7 @@ sxToObj[12]={
 		CNO=41;
 		var ctl = "fsr";
 		var p= "filter";
-		//log("sxToObj"+" "+CNO);
+		//clog("sxToObj"+" "+CNO);
 		for (var i in sx[CNO]){
 			var val = sx[CNO][i];
 			if(!livid[ctl][i]) livid[ctl][i]={}; 
@@ -1654,7 +1665,7 @@ sxToObj[12]={
 		CNO=58;
 		var ctl = "slide";
 		var p = "cc";
-		//log("\nsxToObj"+" "+CNO+" "+ctl);
+		//clog("\nsxToObj"+" "+CNO+" "+ctl);
 		mapbytes(CNO,ctl,p);
 	},
 	//Capacitive Fader Values	[9*BANKS]

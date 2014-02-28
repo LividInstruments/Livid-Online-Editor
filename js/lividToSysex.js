@@ -204,17 +204,19 @@ lividToSx[4]={
 		var j=0;
 		var ledcount = 45;
 		var bitscount = 13;
-		var pos = [	0, 8 ,16,24,
-		            1, 9 ,17,25,
-		            2, 10,18,26,
-		            3, 11,19,27,
-		            4, 12,20,28,
-		            5, 13,21,29,
-		            6, 14,22,30,
-		            7, 15,23,31,
-		            32,33,34,35,
-		            36,37,38,39, 40,41,42,43,44];
-		
+		var pos = [	
+      0, 8 ,16,24,
+      1, 9 ,17,25,
+      2, 10,18,26,
+      3, 11,19,27,
+      4, 12,20,28,
+      5, 13,21,29,
+      6, 14,22,30,
+      7, 15,23,31,
+      32,33,34,35,
+      36,37,38,39, 
+      40,41,42,43,44
+    ];
 		for (var i=0;i<(ledcount);i++){ 
 			var val;
 			var id = pos[i];
@@ -340,9 +342,15 @@ lividToSx[4]={
 		cntl="ledring";
 		prm="style";
 		var maxring = 32;
+		var pos = [	
+      0, 4 ,8 ,12,16,20,24,28,
+      1, 5 ,9 ,13,17,21,25,29,
+      2, 6 ,10,14,18,22,26,30,
+      3, 7 ,11,15,19,23,27,31
+    ];
 		for(var id in livid[cntl]){ //livid.ledring[id].style
 			if(id<maxring){ //shouldn't have to do this, but...
-				sx[CNO][id]=livid[cntl][id][prm];
+				sx[CNO][pos[id]]=livid[cntl][id][prm];
 				//log("\n",CNO,id,cntl,p,livid[cntl][id][prm],"..",sx[CNO]);
 			}
 		}

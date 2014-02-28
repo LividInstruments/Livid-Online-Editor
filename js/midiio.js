@@ -117,8 +117,12 @@ function inselected(){
 function midi_o(){
 	if(Jazz.isJazz){
 		var arg = Array.prototype.slice.call(arguments, 0);
+		var sysid = "...";
 		if(arg.length==1) arg=arg[0];
-		clog("midiout- len: "+arg.length+" : "+arg);
+		if(arg[5]){
+		  sysid = arg[5];
+		}
+		clog("midiout _ ID: "+sysid+" len: "+arg.length+" msg: "+arg);
 		Jazz.MidiOutLong(arg);
 	}
 }
