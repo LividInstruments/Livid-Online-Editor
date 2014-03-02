@@ -585,7 +585,7 @@ var nanhash = {
 'note':0, 'cc':1, 
 'walk':0, 'fill':1, 'eq':2, 'spread':3, 
 'absolute':0, 'relative':1, 
-'ccs':0, 'bend':1, 'aftertouch':2,
+'cc':0, 'bend':1, 'aftertouch':2,
 'Low':0, 'Mid':1, 'Medium':2 ,'High':3, 'Highest':4,
 'abs+fine':0, 'precision':1 ,'fine':2 ,'inc/dec':3,
 'absoute':0, 'relative':1,
@@ -1962,7 +1962,7 @@ function updatectlinspector(type,id){
 		var thesetting;
 		var ynhash = [false,true];
 		var modehash = ["note","cc"];
-		var algmodehash = ["ccs","bend","aftertouch"];
+		var algmodehash = ["cc","bend","aftertouch"];
 		//var filterhash = ["Low","Medium","High"];
 		var filterhash = ['Low', 'Mid', 'Medium','High', 'Highest'];
 		var outmodehash = ["abs+fine","precision","fine","inc/dec"];
