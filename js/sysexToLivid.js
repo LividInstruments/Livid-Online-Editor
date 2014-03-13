@@ -1725,41 +1725,12 @@ sxToObj[12]={
 		//LED Ring Color 0 = Inverted White, 1 = Red, 2 = Green, 3 = Yellow, 4 = Blue, 5 = Magenta, 6 = Cyan, 7 = White
 		CNO=61;
 		var ctl = "slide";
-		var p = "properties";
-		var flags = [];
-		/*
+		var p = "color";
 		for (var i in sx[CNO]){
 			var val = sx[CNO][i];
-			//there are 5 flags in each byte
-			for(var k=0;k<5;k++){ 
-				//first 3 desc. mode, so we collect them.
-				if (k<3){		
-					flags[k]=flagger(val,k);
-				}
-				switch(k){
-					//on the 3rd iteration, we decode the first 3 bytes into the color mode
-					case 2:
-						ctl = "slide";
-						p = "color";	
-						if(!livid[ctl][i]) livid[ctl][i] = {}; //make the object if it's not here
-						livid[ctl][i][p] = btod(flags.reverse());
-					break;
-					case 3:
-						var ctl = "slide";
-						var p = "mode";					
-						if(!livid[ctl][i]) livid[ctl][i] = {}; //make the object if it's not here
-						livid[ctl][i][p] = flagger(val,k); //check if a bit is 1 or 0.
-					break;
-					case 4:
-						var ctl = "slide";
-						var p = "style";					
-						if(!livid[ctl][i]) livid[ctl][i] = {}; //make the object if it's not here
-						livid[ctl][i][p] = flagger(val,k); //check if a bit is 1 or 0.
-					break;
-				}
-			}
+			if(!livid[ctl][i]) livid[ctl][i]={}; 
+			livid[ctl][i][p] = val;
 		}
-		*/
 	},
 	//touch button sensitivity
 	63: function(){	
