@@ -260,7 +260,7 @@ requests[3]=[4,8,
 [9,0,0],[9,1,0],[9,2,0],[9,3,0],[9,4,0],[9,5,0],[9,6,0],[9,7,0],[9,8,0],[9,9,0],[9,10,0],[9,11,0],[9,12,0],[9,13,0],[9,14,0],[9,15,0],[9,16,0],[9,17,0],[9,18,0],[9,19,0],[9,20,0],[9,21,0],[9,22,0],[9,23,0],[9,24,0],[9,25,0],[9,26,0],[9,27,0],[9,28,0],[9,29,0],[9,30,0],[9,31,0],[9,32,0],[9,33,0],[9,34,0],[9,35,0],[9,36,0],[9,37,0],[9,38,0],[9,39,0],[9,40,0],[9,41,0],[9,42,0],[9,43,0],[9,44,0],[9,45,0],[9,46,0],[9,47,0],[9,48,0],[9,49,0],[9,50,0],[9,51,0],[9,52,0],[9,53,0],[9,54,0],[9,55,0],[9,56,0],[9,57,0],[9,58,0],[9,59,0],[9,60,0],[9,61,0],[9,62,0],[9,63,0],[9,64,0],[9,65,0],[9,66,0],[9,67,0],[9,68,0],[9,69,0],[9,70,0],[9,71,0],[9,72,0],[9,73,0],[9,74,0],[9,75,0],[9,76,0],[9,77,0],[9,78,0],[9,79,0],[9,80,0],[9,81,0],[9,82,0],[9,83,0],[9,84,0],[9,85,0],[9,86,0],[9,87,0],[9,88,0],[9,89,0],[9,90,0],[9,91,0],[9,92,0],[9,93,0],[9,94,0],[9,95,0],[9,96,0],[9,97,0],[9,98,0],[9,99,0],[9,100,0],[9,101,0],[9,102,0],[9,103,0],[9,104,0],[9,105,0],[9,106,0],[9,107,0],[9,108,0],[9,109,0],[9,110,0],[9,111,0],[9,112,0],[9,113,0],[9,114,0],[9,115,0],[9,116,0],[9,117,0],[9,118,0],[9,119,0],[9,120,0],[9,121,0],[9,122,0],[9,123,0],[9,124,0],[9,125,0],[9,126,0],[9,127,0],
 [9,0,1],[9,1,1],[9,2,1],[9,3,1],[9,4,1],[9,5,1],[9,6,1],[9,7,1],[9,8,1],[9,9,1],[9,10,1],[9,11,1],[9,12,1],[9,13,1],[9,14,1],[9,15,1],[9,16,1],[9,17,1],[9,18,1],[9,19,1],[9,20,1],[9,21,1],[9,22,1],[9,23,1],[9,24,1],[9,25,1],[9,26,1],[9,27,1],[9,28,1],[9,29,1],[9,30,1],[9,31,1],[9,32,1],[9,33,1],[9,34,1],[9,35,1],[9,36,1],[9,37,1],[9,38,1],[9,39,1],[9,40,1],[9,41,1],[9,42,1],[9,43,1],[9,44,1],[9,45,1],[9,46,1],[9,47,1],[9,48,1],[9,49,1],[9,50,1],[9,51,1],[9,52,1],[9,53,1],[9,54,1],[9,55,1],[9,56,1],[9,57,1],[9,58,1],[9,59,1],[9,60,1],[9,61,1],[9,62,1],[9,63,1],[9,64,1],[9,65,1],[9,66,1],[9,67,1],[9,68,1],[9,69,1],[9,70,1],[9,71,1],[9,72,1],[9,73,1],[9,74,1],[9,75,1],[9,76,1],[9,77,1],[9,78,1],[9,79,1],[9,80,1],[9,81,1],[9,82,1],[9,83,1],[9,84,1],[9,85,1],[9,86,1],[9,87,1],[9,88,1],[9,89,1],[9,90,1],[9,91,1],[9,92,1],[9,93,1],[9,94,1],[9,95,1],[9,96,1],[9,97,1],[9,98,1],[9,99,1],[9,100,1],[9,101,1],[9,102,1],[9,103,1],[9,104,1],[9,105,1],[9,106,1],[9,107,1],[9,108,1],[9,109,1],[9,110,1],[9,111,1],[9,112,1],[9,113,1],[9,114,1],[9,115,1],[9,116,1],[9,117,1],[9,118,1],[9,119,1],[9,120,1],[9,121,1],[9,122,1],[9,123,1],[9,124,1],[9,125,1],[9,126,1],[9,127,1],
 10,11,12,13,33,100]; //block
-requests[4]=[4,8,11,12,13,15,16,17,22,23,26,30,31,32,54,35,36,37,38,39,50,55]; //code v2 //note that 54 is in the middle. Not sure why it needs to be but was choking after 37
+requests[4]=[4,8,11,12,13,15,16,17,22,23,26,30,31,32,54,35,36,37,38,39,50,55,75]; //code v2 //note that 54 is in the middle. Not sure why it needs to be but was choking after 37
 requests[7]=[4,8,10,11,12,13,15,22,23,26,33,34,54,35,36,37]; //ohmrgb
 requests[8]=[4,8,10,11,12,13,16,17,22,23,26,29,30,31,32,33,34,35,36,37,38,39,50,54,55]; //cntrlr
 //requests[9]=[4,8,10,11,12,13,16,17,22,26,27,30,31,32,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54]; //brainv2
@@ -302,6 +302,10 @@ livid.globl.ringlocal_rel = 0;
 livid.globl.agslocal_pot =  0;
 livid.globl.agslocal_fsr =  0;
 livid.globl.linkfbleds = 0; //for base - link the LEDS on the F-buttons, rather than having them with separate controls.
+livid.globl.flip = 0;
+livid.globl.encdet_abs = 0;
+livid.globl.encdet_rel = 0;
+
 
 //associate types with sysex command ids so we know which messages to send out on update. 
 //Without this, we'd have to send them all out for each command. 
@@ -324,6 +328,7 @@ cmds.globl.settingsch=[12];
 cmds.globl.settingsch_enable=[12];
 cmds.globl.merge=[13];
 cmds.globl.enc_flip=[55];
+cmds.globl.encdet=[75]; //encoder settings for detented encoders
 cmds.globl.xfadeflip=[15];
 cmds.globl.bank=[26];
 cmds.globl.onech=[12];
@@ -737,8 +742,11 @@ function product(v){
 	if (!has_omni){
 		$('#omni_li').remove();
 	};
-	if (!has_encflip){ //some have encoders that work backwards
+	if (!has_encflip){ //some have encoders that work backwards and adjustements needed for detented encoders
 		$('#encflip_li').remove();
+		$('#encoderphys').remove();
+		$('#encoderdet').remove();
+		$('#encdet_li').remove();
 	};
 	//modify the global panel as needed for the detected product:
 	if (!has_ledring){
@@ -826,6 +834,9 @@ function productdefs(){
 	ALIAS8 = (pid==11);
 	BASE = (pid==12);
 	BRAINJR = (pid==13);
+	MIDICV = (pid==14);
+	GUITARWING = (pid==15);
+	DS1 = (pid==16);  
 }
 
 function factory_reset(){
@@ -985,8 +996,10 @@ function globl_set(){
 			//clog("use settings ch");
 			omniout();
 			localout();
+		}else if(param=='encdet_abs' || param=='encdet_rel'){
+		  clog("encoder detent dummy");
 		}else{
-			log("---global cmd out "+thecmd);
+			clog("---global cmd out "+thecmd);
 			cmdout(thecmd);
 			if(param=="bank"){
 				//request the settings on bank change
@@ -999,7 +1012,7 @@ function globl_set(){
 
 //color map is pretty independent, so unlike globals and inspectors, we update the livid and sx objects at the same time 
 function colormap_set(){
-	log("colormap_set");
+	//clog("colormap_set");
 	var colors = [];
 	var CMD = 34;
 	var param = "colormap";
@@ -1027,12 +1040,32 @@ function ledlock(v){
 function enc_flip(v){
 	var msg = [];
 	var CMD = cmds.globl.enc_flip; //55
-	var curr_encflip=1-Number(sx[CMD][0]>1);
+	var curr_encflip = 1-Number(sx[CMD][0]>1);
 	clog("enc flip called "+curr_encflip+" sx "+sx[CMD][0]);
+	sx[CMD][0] = curr_encflip;
 	msg = msg.concat(head,CMD,curr_encflip,eom);
 	midi_o(msg);
-		request();
+	request();
 }
+
+function enc_det(v){
+	var msg = [];
+	var CMD = cmds.globl.encdet; //75
+	var curr_abs = sx[CMD][0];
+	var curr_rel = sx[CMD][1];
+	if(v=="abs"){
+  	curr_abs = 1-Number(sx[CMD][0]>0);
+  }
+  if(v=="rel"){
+  	curr_rel = 1-Number(sx[CMD][1]>0);
+  }
+  sx[CMD] = [curr_abs,curr_rel]
+	//clog("enc det called "+curr_rel+" "+curr_abs+" sx "+sx[CMD][0]+" "+sx[CMD][1]);
+	msg = msg.concat(head,CMD,curr_rel,curr_abs,eom);
+	midi_o(msg);
+	//request();
+}
+
 
 //$$ when a UI element is clicked, or the control's MIDI value is rec'd
 //get the value for a control to update the interface
@@ -1132,7 +1165,7 @@ function colormapper(CMD){
 //used for converting livid object to Sysex for cmds 35 and 36
 function ledmapper(CMD,ctl,p){
 	//clog("LED cc "+sx[36]);
-	clog("ledmapper "+CMD+" "+ctl+" "+p+" len "+sx[CMD].length);
+	//clog("ledmapper "+CMD+" "+ctl+" "+p+" len "+sx[CMD].length);
 	//first, use the undo buffer that is created in the UI() to determine what note or cc# is being used:
 	var nncheck=undothis[0][2];
 	var crcheck=sx[CMD][nncheck]; //what cr is at this note or cc #?
@@ -1256,7 +1289,7 @@ function localout(){
 //dump all sysex out to controller all at once.**NOT USED
 function sysexout(){
 	//$.post("../index.html", "json_in sysex " +  JSON.stringify(sx) ); //to max
-	log("all sysex stringified to max");
+	//log("all sysex stringified to max");
 	//omni and local ctl are sent as cc's according to MIDI spec
 	omniout();
 	localout();
@@ -1280,7 +1313,7 @@ function somesysex(){
 		var cmd = sxtosend[i];
 		var oldledstyle = ( (OHM64 || BLOCK) && (cmd==35 || cmd==36) ); //leds on ohm64 and block are handled differently
 		//check if the cmd number is in the sx_send array for this product. For example, we don't want to try to send 54 to CNTRL:R, because it doesn't reply to that. :
-		log("cmd "+cmd+" type "+typeof(cmd));
+		//log("cmd "+cmd+" type "+typeof(cmd));
 		if(sx_send[pid].indexOf(cmd) >= 0){
 			if(!oldledstyle){
 				var tmp = [];
@@ -1298,7 +1331,7 @@ function somesysex(){
 }
 //convert cmds 35 and 36 to cmd 9 for ohm64 and block
 function oldleds(cmd){ //cmd will be 36 or 35
-	log("old led style");
+	//log("old led style");
 	var nn,type,cr;
 	var ledsysex = [];
 	type = cmd-35; //0=note, 1=cc
@@ -1735,17 +1768,17 @@ function toobj(){
 //update the UI for the various "global" values
 function globalsToUI(){
 	var ctl,val
-	//log("-->UI for globals");
+	//clog("-->UI for globals");
 	for(param in livid.globl){
-		if(typeof livid.globl[param] =="object" ){ //only bank channels are reported as an array
+		if(typeof livid.globl[param] == "object" ){ //only bank channels are reported as an array
 			for(var i in livid.globl[param]){
-				//outlet(1,"script","send","globl_"+param+"["+i+"]","set",livid.globl[param][i]); //bankchs: e.g. send globl_bankchs[0] set <val>
+				//clog("globalsToUI "+param+" i "+i+ " val "+livid.globl[param][i]);
 				ctl=param+"_"+i;
 				val=livid.globl[param][i];
 				updateglobalinspector(ctl,val)
 			}
 		}else{
-			log("globl "+param+" "+livid.globl[param]);
+      clog("globalsToUI "+param+" val "+livid.globl[param]);
 			ctl=param;
 			val=livid.globl[param];
 			updateglobalinspector(ctl,val)
@@ -2135,7 +2168,7 @@ function updateglobalinspector(ctlui,val){
 	var speedhash = ["1x","2x","3x","4x","5x","6x","7x","8x","9x","10x","11x","12x","13x","14x","15x","1/2x","1/3x","1/4x","1/5x","1/6x","1/7x","1/8x","1/9x","1/10x","1/11x","1/12x","1/13x","1/14x","1/15x"];
 	var thesetting=val;
 	var formele = $('#'+ctlui);
-	//clog("GLOBALS ui: "+$("#"+ctlui).attr('type')+" -- "+ctlui+" v "+val )
+	clog("GLOBALS ui: "+formele.attr('type')+" -- "+ctlui+" v "+val )
 	switch(formele.attr('type')){
 		case "text":
 		thesetting=parseInt(thesetting); //make sure it is an int
@@ -2152,6 +2185,7 @@ function updateglobalinspector(ctlui,val){
 		break;
 		case "checkbox":
 		var ischeck = thesetting>0; //make it bool
+		clog("Global Form "+ctlui+" setting "+ischeck+ " setting "+thesetting);
 		formele.prop("checked",ischeck);
 		break;
 	}

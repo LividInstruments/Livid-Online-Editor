@@ -597,7 +597,7 @@ sxToObj[4]={
 			var val = sx[CNO][i];
 			if(!livid[ctl][id_]) livid[ctl][id_]={}; 
 			livid[ctl][id_][p] = val;
-		  clog(">>sxToObj"+" LEDRING style ctl "+ctl+" i "+i+" id "+id_+" val "+val);
+		  //clog(">>sxToObj"+" LEDRING style ctl "+ctl+" i "+i+" id "+id_+" val "+val);
 		}
 		
 	},
@@ -628,8 +628,23 @@ sxToObj[4]={
 		var p = "encflip";
 		var val = sx[CNO][0];
 		livid[ctl][p] = val;
+	},
+	75: function(){	//global encoder flip [2]
+		CNO=75;
+		var ctl = "globl";
+	  var p = "encdet_abs";
+	  var i = 0;
+	  val = sx[CNO][i];
+		livid[ctl][p] = val;
+		clog("CMD 75 "+livid[ctl][p]+" ctl "+ctl+" val "+val);
+	  p = "encdet_rel";
+	  i = 1;
+	  val = sx[CNO][i];
+ 		livid[ctl][p] = val;
+		clog("CMD 75 "+livid[ctl][p]+" ctl "+ctl+" val "+val);
 	}
 };
+
 //ohmrgb
 sxToObj[7]={
 	4: function(){ //button LED indicators	[30]

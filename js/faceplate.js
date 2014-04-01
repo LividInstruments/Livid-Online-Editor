@@ -26,12 +26,12 @@ function selctl(pid,ctlname){
 	if(previous){
 		previous.animate({fill: color_off, stroke: color_stroke, "fill-opacity": 0, "stroke-opacity": 0}, 5);
 	}
-	//log('sel '+ctlname);
+	//clog('sel '+ctlname);
 	//use if to protect from fsr cc's causing an error, or anything else that would cause an undefined error, really.
 	if(controller[pid][ctlname]){
 		controller[pid][ctlname].animate({fill: color_on,"stroke-width": strokewidth,  stroke: color_on, "fill-opacity": 0.5, "stroke-opacity": 0.5}, 5);
 		var typeid=ctlname.split("_");
-		//log("selected type"+typeid[0]+" id "+typeid[1]);
+		//clog("selected type"+typeid[0]+" id "+typeid[1]);
 		updatectlinspector(typeid[0],parseInt(typeid[1])); //in uitocontroller.js
 		selected=ctlname;
 		previous = controller[pid][ctlname];
@@ -105,7 +105,7 @@ function submit_one(ctlindex,ctltype,ctlparam,ctlvalue,formtype){
 	var valid = true;
 	var nnmax = 127;
 	clog("---submit one element--- i-"+ctlindex+" t-"+ctltype+" p-"+ctlparam+" v-"+ctlvalue+" form "+formtype);
-	//log(ctlindex+" "+ctltype+" "+ctlparam+" "+ctlvalue+" "+formtype)
+	//clog(ctlindex+" "+ctltype+" "+ctlparam+" "+ctlvalue+" "+formtype)
 	if(ctltype!="testbutton"){ //exclude certain buttons in the HTML from calling this
 		if(ctlparam!="special" && ctlparam!="lock_led"){ //special is a sort of macro that changes 2 elements, so we ignore that.
 			if(ctlvalue !== undefined && formtype !== "submit" && formtype !== "hidden"){
@@ -144,31 +144,46 @@ function submit_one(ctlindex,ctltype,ctlparam,ctlvalue,formtype){
 				if(ctltype=="fsr" && ctlparam=="mode" && ctlvalue=="bend"){
 					alertbox("The </i>bend</i> mode is a weird one! If you want bend, set cc# field to 96-109. There's actually a lot more to this. <a href='http://wiki.lividinstruments.com/wiki/Online_Editor#mode_2'>Read more in the wiki</a>");
 				}
-			//log("CHECK "+livid["led"][0].nn+" mode "+livid["led"][0].mode+" onoff "+livid["led"][0].onoff);
+			  //clog("CHECK "+livid["led"][0].nn+" mode "+livid["led"][0].mode+" onoff "+livid["led"][0].onoff);
 				//SET THE VALUE IN livid object and stringify the midi so it can be sent:
 				if(ctltype=="globl"){
-					if(ctlparam != "encflip"){
+					if(ctlparam != "encflip" && ctlparam != "encdet_abs" && ctlparam != "encdet_rel"){
 						globl_set(ctlparam,ctlvalue);
-					}else{
-						confirmbox("Are you sure you want to reverse the function of the encoders?","encflip")
+					}else{			
+            var CMD = cmds.globl.encdet; //75
+            var curr_abs = sx[CMD][0];
+            var curr_rel = sx[CMD][1];
+					  clog("cur "+curr_abs+" "+curr_rel+" cmd "+CMD);		
+            var words = ["detented","smooth"];
+					  switch(ctlparam){
+              case "encflip":
+                confirmbox("NUN Are you sure you want to reverse the function of the encoders?","encflip")
+              break;
+              case "encdet_abs":
+                confirmbox("NUN This will optimize the speed of encoders for <em>"+words[curr_abs]+"</em> encoders in absolute mode. Are you sure?","encdet_abs")
+              break;
+              case "encdet_rel":
+                confirmbox("NUN This will optimize the speed of encoders for <em>"+words[curr_rel]+"</em> encoders in relative mode. Are you sure?","encdet_rel")
+              break;
+					  }
 					}
-				}else{
-					if(valid){
-						UI(ctlindex,ctltype,ctlparam,ctlvalue); //in uitocontroller.js
-						//if LEDs inspector is locked, we sync the LED to the button or fsr note
-						if(lock && (ctltype=="btn" || ctltype=="fsr") && (ctlparam=="nn" || ctlparam=="mode") ){ //lock var is declared in uitocontroller.js
-							if(ctlparam=="nn"){
-								$("#ledsmidi").val(ctlvalue); //set the text element in UI to the same value as the button's nn:
-							}
-							if(ctlparam=="mode"){
-								//clog("LEDS menu "+ctltype+" "+ctlparam+" "+ctlvalue);
-								if(ctltype=="fsr") ctlvalue="note"; //fsr modes are for the afterpressure, so we don't want those affecting the LED. Just set it to note.
-								$("#ledsmode").val(ctlvalue); //set the mwenu element in UI to the same value as the button's nn:
-							}
-							//log("LOCK");
-							UI(ctlindex,"led",ctlparam,ctlvalue); //now set value in the "livid" object and sysex
-						}
-					}
+				}else{//check here
+          if(valid){
+              UI(ctlindex,ctltype,ctlparam,ctlvalue); //in uitocontroller.js
+              //if LEDs inspector is locked, we sync the LED to the button or fsr note
+              if(lock && (ctltype=="btn" || ctltype=="fsr") && (ctlparam=="nn" || ctlparam=="mode") ){ //lock var is declared in uitocontroller.js
+                if(ctlparam=="nn"){
+                  $("#ledsmidi").val(ctlvalue); //set the text element in UI to the same value as the button's nn:
+                }
+                if(ctlparam=="mode"){
+                  //clog("LEDS menu "+ctltype+" "+ctlparam+" "+ctlvalue);
+                  if(ctltype=="fsr") ctlvalue="note"; //fsr modes are for the afterpressure, so we don't want those affecting the LED. Just set it to note.
+                  $("#ledsmode").val(ctlvalue); //set the mwenu element in UI to the same value as the button's nn:
+                }
+                //clog("LOCK");
+                UI(ctlindex,"led",ctlparam,ctlvalue); //now set value in the "livid" object and sysex
+              }
+            }
 				}
 			}
 		}else if(ctlparam=="special"){ //special menu
@@ -308,6 +323,14 @@ function confirmbox(s,f){
 			break;
 			case "encflip":
 				enc_flip();
+			break;
+			case "encdet_abs":
+			  clog("-----abs----");
+				enc_det("abs");
+				
+			break;
+			case "encdet_rel":
+				enc_det("rel");
 			break;
 		}
 		$("#confirm").fadeTo(500,0,function() { $("#confirm").css({"z-index": -9}) });
@@ -1220,10 +1243,10 @@ function beginfaceplate(){
 					current = item;
 					//fade out the over after 5 secs
 					fadeout = setTimeout(function(){st.animate({fill: color_over, stroke: color_stroke,"fill-opacity": 0, "stroke-opacity": 0}, 500);},4000);
-					//log(" selected "+item);
+					//clog(" selected "+item);
 				}
 				last=item;//for filter 
-				//log(" last "+last+"<br>");
+				//clog(" last "+last+"<br>");
 			});
 			/* IE SUCKS. 
 			st.mouseout(function () {
@@ -1267,6 +1290,26 @@ function beginfaceplate(){
 		//request();
 		confirmbox("Are you sure you want to reverse the function of the encoders?","encflip")
 	});
+	/*
+	$("#encdet_)abs").click(function() {
+		//factory_reset();
+		//request();
+		var CMD = 75;
+    var curr_abs = sx[CMD][0];
+    var curr_rel = sx[CMD][1];
+    var words = ["detented","smooth"];
+		confirmbox("This will optimize the speed of encoders for "+words[curr_abs]+" encoders in absolute mode. Are you sure?","encdet_abs")
+	});
+	$("#encdet_rel").click(function() {
+		var CMD = 75;
+    var curr_abs = sx[CMD][0];
+    var curr_rel = sx[CMD][1];
+    var words = ["detented","smooth"];
+		//factory_reset();
+		//request();
+		confirmbox("This will optimize the speed of encoders for "+words[curr_abs]+" encoders in relative mode. Are you sure?","encdet_rel")
+	});
+	*/
 	$("#sendmidi").submit(function() {
 	 var a = $('#sendmidi').serializeArray();
 	 var nn=a[0].value;
@@ -1336,7 +1379,7 @@ function beginfaceplate(){
 
 //any click in a form:
 	$('form').click(function(){
-		//log('form klik'+' '+this.name);
+		//clog('form klik'+' '+this.name);
 	});
 	
 	$(':input').change(function(){
@@ -1350,7 +1393,7 @@ function beginfaceplate(){
 		if(type!="sendmidi" && type!="sendsysex" && type!="colormap"){
 			var index=theform.find(":input[type=hidden]").val(); //control ID
 			var test=theform.find(":input[type=hidden]").attr('name'); //control ID
-			//log("INDEX "+index+" N "+test);
+			//clog("INDEX "+index+" N "+test);
 			//var index=$("#ctlid").val(); //the hidden form element that holds the control ID
 			var param=this.name;
 			var value=this.value;
@@ -1359,7 +1402,7 @@ function beginfaceplate(){
 			if(formtype=="checkbox"){
 				value=this.checked;
 			}
-			//log('form>>'+' '+this.name+' parent: '+$(this).closest("form").attr('id')+' name: '+$(this).attr('name')+" i-"+index+" t-"+this.type+" v-"+value);
+			//clog('form>>'+' '+this.name+' parent: '+$(this).closest("form").attr('id')+' name: '+$(this).attr('name')+" i-"+index+" t-"+this.type+" v-"+value);
 			if(type){ //excludes inputs that don't have a type - currently the MIDI menus are the only ones.
 				submit_one(index,type,param,value,formtype);
 			}

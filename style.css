@@ -60,10 +60,9 @@ form input[type="text"] {
 }
 #alerts {
 	position: fixed;
-	top: 5%;
+	top: 2%;
 	width: 30%;
-	margin-left: 30%;
-	margin-right: 35%;
+	margin-left: 60%;
 	padding: 0.5em;
 	border: 0.2em dashed rgba(232,48,12,1);
 	background: rgba(235,173,173,1);
@@ -73,10 +72,9 @@ form input[type="text"] {
 }
 #safalerts {
 	position: fixed;
-	top: 15%;
+	top: 50%;
 	width: 30%;
 	margin-left: 30%;
-	margin-right: 35%;
 	padding: 0.5em;
 	border: 0.2em dashed rgba(160,200,220,1);
 	background: rgba(66,161,210,1);
@@ -86,8 +84,8 @@ form input[type="text"] {
 }
 #confirm {
 	position: fixed;
-	top: 5%;
-	width: 30%;
+	top: 15%;
+	width: 25%;
 	margin-left: 35%;
 	margin-right: 35%;
 	padding: 0.5em;
@@ -482,6 +480,10 @@ hr {
 }
 i {
 	font-size: 0.8em;
+	font-style: italic;
+}
+em {
+	font-weight: bold;
 	font-style: italic;
 }
 h2 {
