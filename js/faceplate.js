@@ -157,13 +157,13 @@ function submit_one(ctlindex,ctltype,ctlparam,ctlvalue,formtype){
             var words = ["detented","smooth"];
 					  switch(ctlparam){
               case "encflip":
-                confirmbox("NUN Are you sure you want to reverse the function of the encoders?","encflip")
+                confirmbox("Are you sure you want to reverse the function of the encoders?","encflip")
               break;
               case "encdet_abs":
-                confirmbox("NUN This will optimize the speed of encoders for <em>"+words[curr_abs]+"</em> encoders in absolute mode. Are you sure?","encdet_abs")
+                confirmbox("This will optimize the speed of encoders for <em>"+words[curr_abs]+"</em> encoders in absolute mode. Are you sure?","encdet_abs")
               break;
               case "encdet_rel":
-                confirmbox("NUN This will optimize the speed of encoders for <em>"+words[curr_rel]+"</em> encoders in relative mode. Are you sure?","encdet_rel")
+                confirmbox("This will optimize the speed of encoders for <em>"+words[curr_rel]+"</em> encoders in relative mode. Are you sure?","encdet_rel")
               break;
 					  }
 					}
