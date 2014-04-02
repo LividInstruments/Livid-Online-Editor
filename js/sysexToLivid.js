@@ -384,6 +384,14 @@ sxToObj[4]={
 		var flags = [];
 		var ctl = "enc";
 		var p = "type";
+		var pos = [	0, 8 ,16,24,
+          1, 9 ,17,25,
+          2, 10,18,26,
+          3, 11,19,27,
+          4, 12,20,28,
+          5, 13,21,29,
+          6, 14,22,30,
+          7, 15,23,31];
 		//clog("\nsxToObj"+" "+CNO+" "+ctl+" "+p);
 		var id_=0;
 		var max_id=32; //32 encoders on code
@@ -393,8 +401,8 @@ sxToObj[4]={
 			for(var k=0;k<7;k++){ //there are 7 flags in each byte
 				var skipit = (i%2 && k>0); //only the first bit in odd bytes is used
 				if(!skipit && id_<max_id){
-					if(!livid[ctl][id_]) livid[ctl][id_]={}; //make the object if it's not here
-					livid[ctl][id_][p]=flagger(val,k); //check if a bit is 1 or 0.
+					if(!livid[ctl][pos[id_]]) livid[ctl][pos[id_]]={}; //make the object if it's not here
+					livid[ctl][pos[id_]][p]=flagger(val,k); //check if a bit is 1 or 0.
 					id_++;
 				}
 			}

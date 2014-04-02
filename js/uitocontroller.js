@@ -1053,6 +1053,7 @@ function enc_det(v){
 	var CMD = cmds.globl.encdet; //75
 	var curr_abs = sx[CMD][0];
 	var curr_rel = sx[CMD][1];
+	clog("enc_det BEFORE "+v+" : "+curr_abs+" "+curr_rel+" sx "+sx[CMD][0]+" "+sx[CMD][1]);
 	if(v=="abs"){
   	curr_abs = 1-Number(sx[CMD][0]>0);
   }
@@ -1060,8 +1061,8 @@ function enc_det(v){
   	curr_rel = 1-Number(sx[CMD][1]>0);
   }
   sx[CMD] = [curr_abs,curr_rel]
-	//clog("enc det called "+curr_rel+" "+curr_abs+" sx "+sx[CMD][0]+" "+sx[CMD][1]);
-	msg = msg.concat(head,CMD,curr_rel,curr_abs,eom);
+	clog("enc det AFTER "+v+" : "+curr_abs+" "+curr_rel+" sx "+sx[CMD][0]+" "+sx[CMD][1]);
+	msg = msg.concat(head,CMD,sx[CMD],eom);
 	midi_o(msg);
 	//request();
 }

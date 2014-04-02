@@ -153,7 +153,7 @@ function submit_one(ctlindex,ctltype,ctlparam,ctlvalue,formtype){
             var CMD = cmds.globl.encdet; //75
             var curr_abs = sx[CMD][0];
             var curr_rel = sx[CMD][1];
-					  clog("cur "+curr_abs+" "+curr_rel+" cmd "+CMD);		
+					  clog("need confirmation");		
             var words = ["detented","smooth"];
 					  switch(ctlparam){
               case "encflip":
@@ -300,50 +300,23 @@ function inittabs(){
 	$("#inspector_tab").css("border-bottom-color",tabon);
 }
 var hideconfirm = 0;
+var confirm_what = "";
 function confirmbox(s,f){
 	clog("comfirm "+f+" "+s);
+	confirm_what = f;
 	if(hideconfirm) clearTimeout(hideconfirm);
 	$("#confirm").css({"z-index": 99})
 	$("#confirm").fadeTo(100,1);	
+	$("#midiioscrim").fadeTo(100,1); //bring the scrim back.
 	//$("#confirm").css({visibility: "visible"})
 	//$("#confirm").css({display: "inline"})
 	var d = document.getElementById("confirmspan");
 	d.innerHTML = s;
-	$("#confirmyes").click(function() {
-		switch(f){
-			case "defaults":
-			  //sx[49] = [];
-			  clog("RESET");
-			  resetting_defaults = true;
-			  $("#sendnote").focus();
-			  //need to delay this in the case that the cursor is in an inspector field when we do a reset:
-			  var schedreset = setTimeout(factory_reset(),200);
-			  //the request() function is called in procSysex when the ACK is rec'd from the defaults reset. We leave it here commented out for posterity:
-        //request();
-			break;
-			case "encflip":
-				enc_flip();
-			break;
-			case "encdet_abs":
-			  clog("-----abs----");
-				enc_det("abs");
-				
-			break;
-			case "encdet_rel":
-				enc_det("rel");
-			break;
-		}
-		$("#confirm").fadeTo(500,0,function() { $("#confirm").css({"z-index": -9}) });
-		//$("#confirm").css({visibility: "hidden"});
-		//$("#confirm").css({display: "inline"});
-	});
-	$("#confirmno").click(function() {
-		$("#confirm").fadeTo(500,0);
-		//$("#confirm").css({visibility: "hidden"})
-		//$("#confirm").css({display: "inline"});
-	});
+		
+
 } 
 
+	
 //beginfaceplate() is called from the product() function in uitocontroller.js - inits the Raphael graphics and activates the form handlers.
 function beginfaceplate(){
 	//getsx(); //load default livid object from JSON file in uitocontroller.js
@@ -1506,4 +1479,43 @@ function beginfaceplate(){
 		$(this).css("background",tabon);
 		$(this).css("border-bottom-color",tabon);
 	});	
+	
+	$("#confirmyes").click(function(event) {
+		event.stopPropagation();
+    event.preventDefault();
+      clog("CONFIRM YES");
+      switch(confirm_what){
+        case "defaults":
+          //sx[49] = [];
+          clog("RESET");
+          resetting_defaults = true;
+          $("#sendnote").focus();
+          //need to delay this in the case that the cursor is in an inspector field when we do a reset:
+          var schedreset = setTimeout(factory_reset(),200);
+          //the request() function is called in procSysex when the ACK is rec'd from the defaults reset. We leave it here commented out for posterity:
+          //request();
+        break;
+        case "encflip":
+          enc_flip();
+        break;
+        case "encdet_abs":
+            enc_det("abs");          
+        break;
+        case "encdet_rel":
+            enc_det("rel");
+        break;
+      }
+      $("#confirm").fadeTo(500,0,function() { $("#confirm").css({"z-index": -9}) });
+      $("#midiioscrim").fadeOut(100);
+	});
+	$("#confirmno").click(function() {
+	  clog("CONFIRM NO");
+		$("#confirm").fadeTo(500,0);
+    $("#midiioscrim").fadeOut(100);
+    //change checkvalue for the smooth/detented checkboxes:
+    if(confirm_what == "encdet_abs" ||  confirm_what == "encdet_rel" ){
+      var checkvalue=$("#"+confirm_what).is(":checked");
+      $("#"+confirm_what).prop("checked",!checkvalue);
+    }
+	});
 };

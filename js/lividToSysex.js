@@ -26,26 +26,26 @@ lividToSx[2]={
 			var val;
 			var id = pos[i];
 			if(id>=0){
-				//log("---- "+livid[cntl][id][prm]);
+				//clog("---- "+livid[cntl][id][prm]);
 				val = 1-livid[cntl][id][prm]; //remember: OHM64 is such that 0 is on, 1 is off. Ugh
 			}else{
 				val = 0;
 			}
-			//log("bit "+i+" id "+id);
-			//log("val "+val);
+			//clog("bit "+i+" id "+id);
+			//clog("val "+val);
 			bitlist[i%bitscount]=val;
 			if(i%bitscount==13 && i!=0 || i==ledcount){
 				var firstbyte = bitlist.slice(0,7);
 				sx[CNO][j]=btod(firstbyte.reverse());
-				//log("first"+" i "+i+" j "+j+" - "+firstbyte+" "+"byte"+" "+sx[CNO][j]);
+				//clog("first"+" i "+i+" j "+j+" - "+firstbyte+" "+"byte"+" "+sx[CNO][j]);
 				j++;
 				var secbyte = bitlist.slice(7,bitscount+1);
 				//secbyte.splice(3,0,0); //this bit is skipped in the command.
 				sx[CNO][j]=btod(secbyte.reverse());
-				//log("secd"+" i "+i+" j "+j+" "+"-"+" "+secbyte+" "+"byte"+" "+sx[CNO][j]);
+				//clog("secd"+" i "+i+" j "+j+" "+"-"+" "+secbyte+" "+"byte"+" "+sx[CNO][j]);
 				j++;
 				bitlist=[]; //clear it for the next round
-				//log("sx so far "+sx[CNO]);
+				//clog("sx so far "+sx[CNO]);
 			}
 		}
 		sx[CNO].length=12; //a hack correction - somewhere there might be a bug where extra undef. bytes are added.
@@ -71,7 +71,7 @@ lividToSx[2]={
 		CNO=12; //all bank chs
 		cntl="globl";
 		prm="onech";
-		//log("MIDI CH "+livid[cntl][prm]+" type of "+typeof(livid[cntl][prm])+" - "+(livid[cntl][prm]-1));
+		//clog("MIDI CH "+livid[cntl][prm]+" type of "+typeof(livid[cntl][prm])+" - "+(livid[cntl][prm]-1));
 		sx[CNO]=livid[cntl][prm]-1; //offset by one, since ui shows chs. as 1-16, but sysex wants 0-15		
 	},
 	13: function(){	
@@ -126,26 +126,26 @@ lividToSx[3]={
 			var val;
 			var id = pos[i];
 			if(id>=0){
-				//log("---- "+livid[cntl][id][prm]);
+				//clog("---- "+livid[cntl][id][prm]);
 				val = livid[cntl][id][prm]; //on or off
 			}else{
 				val = 0;
 			}
-			//log("bit "+i+" id "+id);
-			//log("val "+val);
+			//clog("bit "+i+" id "+id);
+			//clog("val "+val);
 			bitlist[i%bitscount]=val;
 			if(i%bitscount==13 && i!=0 || i==ledcount){
 				var firstbyte = bitlist.slice(0,7);
 				sx[CNO][j]=btod(firstbyte.reverse());
-				//log("first"+" i "+i+" j "+j+" - "+firstbyte+" "+"byte"+" "+sx[CNO][j]);
+				//clog("first"+" i "+i+" j "+j+" - "+firstbyte+" "+"byte"+" "+sx[CNO][j]);
 				j++;
 				var secbyte = bitlist.slice(7,bitscount+1);
 				//secbyte.splice(3,0,0); //this bit is skipped in the command.
 				sx[CNO][j]=btod(secbyte.reverse());
-				//log("secd"+" i "+i+" j "+j+" "+"-"+" "+secbyte+" "+"byte"+" "+sx[CNO][j]);
+				//clog("secd"+" i "+i+" j "+j+" "+"-"+" "+secbyte+" "+"byte"+" "+sx[CNO][j]);
 				j++;
 				bitlist=[]; //clear it for the next round
-				//log("sx so far "+sx[CNO]);
+				//clog("sx so far "+sx[CNO]);
 			}
 		}
 		sx[CNO].length=10; //a hack correction - somewhere there might be a bug where extra undef. bytes are added.
@@ -171,7 +171,7 @@ lividToSx[3]={
 		CNO=12; //all bank chs
 		cntl="globl";
 		prm="onech";
-		//log("MIDI CH "+livid[cntl][prm]+" type of "+typeof(livid[cntl][prm])+" - "+(livid[cntl][prm]-1));
+		//clog("MIDI CH "+livid[cntl][prm]+" type of "+typeof(livid[cntl][prm])+" - "+(livid[cntl][prm]-1));
 		sx[CNO]=livid[cntl][prm]-1; //offset by one, since ui shows chs. as 1-16, but sysex wants 0-15		
 	},
 	13: function(){	
@@ -266,24 +266,38 @@ lividToSx[4]={
 		CNO=17; //abs or relative
 		cntl="enc";
 		prm="type";
+		var pos = [	
+      0, 8 ,16,24,
+      1, 9 ,17,25,
+      2, 10,18,26,
+      3, 11,19,27,
+      4, 12,20,28,
+      5, 13,21,29,
+      6, 14,22,30,
+      7, 15,23,31,
+      32,33,34,35,
+      36,37,38,39, 
+      40,41,42,43,44
+    ];
 		bitlist=[];
 		var j=0;
 		var enc_max=31;
 		//cycle thru all encoders and get the encoder type flag
-		for (var id in livid[cntl]){ 
-			bitlist[id%8]=livid[cntl][id][prm];
-			if(id%8==7 && id!=0 || id==enc_max){
+		for(var i=0;i<32;i++){
+		//for (var id in livid[cntl]){ 
+			bitlist[i%8]=livid[cntl][pos[i]][prm];
+			if(i%8==7 && i!=0 || i==enc_max){
 				var firstbyte = bitlist.slice(0,7);
 				sx[CNO][j]=btod(firstbyte.reverse());
-				//log("\nenc type",j,sx[CNO][j],"..",firstbyte);
+				//clog("\nenc type",j,sx[CNO][j],"..",firstbyte);
 				j++;
 				sx[CNO][j]=bitlist.pop(); //the 2nd byte only uses 1 bit
-				//log("\nenc type",j,sx[CNO][j]);
+				//clog("\nenc type",j,sx[CNO][j]);
 				j++;
 				bitlist=[]; //clear it for the next round
 			}
 		}
-		//log("\nenc type sx",sx[CNO]);
+		clog("\nenc type sx (17)",sx[CNO]);
 	},
 	22: function(){
 		CNO=22; //bank ch
@@ -351,7 +365,7 @@ lividToSx[4]={
 		for(var id in livid[cntl]){ //livid.ledring[id].style
 			if(id<maxring){ //shouldn't have to do this, but...
 				sx[CNO][pos[id]]=livid[cntl][id][prm];
-				//log("\n",CNO,id,cntl,p,livid[cntl][id][prm],"..",sx[CNO]);
+				//clog("\n",CNO,id,cntl,p,livid[cntl][id][prm],"..",sx[CNO]);
 			}
 		}
 	},
@@ -365,11 +379,11 @@ lividToSx[4]={
 		var lastid=44;
 		for (var id in livid[cntl]){
 			var bitpos = posi[pid].btn[id];
-			//log("\nbtn tog",id,bitpos,"   ",livid[cntl][id][prm]);
+			//clog("\nbtn tog",id,bitpos,"   ",livid[cntl][id][prm]);
 			bitlist[id%4]=livid[cntl][bitpos][prm];
 			if(id%4==3 && id!=0 || id==lastid){
 				sx[CNO][j]=btod(bitlist.reverse()); //need to reverse the bitlist - easier than creating a new "posi" table!
-				 //log("\ntog bitlist",j,sx[CNO][j],"from list",bitlist);
+				 //clog("\ntog bitlist",j,sx[CNO][j],"from list",bitlist);
 				j++;
 				bitlist=[]; //clear it for the next round
 			}
@@ -397,11 +411,11 @@ lividToSx[7]={
 			//even id's will fill first 3 slots in bitlist, odd id's will fill next 3 slots in bitlist
 			for(var c in p_arr){
 				var clr = p_arr[c];
-				//log(">>>>rgb "+rgb_i+" cntl,id,clr "+cntl+" "+id+" "+clr+" val "+livid[cntl][id][clr]);
+				//clog(">>>>rgb "+rgb_i+" cntl,id,clr "+cntl+" "+id+" "+clr+" val "+livid[cntl][id][clr]);
 				bitlist[rgb_i]=livid[cntl][id][clr];
 				rgb_i++;
 			}
-			//log("LED "+i+" , "+pos[id]+" - "+bitlist)
+			//clog("LED "+i+" , "+pos[id]+" - "+bitlist)
 			if(odd_i || i==80){
 				sx[CNO][pos[id]]=btod(bitlist.reverse());
 				j++;
@@ -549,15 +563,15 @@ lividToSx[8]={
 			if(id%8==7 && id!=0 || id==(max_enc-1) ){
 				var firstbyte = bitlist.slice(0,7);
 				sx[CNO][j]=btod(firstbyte.reverse());
-				//log("\nenc type",j,sx[CNO][j],"..",firstbyte);
+				//clog("\nenc type",j,sx[CNO][j],"..",firstbyte);
 				j++;
 				sx[CNO][j]=bitlist.pop(); //the 2nd byte only uses 1 bit
-				//log("\nenc type",j,sx[CNO][j]);
+				//clog("\nenc type",j,sx[CNO][j]);
 				j++;
 				bitlist=[]; //clear it for the next round
 			}
 		}
-		//log("\nenc type sx",sx[CNO]);
+		//clog("\nenc type sx",sx[CNO]);
 	},
 	22: function(){
 		CNO=22; //bank ch
@@ -589,15 +603,15 @@ lividToSx[8]={
 			if(id%8==7 && id!=0 || id==(max_enc-1) ){
 				var firstbyte = bitlist.slice(0,7);
 				sx[CNO][j]=btod(firstbyte.reverse());
-				//log("\nenc style",j,sx[CNO][j],"..",firstbyte);
+				//clog("\nenc style",j,sx[CNO][j],"..",firstbyte);
 				j++;
 				sx[CNO][j]=bitlist.pop(); //the 2nd byte only uses 1 bit
-				//log("\nenc style",j,sx[CNO][j]);
+				//clog("\nenc style",j,sx[CNO][j]);
 				j++;
 				bitlist=[]; //clear it for the next round
 			}
 		}
-		//log("\nenc type sx",sx[CNO]);
+		//clog("\nenc type sx",sx[CNO]);
 	},
 	30: function(){	
 		CNO=30; //encoder speed
@@ -657,7 +671,7 @@ lividToSx[8]={
 		for(var id in livid[cntl]){ //livid.ledring[id].style
 			if(id<maxring){ //shouldn't have to do this, but...
 				sx[CNO][id]=livid[cntl][id][prm];
-				//log("\n",CNO,id,cntl,p,livid[cntl][id][prm],"..",sx[CNO]);
+				//clog("\n",CNO,id,cntl,p,livid[cntl][id][prm],"..",sx[CNO]);
 			}
 		}
 	},
@@ -671,11 +685,11 @@ lividToSx[8]={
 		var lastid=59;
 		for (var id in livid[cntl]){
 			var bitpos = posi[pid].btn[id];
-			//log("\nbtn tog",id,bitpos,"   ",livid[cntl][id][prm]);
+			//clog("\nbtn tog",id,bitpos,"   ",livid[cntl][id][prm]);
 			bitlist[id%4]=livid[cntl][bitpos][prm];
 			if(id%4==3 && id!=0 || id==lastid){
 				sx[CNO][j]=btod(bitlist.reverse()); //need to reverse the bitlist - easier than creating a new "posi" table!
-				 //log("\ntog bitlist",j,sx[CNO][j],"from list",bitlist);
+				 //clog("\ntog bitlist",j,sx[CNO][j],"from list",bitlist);
 				j++;
 				bitlist=[]; //clear it for the next round
 			}
@@ -702,7 +716,7 @@ lividToSx[11]={
 			//even id's will fill first 3 slots in bitlist, odd id's will fill next 3 slots in bitlist
 			for(var c in p_arr){
 				var clr = p_arr[c];
-				//log("rgb "+rgb_i+" cntl,id,clr "+cntl+" "+id+" "+clr+" val "+livid[cntl][id][clr]);
+				//clog("rgb "+rgb_i+" cntl,id,clr "+cntl+" "+id+" "+clr+" val "+livid[cntl][id][clr]);
 				bitlist[rgb_i]=livid[cntl][id][clr];
 				rgb_i++;
 			}
@@ -746,15 +760,15 @@ lividToSx[11]={
 			if(id%8==7 && id!=0 || id==(max_enc-1) ){
 				var firstbyte = bitlist.slice(0,7);
 				sx[CNO][j]=btod(firstbyte.reverse());
-				//log("\nenc type",j,sx[CNO][j],"..",firstbyte);
+				//clog("\nenc type",j,sx[CNO][j],"..",firstbyte);
 				j++;
 				sx[CNO][j]=bitlist.pop(); //the 2nd byte only uses 1 bit
-				//log("\nenc type",j,sx[CNO][j]);
+				//clog("\nenc type",j,sx[CNO][j]);
 				j++;
 				bitlist=[]; //clear it for the next round
 			}
 		}
-		//log("\nenc type sx",sx[CNO]);
+		//clog("\nenc type sx",sx[CNO]);
 	},
 	22: function(){	//[1]
 		CNO=22; //bank ch
