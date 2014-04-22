@@ -1298,9 +1298,11 @@ function sysexout(){
 
 var cnxn;
 var sxtosend = []; //the array of sysex cmd numbers we're going to send. a full dump just clones sx_send[pid] to this array
+var isfromfile = false;
 //sends out some sysex commands, based on the cmd #s in the arguments.
 function somesysex(){
 	//disconnect the MIDI input for Safari- there seemed to be some sort of problem with leaving it connected during this routine:
+	//if(isfromfile) DO_DISCNXN = true;
 	if(DO_DISCNXN) disconnectMidiIn(); 
 	cmdno=0;
 	sxtosend=Array.prototype.slice.call(arguments, 0); //e.g. [10,11,12]
@@ -1309,7 +1311,21 @@ function somesysex(){
 	}
 	var reps = sxtosend.length;
 	clog("somesysex() "+sxtosend+" reps "+sxtosend.length);
-	var sxmsg=[];
+	var sxmsg=[];	
+  var bank_no = sxtosend.indexOf(26);
+  var chan_no = sxtosend.indexOf(22);
+  var chans_no = sxtosend.indexOf(23);
+  clog ("bank and ch commands "+bank_no+" "+chan_no+" "+chans_no);
+  //send the bank number first CMD 26
+	if(bank_no>0){
+    var tmp = [];
+    midi_o(tmp.concat(head,26,sx[26],eom))
+  }
+  //remove CMD 22 "set bank channel" if there's also CMD 23 since that is redundant of 23 "set all bank chs"
+	if(chan_no>0 && chans_no>0){
+	  sxtosend.splice(chan_no,1);
+  }
+	
 	for(var i=0;i<reps;i++){
 		var cmd = sxtosend[i];
 		var oldledstyle = ( (OHM64 || BLOCK) && (cmd==35 || cmd==36) ); //leds on ohm64 and block are handled differently
@@ -1329,6 +1345,8 @@ function somesysex(){
 	//$.post("../index.html", "json_in sysex " +  JSON.stringify(sxmsg) ); //to max
 	//log("=>somesysex done")
 	if(DO_DISCNXN) cnxn = setTimeout(function(){ connectMidiIn() },500); //re-open the MIDI input port
+  isfromfile = false;
+  //if(isfromfile) DO_DISCNXN = false;
 }
 //convert cmds 35 and 36 to cmd 9 for ohm64 and block
 function oldleds(cmd){ //cmd will be 36 or 35

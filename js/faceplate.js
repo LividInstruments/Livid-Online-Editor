@@ -1428,6 +1428,7 @@ function beginfaceplate(){
               clog("Btns "+sx[11]);
               clog("LEDs "+sx[4]);
               toobj();
+              isfromfile = true;
               //scheduling this because Mark reported some odd behavior where the new settings wouldn't appear on controller until there was a change made in an inspector:
               var schedsysexsend = setTimeout( somesysex(requests[pid]),100 );
               //somesysex(requests[pid]); //unshceduled here for posterity
