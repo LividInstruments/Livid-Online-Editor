@@ -1319,7 +1319,8 @@ function somesysex(){
   //send the bank number first CMD 26
 	if(bank_no>0){
     var tmp = [];
-    midi_o(tmp.concat(head,26,sx[26],eom))
+    midi_o(tmp.concat(head,26,sx[26],eom));
+	  sxtosend.splice(bank_no,1);
   }
   //remove CMD 22 "set bank channel" if there's also CMD 23 since that is redundant of 23 "set all bank chs"
 	if(chan_no>0 && chans_no>0){
