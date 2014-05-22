@@ -438,7 +438,17 @@ IDtocr[4] = [ 0, 4, 8, 13,19,23,28,34,
               55,59,63,67,71,75,79,83,
               56,60,64,68,72,76,80,84,
               57,61,65,69,73,77,81,85];
-IDtocr[7] = [56,48,40,32,24,16,8,0,60,52,44,36,28,20,12,4,57,49,41,33,25,17,9,1,61,53,45,37,29,21,13,5,58,50,42,34,26,18,10,2,62,54,46,38,30,22,14,6,59,51,43,35,27,19,11,3,63,55,47,39,31,23,15,7,74,75,66,67,70,71,79,78,77,76,64,68,72,65,69,73,80];
+IDtocr[7] = [ 56,48,40,32,24,16, 8,00,
+              60,52,44,36,28,20,12, 4,
+              57,49,41,33,25,17,09, 1,
+              61,53,45,37,29,21,13, 5,
+              58,50,42,34,26,18,10, 2,
+              62,54,46,38,30,22,14, 6,
+              59,51,43,35,27,19,11, 3,
+              63,55,47,39,31,23,15, 7,
+              74,75,66,67,70,71,79,78,
+              77,76,64,68,72,65,69,73,
+              80];
 IDtocr[8] = [0,4,8,12,1,5,9,13,2,6,10,14,3,7,11,15,
 			//16,32,17,33, 18,34,19,35, 20,36,21,37, 22,38,23,39,
 			16,18,20,22, 24,26,28,30, 32,34,36,38, 40,42,44,46,  
@@ -1082,39 +1092,101 @@ function getid(){
 	}	
 }
 
+var groups = {};
+//need at type!
+groups[2] = {};
+groups[3] = {};
+groups[4] = {};
+groups[7] = {};
+groups[8] = {};
+groups[11] = {};
+groups[12] = {};
+groups[2]['btn'] = { 'Grid':[0,63],'Crossfader Buttons':[64,65],'Slider Buttons':[66,73],'Function Buttons':[74,80] }; //Ohm64
+groups[2]['pot'] = { 'Left Knobs':[0,11],'Left Sliders':[16,19],'Right Knobs':[12,15],'Right Sliders':[20,23],'Crossfader':[24] };
+groups[2]['led'] = { 'Grid':[0,63],'Crossfader':[64,65],'Slider Buttons':[66,73],'Function Buttons':[74,80] }; //we're not modifying these, so it's safe
+groups[3]['btn'] = { 'Grid':[0,63],'Function Buttons':[64,70] }; //block
+groups[3]['pot'] = { 'Knobs and Sliders':[0,9] };
+groups[3]['led'] = { 'Grid':[0,63],'Function Buttons':[64,70] };
+groups[4]['btn'] = { 'Encoder Buttons':[0,31],'Side Buttons':[32,36],'Bottom Buttons':[37,45] }; //Code
+groups[4]['enc'] = { 'Encoders':[0,31] };
+groups[4]['led'] = { 'Encoders':[0,31] };
+groups[4]['ledring'] = { 'Encoders':[0,31] };
+groups[7]['btn'] = { 'Grid':[0,63],'Crossfader':[64,65],'Slider Buttons':[66,73],'Function Buttons':[74,80] }; //OhmRGB
+groups[7]['pot'] = { 'leftKnobs':[0,11],'leftSliders':[16,19],'rightKnobs':[12,15],'rightSliders':[20,23],'Crossfader':[24] };
+groups[7]['led'] = { 'Grid':[0,63],'Crossfader':[64,65],'Slider Buttons':[66,73],'Function Buttons':[74,80] };
+groups[8]['btn'] = { 'Grid':[0,15],'Top Row Buttons':[16,31],'Bottom Row Buttons':[32,47],'Encoder Buttons':[48,59] }; //CNTRLR
+groups[8]['pot'] = { 'Knobs':[0,23],'Sliders':[24,31] };
+groups[8]['enc'] = { 'Encoders':[0,11] };
+groups[8]['led'] = { 'Grid':[0,15],'Top Row Buttons':[16,31],'Bottom Row Buttons':[32,47],'Encoder Buttons':[48,59] };
+groups[8]['ledring'] = { 'Encoders':[0,11] };
+//groups[9]['btn'] = {}; //Brain V2
+//groups[10]['btn'] = {}; //Enlighten
+groups[11]['btn'] = { 'Top Row Buttons':[0,7],'Bottom Row Buttons':[8,15] }; //Alias8
+groups[11]['pot'] = { 'Knobs':[0,15], 'Sliders':[16,24], 'Master Fader':[25] };
+groups[11]['led'] = { 'Top Row Buttons':[0,7],'Bottom Row Buttons':[8,15] };
+groups[12]['btn'] = { 'Pads':[0,31],'Side Buttons':[32,39],'Side Corner LEDs':[40,47],'Touch Buttons':[48,55],'Top Corner LEDs':[56,63] }; //Base
+groups[12]['fsr'] = { 'Pads':[0,31] };
+groups[12]['led'] = { 'Pads':[0,31],'Side Buttons':[32,39],'Side Corner LEDs':[40,47],'Touch Buttons':[48,55],'Top Corner LEDs':[56,63] };
+//groups[12]['ledring'] = { };
+groups[12]['slide'] = { 'Sliders':[0,8] };
+//groups[13]['btn'] = {}; //Brain Jr.
+
 function group(type,g_id){
-	if(type=="btn" && (pid==4 && g_id>=32) ){
-		alert_panel("Button group only works for encoder buttons");
-	}else{
 		clonesx(); //copy the sx object to a clone so we can undo.
-		var limit=1000; //artificially high. means "no limit".
+		var limit=1000; //artificially high id limit. means "no limit".
 		if(type=="btn" && pid==4){
 			limit=32;
 		}
-		var base = livid[type][g_id]; //an alias
+		var basis = livid[type][g_id]; //an alias
 		//first check if this is going to result in assignments:
 		var validgroup=1;
-		var basemode = livid[type][g_id].mode; //note or cc
+		var idmin = 0;
+		var idmax = limit;
+		var subgroup = type;
+		var basismode = livid[type][g_id].mode; //note or cc
 		var led_too = (type=="btn" && lock>0); //should we do the LED assignments, too?
+		var skip_led_nn = (type=="led" && lock>0); //if lock is on, and group is pressed in LED panel, we don't want to change the note number
+    //figure out the limits of the group
+    for (var g in groups[pid][type]){
+      for(p in groups[pid][type][g]){
+        var gmin = groups[pid][type][g][0];
+        var gmax = groups[pid][type][g][1];
+        if(g_id>=gmin && g_id<=gmax){
+          idmin = gmin;
+          idmax = gmax;
+          subgroup = g;
+        }else{
+          alert_panel("Group values problem");
+        }
+      }
+    }
+    var isspecial=false;
 		for(var id in livid[type]){
-			if(id<limit){
+		  //clog("group "+id+" type "+type);
+			if(id>=idmin && id<=idmax){
 				for (var p in livid[type][id]){
-					if(p=="nn" || p=="cc"){
-						if(p=="cc") status=p;
-						//post("\nbase",id,base[p],"lock",lock);
-						var val = parseInt(base[p])-(g_id-parseInt(id));
-						livid[type][id][p]=val; //so if nn is 30, g_id is 4, id0 gets (30-(4-0))=26,id1 gets (30-(4-1))=27,...,id8 gets (30-(4-8))=34 
-						if(livid[type][id][p].mode){
-							livid[type][id][p].mode = basemode;
-						}
-						if(led_too){
-							livid["led"][id][p]=val;
-							livid["led"][id].mode = basemode; //copy the mode, too.
-						}
-						//post("\ngroup",id,type,p,livid[type][id][p]);
-						if(livid[type][id][p]>127) validgroup = 0;
+					if( p=="nn" || p=="cc"){
+					  if(!skip_led_nn){
+              if(p=="cc") {
+                status=p; //status for the alert popup if needed
+    					  isspecial = livid[type][id][p]>120; //mmc, bank, enc speed, indiv-bank should be left out of the group assignments
+              }
+              var val = parseInt(basis[p])-(g_id-parseInt(id));
+              if(!isspecial){
+                livid[type][id][p]=val; //so if nn is 30, g_id is 4, id0 gets (30-(4-0))=26,id1 gets (30-(4-1))=27,...,id8 gets (30-(4-8))=34 
+                if(livid[type][id][p].mode){
+                  livid[type][id][p].mode = basismode;
+                }
+                if(led_too){
+                  livid["led"][id][p]=val;
+                  livid["led"][id].mode = basismode; //copy the mode, too.
+                }
+              }
+              if(livid[type][id][p]>127) validgroup = 0;
+					  }
 					}else{
-						livid[type][id][p]=base[p]; //ch and mode are copied
+						livid[type][id][p]=basis[p]; //ch and mode are copied
+						//clog("...type "+type+" p "+p+" ob "+livid[type][id][p]);
 					}
 				}
 			}
@@ -1127,13 +1199,11 @@ function group(type,g_id){
 			obToSx(thecmds);
 			somesysex(thecmds);
 			dumpmap();
-			var typehash={"btn":"Button Grid","fsr":"Drum Pads","pot":"Knobs and Sliders","enc":"Encoders","led":"LEDs","ledring":"LED rings","slide":"Touch Sliders"}
-			alert_panel("Group values assigned to "+typehash[type]);
+			alert_panel("Group values assigned to "+subgroup);
 		}else{
 			alert_panel("At least one group value exceeds max "+status+" number. Group not assigned.");
 			revertsx();
-		}
-	}
+		}	
 }
 
 //-----------TURN VALUES FROM livid OBJECT INTO SYSEX--------------------------------
@@ -1798,7 +1868,7 @@ function globalsToUI(){
 				updateglobalinspector(ctl,val)
 			}
 		}else{
-      clog("globalsToUI "+param+" val "+livid.globl[param]);
+      //clog("globalsToUI "+param+" val "+livid.globl[param]);
 			ctl=param;
 			val=livid.globl[param];
 			updateglobalinspector(ctl,val)
@@ -2105,10 +2175,10 @@ function updatectlinspector(type,id){
 		if(ele_type!="submit" && ele_type!="hidden"){
 			if(ele_type == "checkbox"){
 				var ischeck = thesetting; //boolean
-				//clog("type "+type+" name "+ele_name+" setting "+thesetting);
+				//clog("CHECKBOX type "+type+" name "+ele_name+" setting "+thesetting);
 				$(this).prop("checked",ischeck);
 			}else{
-				clog("POPULATE: type "+type+" name "+ele_name+" setting "+thesetting);
+				//clog("POPULATE: type "+type+" name "+ele_name+" setting "+thesetting);
 				$(this).val(thesetting);
 			}
 		}

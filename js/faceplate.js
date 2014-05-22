@@ -1245,7 +1245,7 @@ function beginfaceplate(){
 		var theid = this.id.split("_");
 		var thediv=$(this).closest("div"); //get the div parent of the button that was clicked. could also do $(this).parent() I guess.
 		var index=thediv.find(":input[type=hidden]").val(); //get the control ID by traversing through the div for the hidden element
-		log('GROUP- index: '+index+' type '+theid[0]+' id '+this.id);
+		clog('GROUP- index: '+index+' type '+theid[0]+' id '+this.id);
 		group(theid[0],index);
 	});
 	

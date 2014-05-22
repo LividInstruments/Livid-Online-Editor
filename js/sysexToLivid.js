@@ -657,17 +657,28 @@ sxToObj[4]={
 sxToObj[7]={
 	4: function(){ //button LED indicators	[30]
 		//what ID does a byte half correspond to?
-		var pos=[7,23,39,55,15,31,47,63,6,22,38,54,14,30,14,62,5,21,37,53,13,29,45,61,4,20,36,52,12,28,44,60,3,19,35,51,11,27,43,59,2,18,34,50,10,26,42,58,1,17,33,49,9,25,41,57,0,16,32,48,8,24,40,56,74,78,64,65,75,79,66,67,76,80,68,69,73,72,71,70,77];
+		var pos=[7,23,39,55,15,31,47,63,
+             6,22,38,54,14,30,46,62,
+             5,21,37,53,13,29,45,61,
+             4,20,36,52,12,28,44,60,
+             3,19,35,51,11,27,43,59, 
+             2,18,34,50,10,26,42,58, 
+             1,17,33,49, 9,25,41,57, 
+             0,16,32,48, 8,24,40,56,
+            74,78,64,65,75,79,66,67,
+            76,80,68,69,73,72,71,70,
+            77];
 		CNO=4;
 		var flags = [];
 		var ctl = "led";
 		var p; //filled by red,green,blue
 		var p_arr = ["red","green","blue"];
 		var id_=-1;
-		log("sxToObj"+CNO+ctl+p);
+		//log("sxToObj"+CNO+ctl+p);
 		//unravel the bytes into RGB on/off states:
 		for (var i in sx[CNO]){
 			var val = sx[CNO][i];
+			clog("SX "+val);
 			for(var k=0;k<6;k++){ //there are 2 RGB LEDs in each byte, each LED uses 1 bit
 				if(k%3==0) {
 					id_++;
@@ -677,6 +688,9 @@ sxToObj[7]={
 				}
 				p=p_arr[k%3]; //red,green,or blue
 				livid[ctl][pos[id_]][p]=flagger(val,k); //check if a bit is 1 or 0.
+				if(id_==46){
+          //clog(".........OhmRGB color at id: "+id_+" "+livid[ctl][pos[id_]][p]);
+				}
 			}
 		};
 	},
@@ -814,14 +828,14 @@ sxToObj[7]={
 		};
 		
 	},
-		
+		/*
 	37: function(){ //LEDS all banks	[120]
 		CNO=37;
 		var val = 1-sx[CNO][0];
 		//clog("sxToObj"+" "+CNO);
 		
 	},	
-	
+	*/
 	54: function(){ //button toggle mode	[60]
 		CNO=54;
 		var flags = [];
@@ -1111,14 +1125,14 @@ sxToObj[8]={
 			}
 		}
 	},
-		
+	/*	
 	37: function(){ //LEDS all banks	[120]
 		CNO=37;
 		var val = 1-sx[CNO][0];
 		//clog("sxToObj"+" "+CNO);
 		
 	},	
-	
+	*/
 	38: function(){ //enc values	[12]
 		CNO=38;
 		var ctl = "enc";
@@ -1371,7 +1385,7 @@ sxToObj[11]={
 		};
 		
 	},
-		
+	/*	
 	37: function(){ //LEDS all banks	[120]
 		CNO=37;
 		var ctl = "led";
@@ -1380,7 +1394,7 @@ sxToObj[11]={
 		//clog("sxToObj"+" "+CNO);
 		
 	},	
-	
+	*/
 	38: function(){ //enc values	[4]
 		CNO=38;
 		var ctl = "enc";
@@ -1591,6 +1605,7 @@ sxToObj[12]={
 			}
 		}
 	},
+	/*
 	//LEDS all banks	[120]
 	37: function(){ //not really important for editor
 		CNO=37;
@@ -1600,6 +1615,7 @@ sxToObj[12]={
 		//clog("sxToObj"+" "+CNO);
 		
 	},
+	*/
 	//analog filter mode (sensitivity)	[32]
 	41: function(){ 
 		CNO=41;
