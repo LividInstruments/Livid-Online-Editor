@@ -1409,7 +1409,7 @@ function beginfaceplate(){
             var temp = JSON.parse(reader.result);
             var truthy = false;
             for (i in temp){
-              if(i!="name" && i!="mfg" && i!="id"){
+              if(i!="name" && i!="mfg" && i!="id" && i<247){
                 truthy = parseInt(i)<128;
                 //clog('key type '+i+' is '+truthy+" test: "+(i!="name" || i!="mfg" || i!="id"))
                 for (j in temp[i]){

@@ -11,7 +11,7 @@ var cleanUp = function(a) {
 var downloadFile = function() {
   var container = document.querySelector('#container');
   var output = container.querySelector('output');
-  const MIME_TYPE = 'text/plain';
+  var MIME_TYPE = 'text/plain';
 
   window.URL = window.webkitURL || window.URL;
   var prevLink = output.querySelector('a');
