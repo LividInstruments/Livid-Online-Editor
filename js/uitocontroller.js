@@ -262,7 +262,7 @@ requests[3]=[4,8,
 10,11,12,13,33,100]; //block
 requests[4]=[4,8,11,12,13,15,16,17,22,23,26,30,31,32,54,35,36,38,39,50,55,75]; //code v2 //note that 54 is in the middle. Not sure why it needs to be but was choking after 37
 requests[7]=[4,8,10,11,12,13,15,22,23,26,33,34,54,35,36]; //ohmrgb
-requests[8]=[4,8,10,11,12,13,16,17,22,23,26,29,30,31,32,33,34,35,36,38,39,50,54,55]; //cntrlr
+requests[8]=[4,8,10,11,12,13,16,17,22,23,26,29,30,31,32,33,34,35,36,38,39,50,54,55]; //cntrlr //50,54,55 not used in 100 or less
 //requests[9]=[4,8,10,11,12,13,16,17,22,26,27,30,31,32,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54]; //brainv2
 requests[9]=[4]; //brainv2 abriged
 requests[11]=[4,8,10,11,12,16,17,22,23,26,30,33,34,35,36,38,39,54,55,56]; //alias8
@@ -440,7 +440,7 @@ IDtocr[4] = [ 0, 4, 8, 13,19,23,28,34,
               57,61,65,69,73,77,81,85];
 IDtocr[7] = [ 56,48,40,32,24,16, 8,00,
               60,52,44,36,28,20,12, 4,
-              57,49,41,33,25,17,09, 1,
+              57,49,41,33,25,17,9, 1,
               61,53,45,37,29,21,13, 5,
               58,50,42,34,26,18,10, 2,
               62,54,46,38,30,22,14, 6,
@@ -656,14 +656,16 @@ var fw_versions = {};
 var curfw = 0;
 //store a json file that has all the current firmware verisons in it so we can determine if the user is current or not.
 function isnotcurfw(){
+    clog("CURFW?");
 		var cacheavoid = Math.floor( 1000*Math.random() );
-		$.getJSON("cur_fw.json?"+cacheavoid, function(json) {
+		$.getJSON("cur_fw.json?"+cacheavoid, function(json) {		
 			fw_versions = json;
 			var prodname = products[pid];
 			curfw = fw_versions[prodname];
 			var curfw_str = curfw+''; //make it a symbol by concactenating emtpy string to the number
 			curfw_str = curfw_str.split("."); //ditch the dot
 			var last = curfw_str[1][2];
+      clog("current firmware version: "+curfw_str);
 			if(!curfw_str[1][2]) {
 				last="0"; //do this bc last element might be undef. for versions where that is 0.
 			}
@@ -696,6 +698,7 @@ function product(v){
 	has_enc = (CNTRLR || CNTRLR_OLD || CODE || ALIAS8);
 	has_encflip = (CNTRLR || CNTRLR_OLD || CODE);
 	has_omni = (!BASE); //right now, only Base doesn't have omni.
+	var has_encdet = true; //older code firmware <222 doesn't have the command for detented v smooth action
 	is_diy = (BRAIN || BRAINJR || BRAIN2);
 	
 	var bankcounts = [0,0,0,0,4,0,0,4,4,0,0,15,7];
@@ -713,9 +716,15 @@ function product(v){
 	if(BASE && (firmware[1] < 2 && firmware[2] == 1 && firmware[3] == 0) ){
 		requests[pid].pop(); //remove the last item in the requests array, which is cc retrigger rate. Causes fw 1.16 to fail w/ editor.
 	}
+	if(CODE && (firmware[1] < 2)){
+    requests[pid].pop(); //remove the last item in requests array (75), which doesn't exist on firmware earlier than 222
+    has_encdet = false;
+    clog("OLD CODE "+requests[pid]);
+	}
 	if(CNTRLR_OLD){
+		requests[8].pop(); //removes "55" from end of requests since there's no enc flip in old cntrlr
 		requests[8].pop(); //removes "54" from end of requests since there's no toggle mode in old cntrlr
-		requests[8].pop(); //removes "50" from end of requests since there's no ring style in old rgb
+		requests[8].pop(); //removes "50" from end of requests since there's no ring style in old cntrlr
 	}
 	if(OHM64 || BLOCK){
 		savecmd=2; //change the command number for saving to the device for these products.
@@ -755,6 +764,10 @@ function product(v){
 	if (!has_encflip){ //some have encoders that work backwards and adjustements needed for detented encoders
 		$('#encflip_li').remove();
 		$('#encoderphys').remove();
+		$('#encoderdet').remove();
+		$('#encdet_li').remove();
+	};
+	if (!has_encdet){ //firmware <222 for code doesn't have detent/smooth adjustments
 		$('#encoderdet').remove();
 		$('#encdet_li').remove();
 	};
@@ -1572,6 +1585,9 @@ function procSysex(){
 						firmware = sysexb.slice(12,sysexb.length-1);
 						firmware_sym = firmware[3]+"."+firmware[2]+"."+firmware[1]+"."+firmware[0];
 						firmware_float = Number( firmware[3]+"."+firmware[2]+firmware[1]+firmware[0] );
+						
+						clog("FIRMWARE RAW: "+firmware)
+						
 						var oldohm = ((pid==7) && (firmware[0] <= 5 && firmware[1] <= 5 && firmware[2] == 0 && firmware[3] == 0) );
 						//var oldcode= blah;
 						var oldcntrlr=((pid==8) && firmware[2] < 1 );

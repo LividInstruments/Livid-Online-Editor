@@ -642,14 +642,17 @@ sxToObj[4]={
 		var ctl = "globl";
 	  var p = "encdet_abs";
 	  var i = 0;
-	  val = sx[CNO][i];
-		livid[ctl][p] = val;
-		clog("CMD 75 "+livid[ctl][p]+" ctl "+ctl+" val "+val);
-	  p = "encdet_rel";
-	  i = 1;
-	  val = sx[CNO][i];
- 		livid[ctl][p] = val;
-		clog("CMD 75 "+livid[ctl][p]+" ctl "+ctl+" val "+val);
+	  clog("FRench 75");
+	  if(sx[CNO]){
+      val = sx[CNO][i];
+      livid[ctl][p] = val;
+      //clog("CMD 75 "+livid[ctl][p]+" ctl "+ctl+" val "+val);
+      p = "encdet_rel";
+      i = 1;
+      val = sx[CNO][i];
+      livid[ctl][p] = val;
+      //clog("CMD 75 "+livid[ctl][p]+" ctl "+ctl+" val "+val);
+		}
 	}
 };
 
