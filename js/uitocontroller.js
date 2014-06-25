@@ -1388,20 +1388,27 @@ function somesysex(){
 	//if(isfromfile) DO_DISCNXN = true;
 	if(DO_DISCNXN) disconnectMidiIn(); 
 	cmdno=0;
-	sxtosend=Array.prototype.slice.call(arguments, 0); //e.g. [10,11,12]
-	if(sxtosend.length==1){ //flatten the sxtosend array
-		sxtosend = sxtosend[0];
+	var theargs = [];
+  var tmp = [];
+	theargs=Array.prototype.slice.call(arguments, 0); //e.g. [10,11,12]
+	if(theargs.length==1){ //flatten the sxtosend array
+		theargs = theargs[0];
 	}
-	var reps = sxtosend.length;
-	clog("somesysex() "+sxtosend+" reps "+sxtosend.length);
+	//copy the array so we don't alter the object passed this function:
+	for(var i=0;i<theargs.length;i++){
+	  sxtosend[i]=theargs[i];
+	  //clog("sxtosend "+i+" : "+sxtosend[i]);
+	}
+	clog("somesysex() "+sxtosend+" reps "+sxtosend.length+" current bank "+sx[26]);
 	var sxmsg=[];	
   var bank_no = sxtosend.indexOf(26);
   var chan_no = sxtosend.indexOf(22);
   var chans_no = sxtosend.indexOf(23);
-  clog ("bank and ch commands "+bank_no+" "+chan_no+" "+chans_no);
+  clog ("bank and ch command indices "+bank_no+" "+chan_no+" "+chans_no);
   //send the bank number first CMD 26
 	if(bank_no>0){
-    var tmp = [];
+    var mo = tmp.concat(head,26,sx[26],eom);
+    clog("BANK OUT "+sx[26]+" .. "+mo);
     midi_o(tmp.concat(head,26,sx[26],eom));
 	  sxtosend.splice(bank_no,1);
   }
@@ -1409,23 +1416,46 @@ function somesysex(){
 	if(chan_no>0 && chans_no>0){
 	  sxtosend.splice(chan_no,1);
   }
-	
-	for(var i=0;i<reps;i++){
+	for(var i=0;i<sxtosend.length;i++){
 		var cmd = sxtosend[i];
 		var oldledstyle = ( (OHM64 || BLOCK) && (cmd==35 || cmd==36) ); //leds on ohm64 and block are handled differently
 		//check if the cmd number is in the sx_send array for this product. For example, we don't want to try to send 54 to CNTRL:R, because it doesn't reply to that. :
-		//log("cmd "+cmd+" type "+typeof(cmd));
+		//clog("-----cmd "+cmd+" msg "+sx[cmd]);
 		if(sx_send[pid].indexOf(cmd) >= 0){
 			if(!oldledstyle){
-				var tmp = [];
+				tmp = [];
 				sxmsg[i] = tmp.concat(head,cmd,sx[cmd],eom) //e.g., the entire sysex string for commands 10, 11, and 12
-				//log("somesysex()> CMD "+cmd+" len "+sx[cmd].length+" last "+sx[cmd][(sx[cmd].length-1)]);
-				midi_o(sxmsg[i]); //midi out function in midiio.js
+				//clog("somesysex() "+sxmsg[i]);
+				if(sxmsg[i]){
+          midi_o(sxmsg[i]); //midi out function in midiio.js
+				}
 			}else{
 				oldleds(cmd);
 			}
 		}
 	}
+  //now send LEDs to ensure they are correct:
+  clog("_____SENDING LIGHTS LAST____");
+  midi_o(sxmsg[0]);
+	/*
+	(function(){
+    var i = 0;
+    var looper = function(){
+        //console.log('CMD ID: ' + requests[pid][i]);
+        if (i < sxtosend.length) {
+          if(sxmsg[i]){
+            midi_o(sxmsg[i])
+          }
+          i++;
+        } else {
+          console.log('Loop end.');
+          return;
+        }
+        setTimeout(looper, 1000);
+    };
+    looper();
+    })();
+	*/
 	//$.post("../index.html", "json_in sysex " +  JSON.stringify(sxmsg) ); //to max
 	//log("=>somesysex done")
 	if(DO_DISCNXN) cnxn = setTimeout(function(){ connectMidiIn() },500); //re-open the MIDI input port
@@ -1618,7 +1648,7 @@ function endrequests(){
 		//convert sysex to livid object when the request is finished.
 		clonesx(); //copy the sx object to a clone so we can revert.
 		toobj();
-		clog("requesting? "+requesting);
+		clog("CURRENT BANK "+sx[26]);
 		requesting = 0;
 		masterreq = 0; //for displaying MIDI data at startup.
 		setTimeout(function(){viewmidi("-------------")},SCHED);

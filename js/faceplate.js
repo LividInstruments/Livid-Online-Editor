@@ -1385,11 +1385,17 @@ function beginfaceplate(){
 		}
 	});
 	
-	//for uploading file to replace settings.
+	//force a change because we want to be able to load the same preset file multiple times in a row for each bank.
+	$(':file').click(function(){
+		$('#fileInput').trigger('change');
+	});
+	
+	//for uploading preset file to replace settings.
 	$('#fileInput').change(function(e){
     var fileInput = document.getElementById('fileInput');
     var fileDisplayArea = document.getElementById('fileDisplayArea');
-    clog("file input...");
+    clog(".........................preset file input.................");
+    //clog("reqs "+requests[pid]+" len "+requests[pid].length);
       var file = fileInput.files[0];
       var filename = $('#fileInput').val().split('\\').pop()
       var textType = /text.*/;
@@ -1424,13 +1430,16 @@ function beginfaceplate(){
             }
             clog("Valid preset file: "+truthy);
             if(truthy==true){
+              //we'll need to update the preset's sysex input with the current bank value, so let's store that before we parse the JSON:
+              var bankcache = sx[26];
               sx = JSON.parse(reader.result);
-              clog("Btns "+sx[11]);
-              clog("LEDs "+sx[4]);
+              sx[26] = bankcache;
+              clog("PRESET sample: Btns "+sx[11]);
+              clog("PRESET sample: LEDs "+sx[4]);
               toobj();
               isfromfile = true;
               //scheduling this because Mark reported some odd behavior where the new settings wouldn't appear on controller until there was a change made in an inspector:
-              var schedsysexsend = setTimeout( somesysex(requests[pid]),100 );
+              var schedsysexsend = setTimeout( somesysex(requests[pid]),1000 );
               //somesysex(requests[pid]); //unshceduled here for posterity
               alertbox("Read preset file "+filename);
               fileDisplayArea.innerText = "preset loaded";
