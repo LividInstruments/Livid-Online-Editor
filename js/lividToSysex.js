@@ -199,7 +199,7 @@ lividToSx[4]={
 		cntl="led";
 		prm="onoff";
 		bitlist=[];
-		clog("LED states");
+		//clog("LED states");
 		//cycle thru all leds and get the onoff flag
 		var j=0;
 		var ledcount = 45;
@@ -226,8 +226,8 @@ lividToSx[4]={
 			}else{
 				val = 0;
 			}
-			clog("bit "+i+" id "+id);
-			clog("val "+val);
+			//clog("bit "+i+" id "+id);
+			//clog("val "+val);
 			bitlist[i%bitscount]=val;
 			if(i%bitscount==12 && i!=0 || i==(ledcount-1)){
 				var firstbyte = bitlist.slice(0,7);
