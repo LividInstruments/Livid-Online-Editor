@@ -13,12 +13,8 @@
         <script src="js/faceplate.js"></script>
         <script src="js/uitocontroller.js"></script>
         <script src="js/midiio.js"></script>
-        <!--<script src="http://code.jquery.com/jquery-1.10.2.js"></script>-->
-        <!--<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>-->
         <script src="js/jquery-1.11.0.min.js"></script>
         <script src="js/jquery-ui-1.10.4.custom.min.js"></script>
-        <!--<script src="js/jquery-1.7.2.min.js"></script>-->
-        <!--<script src="js/jquery-ui-1.8.21.custom.min.js"></script>-->
 
         <script src="js/tag-it.js"></script>
 		<script type="text/javascript" charset="utf-8">
@@ -89,7 +85,20 @@
 				if(!stay){
 					hidealert = setTimeout(function(){ $("#alerts").fadeTo(1000,0,function(){ $("#alerts").css({"z-index": -10}) }) },6000); //hide the alert after a few seconds
 				}
-			} 
+			}
+			
+			var hidemsg = 0;
+			function msgbox(s,stay){
+				if(hidemsg) clearTimeout(hidemsg);
+				$("#msg").css({"z-index": 100});
+				$("#msg").fadeTo(500,1);
+				var d = document.getElementById("msg");
+				d.innerHTML = s;
+				if(!stay){
+					hidemsg = setTimeout(function(){ $("#msg").fadeTo(1000,0,function(){ $("#msg").css({"z-index": -10}) }) },8000); //hide the alert after a few seconds
+				}
+			}
+			
 			var hidesafalert = 0;
 			function safarialert(){
 				var words = "blah";
@@ -101,6 +110,7 @@
 				//d.innerHTML = words;
 				hidesafalert = setTimeout(function(){ $("#safalerts").fadeTo(1000,0,function(){ $("#safalerts").css({"z-index": -10}) }) },10000); //hide the alert after a few seconds
 			}
+			
 			var midict = 0;
 			var masterreq = 0;
 			function viewmidi(){
@@ -123,6 +133,7 @@
     <body>
 		<div id="confirm"><span id="confirmspan">CONFIRM</span><br><input type="button" value="yes" class="submitbtn" id="confirmyes"> <input type="button" value="no" class="submitbtn" id="confirmno"></div>
 		<div id="alerts">ALERT</div>
+		<div id="msg">MSG</div>
 		<div id="safalerts">Safari can be a bit buggy with the Livid Editor. We recommend <a href='https://www.google.com/intl/en/chrome/browser/'>Chrome</a> or <a href='http://www.mozilla.org/en-US/'>Firefox</a></div>
 		<!--MIDI io menus -->
 		<div id="midiio">
@@ -229,12 +240,16 @@
 				<li id="one_ch">
 				<select type="menu" name="onech" class="menu ch" id="onech"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select>
 				</li>
+				
 				<li id="encoderdet" style="margin-top:0.8em"><b>Detented or Smooth action</b></li>
 				<li id="encdet_li">
 				<input name="encdet_abs" type="checkbox" class="check" value="no" id="encdet_abs" style="margin-right:0.5em"/><label for="encdet_abs" class="check_local" id="encdet_abs_label">absolute</label>
 				<input name="encdet_rel" type="checkbox" class="check" value="no" id="encdet_rel"/><label for="encdet_rel" class="check_local" id="encdet_rel_label">relative</label>
+				</li>
 				
-				<!--<li><input type="submit" value="update" class="submitbtn" /></li>-->
+				<li id="localcolor" class="localcolors" style="margin-top:0.8em"><b>Save Colors for Local Control</b></li>
+        <li class="localcolors"><button id="localcolor_on" class="submitbtn">On Colors</button> <button id="localcolor_off" class="submitbtn">Off Colors</button></li>
+				
 				</ul>
 				</form>
 				<ul>
@@ -360,7 +375,7 @@
 					</ul>
 					</form>
 				</div>
-				<!--pot inspector-->
+				<!--pot analog inspector-->
 				<div class="inspector ctlinspector insp_pots" name="pot_insp" id="pot_div">
 					<input type="button" value="group" name="group" class="group_btn" id="pot_group" />
 					<!--form elements have names that are identical to the names in the brain.object-->
@@ -406,7 +421,7 @@
 					<input type="hidden" name="ctlid" class="cid" id="crap" value="0">
 					<ul class="listv">
 					<li><span class="insp_label">note/cc#</span> <input name="nn" type="text" class="textfield" id="expsmidi"/></li>
-					<li><span class="insp_label">mode</span> <select type="menu" name="mode" class="menu" id="expsmode"><option>cc</option><option>bend</option></select></li>
+					<li><span class="insp_label">mode</span> <select type="menu" name="mode" class="menu" id="expsmode"><option>cc.</option><option>bend</option></select></li>
 					<!--<li><input type="submit" value="update" class="submitbtn" /></li>-->
 					</ul>
 					</form>
@@ -595,6 +610,7 @@
         
     	<div id="console"></div>
     	
+    	<!--used if in debug mode-->
     	<div id="testbuttons">
 			<form action="#" id="printlivid" method="get">
 			<input type="submit" value="print livid" class="submitbtn" />
@@ -608,8 +624,8 @@
 			<form action="#" id="writefile" method="get">
 			<input type="submit" value="write json file" class="submitbtn" />
 			</form>
-		</div>
-
+      </div>
+      <!--end debug div mode-->
 </div> <!--end "create_container" div-->
 
 <!-- MIDI i/o plugin-->		

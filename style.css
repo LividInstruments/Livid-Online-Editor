@@ -19,6 +19,7 @@
 	font-weight: normal;
 	font-style: normal;
 }
+@import url(http://fonts.googleapis.com/css?family=Source+Code+Pro);
 
 * {
 	padding: 0px;
@@ -58,11 +59,23 @@ form input[type="text"] {
 	background: url('faceplate_0.gif');
 	background-repeat: no-repeat;
 }
+#msg {
+	position: fixed;
+	top: 2%;
+	width: 25%;
+	margin-left: 65%;
+	padding: 0.5em;
+	border: 0.2em dashed rgba(232,48,12,1);
+	background: rgba(235,235,173,1);
+	z-index: 100;
+	display: none;
+	text-align: center;
+}
 #alerts {
 	position: fixed;
 	top: 2%;
-	width: 30%;
-	margin-left: 60%;
+	width: 25%;
+	margin-left: 40%;
 	padding: 0.5em;
 	border: 0.2em dashed rgba(232,48,12,1);
 	background: rgba(235,173,173,1);
@@ -111,6 +124,10 @@ form input[type="text"] {
 	left: 0.5em;
 	visibility: hidden;
 }
+.localcolors {
+	visibility: hidden;
+}
+
 #midimonitor {
 	width: 95%;
 	height: 400px;
@@ -118,12 +135,12 @@ form input[type="text"] {
 	background-color: #eee;
 	border: solid 1px #888;
 	white-space: pre;
-	font-family: Courier New, monospace;
+	font-family: "Source Code Pro", monospace;
 	font-size: 0.75em;
 	overflow: auto;
 }
 #initmidi {
-	font-family: Courier New, monospace;
+	font-family: "Source Code Pro",monospace;
 	font-size: 1em;
 	background-color: rgba(255, 255, 255, 0.6);
 	padding-left: 1em;

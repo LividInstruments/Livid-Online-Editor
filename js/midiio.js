@@ -16,7 +16,7 @@ var sysexbuffer = new Array();
 var issysex = false;
 
 function makemidimenu(){
-	log("make midi menu");
+	//log("make midi menu");
 	outports=document.getElementById('outports');
 	inports=document.getElementById('inports');
 	try{
@@ -24,7 +24,7 @@ function makemidimenu(){
 		list.unshift("--Select a Port--")
 		for(var i in list){
 			outports[i]=new Option(list[i],list[i],i==0,i==0);
-			log("outport "+list[i]);
+			//log("outport "+list[i]);
 		}
 		document.getElementById('midiout').className=''; //change class to nothing so it's visible
 		//if(SPOOF){
@@ -34,7 +34,7 @@ function makemidimenu(){
 			for(var i in list){
 				inports[i]=new Option(list[i],list[i],i==0,i==0);
 				inports[inports.options.length]=new Option(list[i],list[i],list[i]==0,list[i]==0);
-				log("inport "+list[i]);
+				//log("inport "+list[i]);
 			}
 			if(SPOOF) document.getElementById('midiin').className=''; //change class to nothing so it's visible
 		//}
@@ -80,7 +80,7 @@ function midioutports(theport){
 			inports[i].selected=1;
 			doalert=0;
 		}
-		log("inport "+inports.options[inports.selectedIndex].value);
+		//log("inport "+inports.options[inports.selectedIndex].value);
 	}
 	if(doalert){
 		alert_panel("Error: there are not matching MIDI in/out ports on your system! Please check your controller connection and configuration");
@@ -96,7 +96,7 @@ function midioutports(theport){
 //select an in port
 function midiinports(){
 	if(SPOOF){
-		log("INPORT");
+		//log("INPORT");
 		Jazz.MidiInOpen(inports.options[inports.selectedIndex].value,function(t,a){ midiProc(a);});
 		//document.getElementById('midiiohint').className='hidden'; //hide the hint	
 		inselected();
@@ -142,12 +142,12 @@ function connectMidiIn(){
 function disconnectMidiIn(){
 	if(inports[0].selected!=1){
 		current_in=inports.options[inports.selectedIndex].value;
-		log("inport: "+current_in);
+		clog("inport: "+current_in);
 	}
 	try{
 		Jazz.MidiInClose(); 
 		inports[0].selected=1;
-		log("discnx "+inports[0].selected);
+		clog("discnx "+inports[0].selected);
 	}
 	catch(err){}
 }

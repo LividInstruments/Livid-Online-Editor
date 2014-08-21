@@ -195,7 +195,8 @@ var cmdfriendly = {
 67 : "Set 7-Segment Displays (Livid Spec)",
 68 : "Link Function Button Indicator LEDs",
 69 : "Disable Capacitve Fader Note Messages",
-127 : "Settings Received"
+127 : "Settings Received",
+247 : "EOX"
 }
 
 var SAFARI = false;
@@ -229,6 +230,12 @@ var BRAIN2 = (pid==9);
 var ENLIGHTEN = (pid==10);
 var ALIAS8 = (pid==11);
 var BASE = (pid==12);
+var BRAINJR = (pid==13);
+var MIDICV = (pid==14);
+var GUITARWING = (pid==15);
+var DS1 = (pid==16);
+var BASEII = (pid==17);
+
 var ch = 0;
 var v1 = 0;
 var v2 = 0;
@@ -269,6 +276,9 @@ requests[11]=[4,8,10,11,12,16,17,22,23,26,30,33,34,35,36,38,39,54,55,56]; //alia
 requests[12]=[4,8,10,11,12,22,23,26,34,35,36,41,49,50,54,56,57,58,59,60,61,66,68,69,70]; //base
 //requests[13]=[4,8,10,11,12,13,16,17,22,26,27,30,31,32,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54]; //brain jr
 requests[13]=[4]; //brain jr abridged
+requests[16]=[4,8,10,11,12,16,17,22,23,26,30,33,34,35,36,38,39,54,55,56,/*76*/]; //ds1
+requests[17]=[4,8,10,11,12,22,23,26,34,35,36,41,49,50,54,56,57,58,59,60,61,66,68,69,70]; //base
+              
 var savecmd = 25; //either 2 or 25. Block and Ohm64 are 2, so we'll make that adjustment on the product detection result.
 
 var sx_send={}; //CMD numbers that we need to send out on a dump of all sysex
@@ -279,7 +289,9 @@ sx_send[7]=[4,10,11,12,13,15,22,23,26,33,34,35,36,54]; //ohmrgb
 sx_send[8]=[4,10,11,12,13,17,22,23,26,29,30,31,32,33,34,35,36,50,54,16]; //cntrlr
 sx_send[11]=[4,10,11,12,17,23,30,33,34,35,36,39,54,56,16]; //alias
 sx_send[12]=[4,10,11,12,22,23,34,35,36,41,49,50,54,56,57,58,59,60,61,65,66,67,68,70]; //base
-		    
+sx_send[16]=[4,10,11,12,17,23,30,33,34,35,36,39,54,56,/*76*/,16]; //ds1
+sx_send[17]=[4,10,11,12,22,23,34,35,36,41,49,50,54,56,57,58,59,60,61,65,66,67,68,70]; //base II
+
 var localflags = [1,0,0,0,0,0,1]; //security bit,btn momentary local,btn toggle local,enc abs local,enc rel local,(reserved)
 var livid={};
 livid.btn = []; //nn mode(note or cc) toggle isencspeed isbank ismmc
@@ -390,8 +402,6 @@ crtoID[3] = [0 ,8 ,16,24,32,40,48,56,
 			45,53,-1,61,47,55,-1,-1,
 			4 ,12,20,28,36,44,52,60,
 			46,54,-1,62,63];
-//crtoID[4] = [0,1,2,3,4,5,6,7,8,9,-1,10,11,12,-1,-1,13,14,15,16,17,18,19,20,21,22,-1,23,24,25,
-//-1,-1,26,27,28,29,30,31,32,33,34,35,-1,36,37,38,-1,-1,39,40,41,42,43,44];
 crtoID[4] = [  0, 8,16,24,
                1, 9,17,25,
                2,10,-1,18,26,
@@ -419,6 +429,8 @@ crtoID[8] = [0,4,8,12,1,5,9,13,2,6,10,14,3,7,11,15,
 			 48,49,50,51, 52,53,54,55, 56,57,58,59];
 crtoID[11] = [0,2,4,6,1,3,5,7,8,10,12,14,9,11,13,15,16,17];
 crtoID[12] = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63];
+crtoID[16] = [0,2,4,6,1,3,5,7,8,10,12,14,9,11,13,15, 16,17,18,19,20,21,22,23,24,25, 26,27,28,29];
+crtoID[17] = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63];
 
 //maps ID value to cr value for LEDs:
 var IDtocr= {}; //use pid as an arg to call up desired map
@@ -455,10 +467,10 @@ IDtocr[8] = [0,4,8,12,1,5,9,13,2,6,10,14,3,7,11,15,
 			//24,40,25,41, 26,42,27,43, 28,44,29,45, 30,46,31,47,
 			17,19,21,23,25,27,29,31,33,35,37,39,41,43,45,47,
 			48,49,50,51, 52,53,54,55, 56,57,58,59];
-			//48,52,56,49, 53,57,50,54, 58,51,55,59];
-			//48,51,54,57, 49,52,55,58, 50,53,56,59];
 IDtocr[11] = [0,4,1,5,2,6,3,7,8,12,9,13,10,14,11,15,16,17]; //16 and 17 are for the character display?
 IDtocr[12] = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63];
+IDtocr[16] = [0,4,8,12,16,20,24,28,32,36,40,44,1,5,9,13,17,21,25,29,33,37,41,45,88]; 
+IDtocr[17] = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63];
 
 //we'll need to reorganize the sysex maps for button, pot, encoder, fsr and expansion maps into ID order. based on the product id.
 //position in sysex string to UI index value (ID) used in "mapbytes()"/sysexToLivid.js
@@ -470,6 +482,8 @@ posi[7] = {};
 posi[8] = {};
 posi[11] = {};
 posi[12] = {};
+posi[16] = {};
+posi[17] = {};
 
 //OHM 64
 posi[2].btn=[0,8,16,24,32,40,48,56,1,9,17,25,33,41,49,57,2,10,18,26,34,42,50,58,3,11,19,27,35,43,51,59,4,12,20,28,36,44,52,60,5,13,21,29,37,45,53,61,6,14,22,30,38,46,54,62,7,15,23,31,39,47,55,63,64,66,68,70,72,74,75,76,65,67,69,71,73,77,78,79,80,999,999,999,999,999,999,80];
@@ -513,13 +527,22 @@ posi[8].pot=[19,27,11,26,3,2,18, 10,0, 17,8,9,16, 1,24,25, 21,29,13, 28,5,20,4, 
 posi[8].exp=[4,8,5,9,2,6,3,7,1];
 //ALIAS8
 posi[11].btn=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
-posi[11].enc=[0,1,2,4]; //there's only 1 encoder, but the sysex for this is primed for 4. Ask justin...
+posi[11].enc=[0,1,2,3]; //there's only 1 encoder, but the sysex for this is primed for 4. Ask justin...
 posi[11].pot=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24];
 //BASE
-posi[12].btn=[32,33,34,35,36,37,38,39, 48,49,50,51,52,53,54,55]; //fbtns, cap btns
+posi[12].btn=[32,33,34,35,36,37,38,39, 48,49,50,51,52,53,54,55]; //fbtns, cap btns. IDs start at 32 to keep sync w/ LEDs.
 posi[12].pot=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
 posi[12].slide=[0,1,2,3,4,5,6,7,8];
 posi[12].fsr=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
+//DS1
+posi[16].btn=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,21,21,22,23,24,25,26,27,28];
+posi[16].enc=[0,1,2,3];
+posi[16].pot=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53];
+//BASE II
+posi[17].btn=[32,33,34,35,36,37,38,39, 48,49,50,51,52,53,54,55]; //fbtns, cap btns. IDs start at 32 to keep sync w/ LEDs.
+posi[17].pot=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
+posi[17].slide=[0,1,2,3,4,5,6,7,8];
+posi[17].fsr=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
 
 //need to create the inverse of posi,
 //ID to position in sysex string...
@@ -531,6 +554,8 @@ ipos[7] = {};
 ipos[8] = {};
 ipos[11] = {};
 ipos[12] = {};
+ipos[16] = {};
+ipos[17] = {};
 //OHM64
 ipos[2].btn=[0,8,16,24,32,40,48,56,1,9,17,25,33,41,49,57,2,10,18,26,34,42,50,58,3,11,19,27,35,43,51,59,4,12,20,28,36,44,52,60,5,13,21,29,37,45,53,61,6,14,22,30,38,46,54,62,7,15,23,31,39,47,55,63,64,72,65,73,66,74,67,75,68,76,87,69,70,71,77,78,79];
 ipos[2].pot=[17,16,9,8, 19,18,11,10, 21,20,13,12, 3,1,0,2, 23,22,15,14, 5,7,6,4, 24,/*expansion jacks:*/25,0,26,0,27,0,28,0,29,0,30,0,31,0,32,0, 33,0,34,0];
@@ -580,6 +605,18 @@ ipos[12].btn=[	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 ];
 ipos[12].slide=[0,1,2,3,4,5,6,7,8];
 ipos[12].fsr=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
+//DS1
+ipos[16].btn=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28];
+ipos[16].enc=[0,1,2,3];
+ipos[16].pot=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53];
+//BASE II
+ipos[17].btn=[	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,1,2,3,4,5,6,7,
+				0,0,0,0,0,0,0,0,
+				8,9,10,11,12,13,14,15
+];
+ipos[17].slide=[0,1,2,3,4,5,6,7,8];
+ipos[17].fsr=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
 
 //the bits in CMD54 map in a weird way on the Code. This table adjusts that
 var togglebitmap = {}; //use pid as an argument to call up the desired map
@@ -590,12 +627,14 @@ togglebitmap[7] = posi[7].btn;
 togglebitmap[8] = posi[8].btn;
 togglebitmap[11] = posi[11].btn;
 togglebitmap[12] = posi[12].btn;
+togglebitmap[16] = posi[16].btn;
+togglebitmap[17] = posi[17].btn;
 
 //need to translate the encoder speed to and from the UI widget, since encoder speed values are discontinuous
 var e_speedfromUI=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,66,67,68,69,70,71,72,73,74,75,76,77,78,79]; //for proper display of UI
 var e_speedtoUI=[-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,15,16,17,18,19,20,21,22,23,24,25,26,27,28];
 
-//convert symbols from menus to ints
+//convert symbols from menus to ints. notice that there is a 'cc' and a 'cc.' - just a hack to make them unique :(
 var nanhash = {
 'note':0, 'cc':1, 
 'walk':0, 'fill':1, 'eq':2, 'spread':3, 
@@ -607,7 +646,7 @@ var nanhash = {
 'invert':0,'red':1,'green':2,'yellow':3,'blue':4,'magenta':5,'cyan':6,'white':7,
 '1x':1,'2x':2,'3x':3,'4x':4,'5x':5,'6x':6,'7x':7,'8x':8,'9x':9,'10x':10,'11x':11,'12x':12,'13x':13,'14x':14,'15x':15,'1/2x':66,'1/3x':67,'1/4x':68,'1/5x':69,'1/6x':70,'1/7x':71,'1/8x':72,'1/9x':73,'1/10x':74,'1/11x':75,'1/12x':76,'1/13x':77,'1/14x':78,'1/15x':79
 };
-var products = ["-","Brain","Ohm64","block","Code","MCDAW","MCP","OhmRGB","CNTRL:R","BrainV2","Enlighten","Alias 8","Base","Brain Jr."];
+var products = ["-","Brain","Ohm64","block","Code","MCDAW","MCP","OhmRGB","CNTRL:R","BrainV2","Enlighten","Alias 8","Base","Brain Jr.","BrainCV","Guitar Wing","DS1","BaseII"];
 var colorhash = ["off","red","green","yellow","blue","magenta","cyan","white"];
 var bgcolors = ["rgba(0,0,0,0.3)","rgba(255,0,0,0.3)","rgba(0,255,0,0.3)","rgba(255,255,0,0.3)","rgba(0,0,255,0.3)","rgba(255,0,255,0.3)","rgba(0,255,255,0.3)","rgba(255,255,255,1)"];
 
@@ -623,6 +662,8 @@ dim[9]=[700,600]; //brain v2 - placholder
 dim[11]=[690,485]; //alias
 dim[12]=[700,607]; //base
 dim[13]=[700,600]; //brain jr - placholder
+dim[16]=[802,712]; //DS1 
+dim[17]=[700,607]; //base II
 //*******************************
 
 //need this because the Jazz plug-in 1.2.1 is a bit tweaky with Safari, so we slow the sending of sysex and gate ACK....
@@ -645,7 +686,7 @@ function getsx(v){
 	};
 	var sysexfile = ["sx_default.json","sx_dynamic.json"];
 	$.getJSON("js/"+sysexfile[opt], function(bjson) {
-		log("sx from json read");
+		clog("sx from json read");
 		sx = bjson;
 	})
 	.success(function() { toobj(); log("CH "+livid.globl.bankchs[0]+' '+livid.globl.bankchs[1]) })
@@ -656,9 +697,10 @@ var fw_versions = {};
 var curfw = 0;
 //store a json file that has all the current firmware verisons in it so we can determine if the user is current or not.
 function isnotcurfw(){
-    clog("CURFW?");
+    clog("CURRENT FIRMWARE?");
 		var cacheavoid = Math.floor( 1000*Math.random() );
-		$.getJSON("cur_fw.json?"+cacheavoid, function(json) {		
+		$.getJSON("cur_fw.json?"+cacheavoid, function(json) {	
+     clog("READING CURRENT FIRMWARE");	
 			fw_versions = json;
 			var prodname = products[pid];
 			curfw = fw_versions[prodname];
@@ -679,37 +721,50 @@ function isnotcurfw(){
 			}else{
 				alert_panel("Settings requests complete"+"<br>"+"Your firmware is up to date");
 			}
-		});
+			if(is_diy){
+			  msgbox("Your selected controller does not work with the online editor. You can download the appropriate editors from <a href='http://wiki.lividinstruments.com/>the wiki.</a>",1);
+			}
+			if(BASEII && firmware_float<=0.234){
+			  msgbox("There are known issues with the LEDs color settings for this firmware version. We will have an update soon. Thanks for your patience!<br> <a href='https://twitter.com/lividindustry'>Twitter</a> | <a href='https://www.facebook.com/lividinstrumentsinc'>Facebook</a>");
+			}
+			
+		})
+		.error(function() { clog("NO FW JSON"); });
 }
 
 //sets up the interface with the right graphics, and requests the settings from the controller.
 function product(v){
-	//log("function called: product");
-	pid = v;
+  pid = v;
 	productdefs();
 	head = [240, 0, 1, mfg, pid];
-	theurl = "http://127.0.0.1:8084/index.html?id="+pid;
-	has_ledring = (CODE || CNTRLR || BASE); //later versions of CNTRL:R will need this
-	has_rgb = (OHMRGB || CNTRLR || CNTRLR_OLD || ALIAS8 || BASE || BRAIN2 || OHMRGB_OLD);
-	has_setch = (CODE || ALIAS8 || BASE || BRAIN2 || OHMRGB || CNTRLR);
-	has_btntog = (CODE || ALIAS8 || BASE || BRAIN2 || OHMRGB || CNTRLR); //new cntrlr
+	//theurl = "http://127.0.0.1:8084/index.html?id="+pid;
+	has_ledring = (CODE || CNTRLR || BASE || BASEII); //later versions of CNTRL:R will need this
+	has_rgb = (OHMRGB || CNTRLR || CNTRLR_OLD || ALIAS8 || BASE || BASEII || BRAIN2 || BRAINJR || GUITARWING || OHMRGB_OLD || DS1);
+	has_setch = (CODE || ALIAS8 || BASE || BASEII || BRAIN2 || OHMRGB || CNTRLR ||DS1);
+	has_btntog = (CODE || ALIAS8 || BASE || BASEII || BRAIN2 || OHMRGB || CNTRLR || DS1); 
 	has_midi = (OHM64 || CNTRLR || CNTRLR_OLD || OHMRGB || BLOCK || BRAIN || BRAIN2 || CODE); //midi jacks
 	has_local = (OHM64 || BLOCK || OHMRGB_OLD || CNTRLR_OLD || CNTRLR_OLD); //standard local control
-	has_enc = (CNTRLR || CNTRLR_OLD || CODE || ALIAS8);
-	has_encflip = (CNTRLR || CNTRLR_OLD || CODE);
-	has_omni = (!BASE); //right now, only Base doesn't have omni.
+	has_enc = (CNTRLR || CNTRLR_OLD || CODE || ALIAS8 || DS1);
+	has_encflip = (CNTRLR || CNTRLR_OLD || CODE || DS1);
+	has_localcolor = (DS1);
 	var has_encdet = true; //older code firmware <222 doesn't have the command for detented v smooth action
-	is_diy = (BRAIN || BRAINJR || BRAIN2);
+	is_diy = (BRAIN || BRAINJR || BRAIN2 || GUITARWING);
+	is_base = (BASE || BASEII);
+	has_omni = (!is_base); //right now, only Base doesn't have omni.
 	
-	var bankcounts = [0,0,0,0,4,0,0,4,4,0,0,15,7];
+	var bankcounts = [0,0,0,0,4,0,0,4,4,0,0,15,7,0,0,0,1,7];
 	var bankcount = bankcounts[pid];
 	ledlock(v); //initialize with the led locked to note
 	if(DEBUG || DEBUGMIDI){ //add the console div and testbuttons for debugging
 		$('#testbuttons').css({visibility: "visible"});
 		$('#console').css({visibility: "visible"});
 	}
+	if(has_localcolor){
+	  $('.localcolors').css({visibility: "visible"});
+	}else{
+		$('.localcolors').remove();
+	}
 	//accomodate older firmware for OhmRGB that doesn't have button toggle states.
-	//log("TEST FW "+firmware[0]+" : "+ (firmware[0] <= 5) +" , "+firmware[1]+" : "+ (firmware[1] <= 5) +" , "+firmware[2]+" : "+ (firmware[2] == 0) +" , "+firmware[3]+" : "+ (firmware[3] == 0) );
 	if(OHMRGB && (firmware[0] <= 5 && firmware[1] <= 5 && firmware[2] == 0 && firmware[3] == 0) ){
 		requests[pid].pop(); //remove the last item in the requests array, which is button toggle states
 	}
@@ -737,7 +792,7 @@ function product(v){
 	$('#paper').height(dim[pid][1]);
 	$('#paper').css({background : 'url(faceplate_'+pid+'.gif)  no-repeat'});
 	$('#inspectors').width(dim[pid][0]);
-	log("BANK COUNT "+bankcount);
+	//clog("BANK COUNT "+bankcount);
 	//remove any extra bank channel inputs (code has less than alias, for example)
 	for(var i=0;i<16;i++){ 
 		if(i>(bankcount-1)){
@@ -797,7 +852,7 @@ function product(v){
 		$('#encspeedA_li').remove();
 		$('#encspeedB_li').remove();
 	};
-	if (!BASE){
+	if (!is_base){
 		$('#agslocal_fsr_li').remove();
 		$('#ringlocal_slide_li').remove();
 		$('#atouchspeed').remove(); //global control for afterpressure retrigger speed (temporal resolution)
@@ -835,7 +890,7 @@ function product(v){
 		$("#saveanddefaults").css({visibility: "visible"})
 		request();
 	}else{
-		alert_panel("We're sorry to report, the online editor application does not work for the Livid Brain products. It is for control surfaces only.",1);
+		alert_panel("We're sorry to report, the online editor application does not work for the Livid Brain products or the Guitar Wing. It is for control surfaces only.",1);
 		$("#midiioscrim").fadeIn(500); //bring the scrim back.
 		request();
 	}
@@ -859,7 +914,8 @@ function productdefs(){
 	BRAINJR = (pid==13);
 	MIDICV = (pid==14);
 	GUITARWING = (pid==15);
-	DS1 = (pid==16);  
+	DS1 = (pid==16);
+	BASEII = (pid==17);
 }
 
 function factory_reset(){
@@ -881,7 +937,7 @@ function undo(){
 	var type = undothis[0][1];
 	var param = undothis[0][2];
 	var val = undobuffer[0][param];
-	log("undo to"+" "+id+" "+type+" "+param+" "+val);
+	//clog("undo to"+" "+id+" "+type+" "+param+" "+val);
 	
 	livid[type][id][param]=val;
 	//send old value back to controller:
@@ -928,12 +984,11 @@ function UI(id,type,param,val){ //e.g. 1 btn nn 10
 				CMD=35;
 				mode="note";
 			}
-			//clog("LED? "+type+" mode "+mode+" CMD "+CMD+" val "+val+" sx "+sx[CMD]);
 			//get the cr:
 			cr=sx[CMD][val]; //val is note# or cc#
-			//log("sx["+CMD+"] "+sx[CMD]+" val "+val);
 			//see what id  is at this cr using  crtoID
 			var ID_=crtoID[pid][cr];
+			//clog("#### LED "+type+" mode "+mode+" CMD "+CMD+" val "+val+" sx "+sx[CMD]+ " cr "+ cr + " id "+ID_);
 			//reassign (clear) the nn or cc at that id in livid, only if it has been assigned.
 			if(ID_!=undefined && id!=ID_ && ID_>=0){ //we don't want to alert if the assignment is just a repeat of what's already here.
 				if(livid[type][ID_].nn){
@@ -1094,19 +1149,19 @@ function enc_det(v){
 //$$ when a UI element is clicked, or the control's MIDI value is rec'd
 //get the value for a control to update the interface
 function getid(){ 
+  clog("getid() "+requesting);
 	if(!requesting){	
 		var a = Array.prototype.slice.call(arguments, 0); //arg are sth like "btn_25" or "enc_7" 
 		var p = a[0].split("_");
-		//clog("get ctl id "+p[0]+" "+p[1]);
 		var type = p[0];
 		var id = parseInt(p[1]);
 		undobuffer[0] = clone(livid[type][id]);
+		clog("getid() type: "+type+" id: "+id);
 		updatectlinspector(type,id);
 	}	
 }
 
 var groups = {};
-//need at type!
 groups[2] = {};
 groups[3] = {};
 groups[4] = {};
@@ -1114,35 +1169,50 @@ groups[7] = {};
 groups[8] = {};
 groups[11] = {};
 groups[12] = {};
-groups[2]['btn'] = { 'Grid':[0,63],'Crossfader Buttons':[64,65],'Slider Buttons':[66,73],'Function Buttons':[74,80] }; //Ohm64
+groups[16] = {};
+groups[17] = {};
+//Ohm64
+groups[2]['btn'] = { 'Grid':[0,63],'Crossfader Buttons':[64,65],'Slider Buttons':[66,73],'Function Buttons':[74,80] }; 
 groups[2]['pot'] = { 'Left Knobs':[0,11],'Left Sliders':[16,19],'Right Knobs':[12,15],'Right Sliders':[20,23],'Crossfader':[24] };
 groups[2]['led'] = { 'Grid':[0,63],'Crossfader':[64,65],'Slider Buttons':[66,73],'Function Buttons':[74,80] }; //we're not modifying these, so it's safe
-groups[3]['btn'] = { 'Grid':[0,63],'Function Buttons':[64,70] }; //block
+//block
+groups[3]['btn'] = { 'Grid':[0,63],'Function Buttons':[64,70] }; 
 groups[3]['pot'] = { 'Knobs and Sliders':[0,9] };
 groups[3]['led'] = { 'Grid':[0,63],'Function Buttons':[64,70] };
-groups[4]['btn'] = { 'Encoder Buttons':[0,31],'Side Buttons':[32,36],'Bottom Buttons':[37,45] }; //Code
+//Code
+groups[4]['btn'] = { 'Encoder Buttons':[0,31],'Side Buttons':[32,36],'Bottom Buttons':[37,45] }; 
 groups[4]['enc'] = { 'Encoders':[0,31] };
 groups[4]['led'] = { 'Encoders':[0,31] };
 groups[4]['ledring'] = { 'Encoders':[0,31] };
-groups[7]['btn'] = { 'Grid':[0,63],'Crossfader':[64,65],'Slider Buttons':[66,73],'Function Buttons':[74,80] }; //OhmRGB
+//OhmRGB
+groups[7]['btn'] = { 'Grid':[0,63],'Crossfader':[64,65],'Slider Buttons':[66,73],'Function Buttons':[74,80] }; 
 groups[7]['pot'] = { 'leftKnobs':[0,11],'leftSliders':[16,19],'rightKnobs':[12,15],'rightSliders':[20,23],'Crossfader':[24] };
 groups[7]['led'] = { 'Grid':[0,63],'Crossfader':[64,65],'Slider Buttons':[66,73],'Function Buttons':[74,80] };
-groups[8]['btn'] = { 'Grid':[0,15],'Top Row Buttons':[16,31],'Bottom Row Buttons':[32,47],'Encoder Buttons':[48,59] }; //CNTRLR
+//CNTRLR
+groups[8]['btn'] = { 'Grid':[0,15],'Top Row Buttons':[16,31],'Bottom Row Buttons':[32,47],'Encoder Buttons':[48,59] }; 
 groups[8]['pot'] = { 'Knobs':[0,23],'Sliders':[24,31] };
 groups[8]['enc'] = { 'Encoders':[0,11] };
 groups[8]['led'] = { 'Grid':[0,15],'Top Row Buttons':[16,31],'Bottom Row Buttons':[32,47],'Encoder Buttons':[48,59] };
 groups[8]['ledring'] = { 'Encoders':[0,11] };
-//groups[9]['btn'] = {}; //Brain V2
-//groups[10]['btn'] = {}; //Enlighten
-groups[11]['btn'] = { 'Top Row Buttons':[0,7],'Bottom Row Buttons':[8,15] }; //Alias8
+//Alias8
+groups[11]['btn'] = { 'Top Row Buttons':[0,7],'Bottom Row Buttons':[8,15] }; 
 groups[11]['pot'] = { 'Knobs':[0,15], 'Sliders':[16,24], 'Master Fader':[25] };
 groups[11]['led'] = { 'Top Row Buttons':[0,7],'Bottom Row Buttons':[8,15] };
-groups[12]['btn'] = { 'Pads':[0,31],'Side Buttons':[32,39],'Side Corner LEDs':[40,47],'Touch Buttons':[48,55],'Top Corner LEDs':[56,63] }; //Base
+//Base
+groups[12]['btn'] = { 'Pads':[0,31],'Side Buttons':[32,39],'Side Corner LEDs':[40,47],'Touch Buttons':[48,55],'Top Corner LEDs':[56,63] }; 
 groups[12]['fsr'] = { 'Pads':[0,31] };
 groups[12]['led'] = { 'Pads':[0,31],'Side Buttons':[32,39],'Side Corner LEDs':[40,47],'Touch Buttons':[48,55],'Top Corner LEDs':[56,63] };
-//groups[12]['ledring'] = { };
 groups[12]['slide'] = { 'Sliders':[0,8] };
-//groups[13]['btn'] = {}; //Brain Jr.
+//DS1
+groups[16]['btn'] = { 'Channel Buttons':[0,15],'Master Buttons':[16,24],'Encoder Buttons':[25,28] }; 
+groups[16]['pot'] = { 'Ch1':[0,5], 'Ch2':[6,11], 'Ch3':[12,17], 'Ch4':[18,23], 'Ch5':[24,29], 'Ch6':[30,35], 'Ch7':[36,41], 'Ch8':[42,47], 'Master and External':[48,53] };
+groups[16]['led'] = { 'Channel Buttons':[0,15],'Master Buttons':[16,24],'Encoder Buttons':[25,28] }; 
+groups[16]['enc'] = { 'Encoders':[0,3] };
+//BaseII
+groups[17]['btn'] = { 'Pads':[0,31],'Side Buttons':[32,39],'Side Corner LEDs':[40,47],'Touch Buttons':[48,55],'Top Corner LEDs':[56,63] };
+groups[17]['fsr'] = { 'Pads':[0,31] };
+groups[17]['led'] = { 'Pads':[0,31],'Side Buttons':[32,39],'Side Corner LEDs':[40,47],'Touch Buttons':[48,55],'Top Corner LEDs':[56,63] };
+groups[17]['slide'] = { 'Sliders':[0,8] };
 
 function group(type,g_id){
 		clonesx(); //copy the sx object to a clone so we can undo.
@@ -1290,6 +1360,9 @@ function ledmapper(CMD,ctl,p){
 			//**END probably don't need this
 			//clog("LED note "+nn+" cr "+cr+ " id "+id);
 			sx[CMD][nn] = cr; //put the cr code at the note position
+			var otherCMD = 36;
+			var deassign = 127;
+			sx[otherCMD][nn] = 127; //deassign the corresponding CC so the LED doesn't respond to both note and cc
 		}
 		if(mode==1 && CMD==36){
 			//**probably don't need this
@@ -1298,6 +1371,9 @@ function ledmapper(CMD,ctl,p){
 			//if(check>0) sx[CMD][check] = 127;
 			//**END probably don't need this
 			sx[CMD][nn] = cr; //put the cr code at the cc position
+			var otherCMD = 35;
+			var deassign = 127;
+			sx[otherCMD][nn] = 127; //deassign the corresponding note so the LED doesn't respond to both note and cc
 		}
 	}
 	//log("ledmapper end "+CMD+" "+ctl+" "+p+" len "+sx[CMD].length);
@@ -1349,7 +1425,7 @@ function omniout(){
 function localout(){
 	var localcc = 122;
 	var ch = (livid.globl.settingsch)-1;
-	if(!BASE){
+	if(!is_base){
 		localflags[1] = livid.globl.btnlocal_mom; //btn momentary
 		localflags[2] = livid.globl.btnlocal_tog; //btn toggle 
 		localflags[3] = livid.globl.ringlocal_abs; //enc absolute
@@ -1385,8 +1461,14 @@ var isfromfile = false;
 //sends out some sysex commands, based on the cmd #s in the arguments.
 function somesysex(){
 	//disconnect the MIDI input for Safari- there seemed to be some sort of problem with leaving it connected during this routine:
-	//if(isfromfile) DO_DISCNXN = true;
-	if(DO_DISCNXN) disconnectMidiIn(); 
+	if(DO_DISCNXN) disconnectMidiIn();
+	var LEDcmd = 4;	
+	//request the current LED state
+	/*
+	var reqled = []
+  reqled = reqled.concat(head,7,LEDcmd,eom);
+  midi_o(reqled);
+  */
 	cmdno=0;
 	var theargs = [];
   var tmp = [];
@@ -1407,8 +1489,6 @@ function somesysex(){
   clog ("bank and ch command indices "+bank_no+" "+chan_no+" "+chans_no);
   //send the bank number first CMD 26
 	if(bank_no>0){
-    var mo = tmp.concat(head,26,sx[26],eom);
-    clog("BANK OUT "+sx[26]+" .. "+mo);
     midi_o(tmp.concat(head,26,sx[26],eom));
 	  sxtosend.splice(bank_no,1);
   }
@@ -1434,9 +1514,6 @@ function somesysex(){
 			}
 		}
 	}
-  //now send LEDs to ensure they are correct:
-  //clog("_____SENDING LIGHTS LAST____");
-  midi_o(sxmsg[0]);
 	/*
 	(function(){
     var i = 0;
@@ -1456,12 +1533,29 @@ function somesysex(){
     looper();
     })();
 	*/
-	//$.post("../index.html", "json_in sysex " +  JSON.stringify(sxmsg) ); //to max
-	//log("=>somesysex done")
+	clog("LED MAP AGAIN "+sxtosend.indexOf(35)+" "+sxtosend.indexOf(36));
+	//for whatever reason, we need to send 35 and 36 again, something to do with the order of 16, 35, & 36
+	var recmd = 35;
+  if(sxtosend.indexOf(recmd) >= 0){
+    tmp = [];
+    tmp = tmp.concat(head,recmd,sx[35],eom) 
+    midi_o(tmp); //midi out function in midiio.js
+  }
+  recmd = 36;
+  if(sxtosend.indexOf(recmd) >= 0){
+    tmp = [];
+    tmp = tmp.concat(head,recmd,sx[36],eom)
+    midi_o(tmp); //midi out function in midiio.js
+	}
+	if(sxtosend.indexOf(LEDcmd) >= 0){
+    tmp = [];
+    clog("_____SENDING LIGHTS LAST____");
+    midi_o( tmp.concat(head,LEDcmd,sx[LEDcmd],eom) );
+  }
 	if(DO_DISCNXN) cnxn = setTimeout(function(){ connectMidiIn() },500); //re-open the MIDI input port
   isfromfile = false;
-  //if(isfromfile) DO_DISCNXN = false;
 }
+
 //convert cmds 35 and 36 to cmd 9 for ohm64 and block
 function oldleds(cmd){ //cmd will be 36 or 35
 	//log("old led style");
@@ -1490,7 +1584,7 @@ function cmdout(){
 	var cmd = Array.prototype.slice.call(arguments, 0);
 	cmd = cmd[0]; //"flatten" it
 	var midiout=[];	
-	//log("cmdout "+" cmd "+cmd);
+	//clog("cmdout "+" cmd "+cmd);
 	//now that we know the cmd number of the sysex string,
 	//we can use that to output midi:
 	if(cmd=="inquiry"){
@@ -1543,7 +1637,6 @@ function procSysex(){
 				//ohm64 and block have a different way of dealing with LEDs:
 				}else{ //our bytestring is a triad: <nn> <note or cc> <cr> e.g. 2 0 66 is note 2 at CR 66
 					//for Ohm64 and block, we create CMD 35 and 36 from the results of 9
-					//log("bytestring "+bytestring);
 					if(!sx[35] || !sx[35]){
 						sx[35]=[1];
 						sx[36]=[1];
@@ -1572,30 +1665,29 @@ function procSysex(){
 					  request();
 					  resetting_defaults = false;
 					}
+					notify("ACK");
 				}
 				if(sxid==NACK){
-				  clog("NACK");
 					alert_panel("Transmission error - start again");
 				}
 				if(sxid==BANKIN){
 					var bankin = sx[sxid];
 					changebank(bankin);
-					notify("Bank Change in from controller "+bankin);
+					alert_panel("Bank Change in from controller "+bankin);
 				}
 				//if we're not in the request loop and the sysex description of LED states comes in, lets update the livid object
 				if(!requesting && (sxid==4 || sxid==31) ){
 				  clog("LED update "+sxid+ " "+sx[sxid]);
-				  sxToObj[pid][sxid]()
+				  sxToObj[pid][sxid]();
 				}
 			}
 			if(requesting && !timedreq){ //handshake method - use the ack to trigger the next request
 				cmdno++;
 				var req=requests[pid][cmdno];
 				if(BLOCK && req==33){ //we may not get a response for this because the block may not have expansion jacks
-					//log("setup timeout for 33");
 					blockhedge = setTimeout(function(){ endrequests() },500);
 				}
-				//log("next "+req+" - "+pid+" - "+cmdno);
+				//clog("next "+req+" - "+pid+" - "+cmdno);
 				if(!req){ //protection against a problem where it can go to req's out of bounds. not sure why it does this...must track down.
 					clog("undef request");
 					endrequests();
@@ -1644,7 +1736,7 @@ function endrequests(){
 		//alert_panel("Settings requests complete");
 		isnotcurfw();
 		$('#fetchsettings').fadeOut(200);
-		clog("\nREQ DONE ");
+		clog("SETTINGS REQUEST IS DONE ");
 		//convert sysex to livid object when the request is finished.
 		clonesx(); //copy the sx object to a clone so we can revert.
 		toobj();
@@ -1716,7 +1808,7 @@ function queryd(){
 					sx[ID] = bytestring;
 					//clog("ID "+ID+" sx "+sx[ID]);
 					//viewmidi("-"+ID+": "+sx[ID]);
-					viewmidi("-"+ID);
+					viewmidi("get "+cmdfriendly[ID]+" ("+ID+")");
 				}else{
 					//for Ohm64 and block, we create CMD 35 and 36 from the results of 9
 					if(!sx[35] || !sx[35]){
@@ -1834,7 +1926,7 @@ function req_sched(){
 //used in a scheduled request
 function req_next(){
 	var req=requests[pid][cmdi];
-	log("REQ dump "+req+" of "+req_max);
+	clog("REQ dump "+req+" of "+req_max);
 	cmdout(req);
 	cmdi++;
 	if(req==req_max){
@@ -1894,7 +1986,7 @@ function toobj(){
 	//log("toobj: product # "+pid+" ");
 	//selects the first button
 	var firstbtn="btn_0";
-	if(BASE) firstbtn="btn_48";
+	if(BASE || BASEII) firstbtn="btn_48";
 	selctl(pid,firstbtn); //in faceplate.js
 	inittabs();
 	getid(firstbtn);
@@ -2102,7 +2194,7 @@ var prev_type="";
 var ledsvisible=false;
 function updatectlinspector(type,id){
 	//show the correct div:
-	clog(">to insp.: "+type+" "+id+" (pvs type: "+prev_type+")");
+	clog(">updatectlinspector() type- "+type+" id- "+id+" (pvs type: "+prev_type+")");
 	//var ctltypes = ["btn","led","ledring","enc","fsr","pot", "slide"]
 	//fade inspectors in/out when type changes
 	var noleds = ( OHM64 && (id>=75 && id<=80) ) || ( BLOCK && (id>=64 && id<=70) ); //some buttons on these devices have no leds to control
@@ -2188,10 +2280,10 @@ function updatectlinspector(type,id){
 				if(typeof thesetting=="number"){
 					switch(this.name){
 						case "mode":
-						if(type=="btn" ||type=="enc"){
+						if(type=="btn" || type=="enc"){
 							thesetting=modehash[thesetting];
 							//CNTRL:R encoder modes are different than codes - no 'note' setting:
-							if(CNTRLR){
+							if(CNTRLR &&  type=="enc"){
 							  thesetting="cc";
 							}
 						}else{
@@ -2330,7 +2422,6 @@ function updateglobalinspector(ctlui,val){
 var saveclicked = 0; //set to 1 when the save to device button is clicked in faceplate.js
 function notify(note){
 	if(note=="ACK"){
-		clog("ACK");
 		if(saveclicked){
 			alert_panel("Settings saved to device");
 			saveclicked = 0;
@@ -2342,15 +2433,13 @@ function notify(note){
 }
 
 function printsx(){
-	log();
 	for(i in sx){
 		clog("sx"+' '+i+' '+":"+' '+sx[i]+' '+"-len-"+' '+sx[i].length+" last "+sx[i][(sx[i].length-1)]);
 	}
 }
 function printenc(){
-	log();
 	for(i in livid.enc){
-		log("enc"+' '+i+' '+":"+' '+livid.enc[i].nn);
+		clog("enc"+' '+i+' '+":"+' '+livid.enc[i].nn);
 	}
 }
 
@@ -2388,18 +2477,17 @@ function allnotesoff(){
 }
 
 function printtype(v){
-	log();
 	for(var type in livid){
 		if(type!="globl" && type==v){
 			for(var i in livid[type]){
 				//post("\n--",i);
 				for(var p in livid[type][i]){
-					log(">"+" "+type+" "+i+" "+p+" "+livid[type][i][p]);
+					clog(">"+" "+type+" "+i+" "+p+" "+livid[type][i][p]);
 				}
 			}
 		}else if(v=="globl"){
 			for(var p in livid[type]){
-				log(">"+" "+type+" "+i+" "+p+" "+livid[type][p]);
+				clog(">"+" "+type+" "+i+" "+p+" "+livid[type][p]);
 			}
 		}
 		
@@ -2430,7 +2518,7 @@ function printlivid(){
 function globlquest(){
 	for(var p in livid.globl){		
 		var tmp=Number(livid.globl[p]);
-		log("glob"+" "+p+" "+livid.globl[p]+" "+tmp+" "+"type"+" "+typeof livid.globl[p]+" "+typeof tmp);
+		clog("glob"+" "+p+" "+livid.globl[p]+" "+tmp+" "+"type"+" "+typeof livid.globl[p]+" "+typeof tmp);
 	}
 }
 
@@ -2501,7 +2589,7 @@ function dumpmap(){
  
 //error supressions:
 function start(){
-	log("START");
+	clog("START");
 }
 
 var remote_type="";
@@ -2528,5 +2616,5 @@ function mode(v){
 	}
 }
 function bang(){
-	log("uitocontroller.js: bang");
+	clog("uitocontroller.js: bang");
 }

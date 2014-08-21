@@ -8,5 +8,8 @@
 	"BrainV2" : 0.179,
 	"CNTRL:R" : 0.111,
 	"Ohm64" : 0.223,
-	"OhmRGB" : 0.066
+	"OhmRGB" : 0.066,
+	"Guitar Wing" : 0.100,
+	"BaseII" : 0.234,
+	"DS1" : 0.102
 }

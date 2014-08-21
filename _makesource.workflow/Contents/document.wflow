@@ -105,7 +105,7 @@
 				<key>isViewVisible</key>
 				<true/>
 				<key>location</key>
-				<string>302.000000:704.000000</string>
+				<string>250.500000:704.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Get Specified Finder Items.action/Contents/Resources/English.lproj/main.nib</string>
 			</dict>
@@ -233,6 +233,7 @@
 						<string>/Volumes/Satellite/gitbins/Livid Online Editor/index.html</string>
 						<string>/Volumes/Satellite/gitbins/Livid Online Editor/js</string>
 						<string>/Volumes/Satellite/gitbins/Livid Online Editor/labels.html</string>
+						<string>/Volumes/Satellite/gitbins/Livid Online Editor/faceplate_17.gif</string>
 						<string>/Volumes/Satellite/gitbins/Livid Online Editor/livid_logo_corner.png</string>
 						<string>/Volumes/Satellite/gitbins/Livid Online Editor/livid_logo_select.png</string>
 						<string>/Volumes/Satellite/gitbins/Livid Online Editor/logo.gif</string>
@@ -291,7 +292,7 @@
 				<key>isViewVisible</key>
 				<true/>
 				<key>location</key>
-				<string>302.000000:400.000000</string>
+				<string>250.500000:400.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Get Specified Finder Items.action/Contents/Resources/English.lproj/main.nib</string>
 			</dict>
@@ -439,7 +440,7 @@
 				<key>isViewVisible</key>
 				<true/>
 				<key>location</key>
-				<string>302.000000:162.000000</string>
+				<string>250.500000:162.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Create Archive.action/Contents/Resources/English.lproj/main.nib</string>
 			</dict>
@@ -449,24 +450,24 @@
 	</array>
 	<key>connectors</key>
 	<dict>
-		<key>1D2256FB-48DA-4C28-99A2-F1B912FA0E81</key>
+		<key>220B2362-01B4-4753-AC6D-F8CCD15DEA29</key>
 		<dict>
-			<key>from</key>
-			<string>48C82D90-7455-4E72-9271-52F2B713FF72 - 48C82D90-7455-4E72-9271-52F2B713FF72</string>
 			<key>to</key>
-			<string>ED4F8412-7DD4-4387-A3BE-7035EB7EFC8E - ED4F8412-7DD4-4387-A3BE-7035EB7EFC8E</string>
+			<string>48C82D90-7455-4E72-9271-52F2B713FF72 - 48C82D90-7455-4E72-9271-52F2B713FF72</string>
 		</dict>
-		<key>379489AF-871B-4B1B-9D16-94C6E3E65684</key>
+		<key>78F38BAB-FC51-4F92-A6AF-9AECE649540A</key>
 		<dict>
 			<key>from</key>
 			<string>A13C3D3E-C79F-4AD5-A917-8735E0296F6A - A13C3D3E-C79F-4AD5-A917-8735E0296F6A</string>
 			<key>to</key>
 			<string>3E96116D-46EB-4220-A462-ACD881515634 - 3E96116D-46EB-4220-A462-ACD881515634</string>
 		</dict>
-		<key>7CE93A4C-E4C7-40BD-8339-EC7851626447</key>
+		<key>D61B1772-40FA-4297-89DB-6C4DADACB984</key>
 		<dict>
-			<key>to</key>
+			<key>from</key>
 			<string>48C82D90-7455-4E72-9271-52F2B713FF72 - 48C82D90-7455-4E72-9271-52F2B713FF72</string>
+			<key>to</key>
+			<string>ED4F8412-7DD4-4387-A3BE-7035EB7EFC8E - ED4F8412-7DD4-4387-A3BE-7035EB7EFC8E</string>
 		</dict>
 	</dict>
 	<key>workflowMetaData</key>

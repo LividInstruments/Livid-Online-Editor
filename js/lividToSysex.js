@@ -1157,3 +1157,450 @@ lividToSx[12]={ //[4,8,10,11,12,22,23,26,34,35,36,41,49,50,54,56,57,58,59,60,61,
 		sx[CNO][0]=Number(livid[cntl][prm])-1; //menu in UI starts at 1, but CMD 70 setting starts at 0
 	}
 }; 
+//ds1
+lividToSx[16]={
+	4: function(){ //[8]
+		var pos=[0,2,0,2,1,3,1,3,4,6,4,6,5,7,5,7];
+		CNO=4;
+		cntl="led";
+		var p_arr = ["red","green","blue"];
+		var rgb_i=0;
+		bitlist=[];
+		//cycle thru all leds and get the onoff flags. Two ids get packed into 1 byte
+		var j=0;
+		//need to step thru ids in a weird order so the right halves of the bytes can be joined. 
+		var idorder = [0,2,4,6,1,3,5,7,8,10,12,14,9,11,13,15];
+		for (var i=0;i<16;i++){
+			var id = idorder[i];
+			var odd_id = id%2;
+			var odd_i = i%2;
+			//even id's will fill first 3 slots in bitlist, odd id's will fill next 3 slots in bitlist
+			for(var c in p_arr){
+				var clr = p_arr[c];
+				//clog("rgb "+rgb_i+" cntl,id,clr "+cntl+" "+id+" "+clr+" val "+livid[cntl][id][clr]);
+				bitlist[rgb_i]=livid[cntl][id][clr];
+				rgb_i++;
+			}
+			if(odd_i){
+				sx[CNO][pos[id]]=btod(bitlist.reverse());
+				j++;
+				bitlist=[]; //clear it for the next round
+				rgb_i=0;
+			}
+		}
+	},
+	8: function(){	//[1]
+		CNO=8; //various global control info
+	},
+	10: function(){	//[84]
+		CNO=10; // analogs
+		bytemaps(CNO,"pot"); //map
+	},
+	11: function(){	//[32]
+		CNO=11; //buttons
+		bytemaps(CNO,"btn"); //map
+	},
+	12: function(){	//[1]
+		CNO=12; //midi settings ch
+		getone(CNO,"settingsch",1);
+	},
+	16: function(){	//[8]	
+		CNO=16; //encoder map
+		bytemaps(CNO,"enc"); //map
+	},
+	17: function(){	//[2]
+		CNO=17; //abs or relative
+		cntl="enc";
+		prm="type";
+		bitlist=[];
+		var j=0;
+		var max_enc = 12;
+		//cycle thru all encoders and get the encoder type flag
+		for (var id in livid[cntl]){ 
+			bitlist[id%8]=livid[cntl][id][prm];
+			if(id%8==7 && id!=0 || id==(max_enc-1) ){
+				var firstbyte = bitlist.slice(0,7);
+				sx[CNO][j]=btod(firstbyte.reverse());
+				//clog("\nenc type",j,sx[CNO][j],"..",firstbyte);
+				j++;
+				sx[CNO][j]=bitlist.pop(); //the 2nd byte only uses 1 bit
+				//clog("\nenc type",j,sx[CNO][j]);
+				j++;
+				bitlist=[]; //clear it for the next round
+			}
+		}
+		//clog("\nenc type sx",sx[CNO]);
+	},
+	22: function(){	//[1]
+		CNO=22; //bank ch
+		getone(CNO,"bankch",1);
+	},
+	23: function(){	//[15]
+		CNO=23; //all bank chs
+		cntl="globl";
+		prm="bankchs";
+		//cycle thru all four bank chs.
+		for(var i in livid[cntl][prm]){
+			sx[CNO][i]=livid[cntl][prm][i]-1; //offset by one, since ui shows chs. as 1-16, but sysex wants 0-15
+		}
+	},
+	26: function(){	//[1]
+		CNO=26; //current bank number
+		getone(CNO,"bank",1);
+	},
+	30: function(){	//[30]
+		CNO=30; //encoder speed
+		cntl = "globl";
+		var speedA=livid[cntl]["encspeedA"];
+		var speedB=livid[cntl]["encspeedB"];
+		//very hacked correction here:
+		if(!speedA) speedA=1;
+		if(!speedB) speedB=1;
+		//for some reason there are 30 bytes. Perhaps we can set speed per bank? dunno. there are oddities in A8 firmware!
+		for (var i=0;i<15;i++){
+			var j=i*2;
+			sx[CNO][j]=speedA;
+			sx[CNO][j+1]=speedB;
+		}
+	},
+	33: function(){	//[] //not yet implemented on alias fw
+		CNO=33; //map expansion analogs
+	},
+	34: function(){	//[8]
+		CNO=34; //map led color scheme
+	},
+	35: function(){	//[128]
+		CNO=35; //led note map
+		cntl="led";
+		prm="nn";
+		ledmapper(CNO,cntl,prm);
+	},
+	36: function(){	//[129]
+		CNO=36; //led cc map
+		cntl="led";
+		prm="nn";
+		ledmapper(CNO,cntl,prm);
+	},
+	37: function(){	//[120]
+		CNO=37; //LEDs All banks
+	},
+	38: function(){ //[4]
+		CNO=38; //encoder values
+	},
+	39: function(){	//[60]
+		CNO=39; //encoder values all banks
+	},
+	54: function(){	//[6]
+		CNO=54; //button toggle mode
+		cntl="btn";
+		prm="toggle";
+		bitlist=[];
+		//cycle thru all buttons and get the toggle flag 
+		var j=0;
+		var lastid=15;
+		for (var id in livid[cntl]){
+			var bitpos = posi[pid].btn[id];
+			log("\nbtn tog"+" "+id+" "+bitpos+" "+"   "+" "+livid[cntl][id][prm]);
+			bitlist[id%4]=livid[cntl][bitpos][prm];
+			if(id%4==3 && id!=0 || id==lastid){
+				sx[CNO][j]=btod(bitlist.reverse()); //need to reverse the bitlist - easier than creating a new "posi" table!
+				log("\ntog bitlist"+" "+j+" "+sx[CNO][j]+" "+"from list"+" "+bitlist);
+				j++;
+				bitlist=[]; //clear it for the next round
+			}
+		}
+	},
+	55: function(){	//[2]
+		CNO=55; //encoder flip
+		cntl="global";
+		prm="encflip";
+	},
+	56: function(){	//[15]
+		CNO=56; //local control color
+		cntl="globl";
+		prm="localcolor";
+	},
+	76: function(){	//
+		CNO=76; //local control color map
+		cntl="globl";
+		prm="localcolor";
+	}
+}; 
+//BaseII
+lividToSx[17]={ //[4,8,10,11,12,22,23,26,34,35,36,41,49,50,54,56,57,58,59,60,61,65,66]
+	4: function(){ //[72]
+		CNO=4;
+		cntl="led";
+		var p_arr = ["red","green","blue"];
+		var rgb_i=0;
+		bitlist=[];
+		//cycle thru all leds and get the onoff flags. Two ids get packed into 1 byte
+		var j=0;
+		//need to step thru ids in a weird order so the right halves of the bytes can be joined. 
+		//buttons:
+		for (var i=0;i<64;i++){
+			var id = i;
+			var odd_i = i%2;
+			//even id's will fill first 3 slots in bitlist, odd id's will fill next 3 slots in bitlist
+			for(var c in p_arr){
+				var clr = p_arr[c];
+				//clog("rgb "+rgb_i+" cntl,id,clr "+cntl+" "+id+" "+clr+" val "+livid[cntl][id][clr]);
+				bitlist[rgb_i]=livid[cntl][id][clr];
+				rgb_i++;
+			}
+			if(odd_i){
+				var pos = (i-1)/2;
+				var val = btod(bitlist.reverse());
+				sx[CNO][pos]=val;
+				j++;
+				bitlist=[]; //clear it for the next round
+				rgb_i=0;
+			}
+		}
+	},
+	8: function(){	//[1]
+		CNO=8; //various global control info
+		var flags = [];
+		flags[1] = livid.globl.btnlocal_mom;  //btn momentary
+		flags[2] = livid.globl.btnlocal_tog;  //btn toggle 
+		flags[3] = livid.globl.ringlocal_slide; //cap slider
+		flags[4] = livid.globl.btnlocal_cbtn;  //cap button (deprecated - merged w/ regular btns)
+		flags[5] = livid.globl.agslocal_fsr;  //drumpad
+		sx[CNO] = btod(flags);
+	},
+	10: function(){	//[84]
+		CNO=10; // analogs
+		bytemaps(CNO,"fsr","cc"); //map
+	},
+	11: function(){	//[32]
+		CNO=11; //buttons
+		//we appended the info in CNO 65 to CNO 11, so we have to split that out now:
+		var len = sx[CNO].length;
+		if(len>16){
+			//do 65 first, cuz we're going to destructively modify 11 after this:
+			sx[65] = sx[CNO].slice(len/2,len);
+			sx[CNO] = sx[CNO].slice(0,len/2);
+		}
+		bytemaps(CNO,"btn"); //map
+	},
+	12: function(){	//[1]
+		CNO=12; //midi settings ch
+		getone(CNO,"settingsch",1);
+	},
+	22: function(){	//[1]
+		CNO=22; //bank ch
+		getone(CNO,"bankch",1);
+	},
+	23: function(){	//[15]
+		CNO=23; //all bank chs
+		cntl="globl";
+		prm="bankchs";
+		//cycle thru all four bank chs.
+		for(var i in livid[cntl][prm]){
+			sx[CNO][i]=livid[cntl][prm][i]-1; //offset by one, since ui shows chs. as 1-16, but sysex wants 0-15
+		}
+	},
+	26: function(){	//[1]
+		CNO=26; //current bank number
+		getone(CNO,"bank",1);
+	},
+	34: function(){	//[8]
+		CNO=34; //map led color scheme
+		cntl="colormap";
+		colormapper(CNO);
+	},
+	35: function(){	//[128]
+		CNO=35; //led note map
+		cntl="led";
+		prm="nn";
+		ledmapper(CNO,cntl,prm);
+	},
+	36: function(){	//[128]
+		CNO=36; //led cc map
+		cntl="led";
+		prm="nn";
+		ledmapper(CNO,cntl,prm);
+	},
+	41: function(){
+		CNO=41; //analog filter mode 1 byte per fsr
+		cntl="fsr";
+		prm="filter";
+		for(var i in livid[cntl]){
+			sx[CNO][i]=livid[cntl][i][prm]; //pretty straightforward
+		}
+	},
+	49: function(){ //Analog Note Assignment
+		CNO=49;
+		cntl="fsr";
+		prm="nn";
+		for(var i in livid[cntl]){
+			sx[CNO][i]=livid[cntl][i][prm]; //pretty straightforward
+		}
+	},
+	50: function(){ //LED Ring Style //redundant with 61?
+		CNO=50;
+		cntl="slide";
+		prm="style";
+		var maxring = 9;
+		for(var id in livid[cntl]){ //livid.ledring[id].style
+			if(id<maxring){ //shouldn't have to do this, but...
+				sx[CNO][id]=livid[cntl][id][prm];
+			}
+		}
+	},
+	54: function(){	//[2*BANKS]
+		CNO=54; //button toggle mode
+		cntl="btn";
+		prm="toggle";
+		bitlist=[];
+		//cycle thru all buttons and get the toggle flag 
+		var j=0;
+		var lastid=55; //button ids are somewhat strange on base, so the last id is a higher number than count of buttons
+		for (var id in livid[cntl]){
+			//var bitpos = posi[pid].btn[id];
+			var bitpos = id;
+			//clog("btn tog"+" "+id+" "+bitpos+" "+"   "+" "+livid[cntl][id][prm]);
+			bitlist[id%4]=livid[cntl][bitpos][prm];
+			if(id%4==3 && id!=0 || id==lastid){
+				sx[CNO][j]=btod(bitlist.reverse()); //need to reverse the bitlist - easier than creating a new "posi" table!
+				//clog("tog bitlist"+" "+j+" "+sx[CNO][j]+" "+"from list"+" "+bitlist);
+				j++;
+				bitlist=[]; //clear it for the next round
+			}
+		}
+	},
+	56: function(){	//[]
+		CNO=56; //local control color
+		cntl="globl";
+		prm="localcolor";
+	},
+	57: function(){	//[9]
+		CNO=57; //Capacitive Fader Map Notes
+		cntl="slide";
+		prm="nn";
+		//clog("touch fader notes 57 "+livid[cntl][0][prm]);
+		for(var i in livid[cntl]){
+			//clog("TF notes "+i+" "+livid[cntl][i][prm]);
+			if(livid[cntl][i][prm]!=undefined)
+				sx[CNO][i]=livid[cntl][i][prm]; //pretty straightforward
+		}
+	},
+	58: function(){	//[9]
+		CNO=58; // analogs
+		cntl="slide";
+		prm="cc";
+		bytemaps(CNO,cntl,prm); //map
+	},/*
+	58: function(){	//[9]
+		CNO=58; //Capacitive Fader Map cc
+		cntl="slide";
+		prm="cc";
+		//clog("touch fader cc 58 "+livid[cntl][0][prm]);
+		for(var i in livid[cntl]){
+			//clog("TF ccs "+i+" "+livid[cntl][i][prm]);
+			if(livid[cntl][i][prm]!=undefined)
+				sx[CNO][i]=livid[cntl][i][prm]; //pretty straightforward
+		}
+	},*/
+	59: function(){	//[9]
+		CNO=59; //Capacitive Fader values
+		cntl="slide";
+		prm="val";
+		for(var i in livid[cntl]){
+			sx[CNO][i]=livid[cntl][i][prm]; //pretty straightforward
+		}
+	},
+	60: function(){	//[9]
+		CNO=60; //Capacitive Fader mode
+		cntl="slide";
+		//collect all the flags for each fader's byte:
+		for (var i=0; i<sx[CNO].length; i++){ //all 9 bytes
+			var flags = [];
+			prm="output"; 
+			var mode = livid[cntl][i][prm];
+			flags = flags.concat( dtob(mode,2).reverse() );
+			prm = "sendnote";
+			flags[2] = livid[cntl][i][prm];
+			prm = "fixvel";
+			flags[3] = livid[cntl][i][prm];
+			//wrap the flags into a byte:
+			sx[CNO][i] = btod(flags.reverse());
+		}
+	},
+	//LED Ring Color Map (all banks)
+	61: function(){	//[9]
+		CNO=61; 
+		cntl="slide";
+		prm="color";
+		//clog("touch fader cc 58 "+livid[cntl][0][prm]);
+		for(var i in livid[cntl]){
+			//clog("TF ccs "+i+" "+livid[cntl][i][prm]);
+			if(livid[cntl][i][prm]!=undefined)
+				sx[CNO][i]=livid[cntl][i][prm]; //pretty straightforward
+		}
+		
+	},
+	//Touch Button Sensitivity
+	63: function(){	//[8]
+		CNO=62; 
+		cntl="btn";
+		prm="sens";
+		for(var i in livid[cntl]){
+			sx[CNO][i]=livid[cntl][i][prm]; //pretty straightforward
+		}
+	},
+	//cap btn notes
+	65: function(){
+		//We appended the info in 65 to CMD 11, and we split that out above in CMD 11
+		CNO=65; // cap touch buttons
+		bytemaps(CNO,"btn"); //map
+	},
+		//analog flags
+		// 	[0] = Output Note Messages?	
+		// 	[1] = Output Retrigger Messages (CC/Pitchbend)?	
+		// 	[2] = Button Mode? (note messages have constant velocity of 127)	
+		// 	[3] = Button Toggle Mode?
+	66: function(){
+		var CNO=66;
+		cntl="fsr";
+		var flags = [];
+		for (var i=0; i<sx[CNO].length; i++){ //all 32 bytes
+			prm = "nn_enable"; //output cc (afterpressure)
+			flags[0] = livid[cntl][i][prm];
+			prm = "cc_enable"; //output note (afterpressure)
+			flags[1] = livid[cntl][i][prm];
+			prm = "nvel_enable"; //fixed velocity note
+			flags[2] = livid[cntl][i][prm];
+			prm = "ntog_enable"; //button toggle mode
+			flags[3] = livid[cntl][i][prm];
+			//wrap the flags into a byte:
+			sx[CNO][i] = btod(flags.reverse());
+		}
+	},
+	//7 segment display
+	67: function(){
+		CNO=67;
+		cntl = "7seg";
+		prm = "state";
+	},
+	//link function button leds
+	68: function(){
+		CNO=68;
+		cntl = "globl";
+		prm = "linkfbleds";
+	},
+	//touch slider sends note
+	69: function(){
+		CNO=69;
+		cntl = "globl";
+		prm = "slidenote";
+		sx[CNO][0]=livid[cntl][prm];
+	},
+	//touch slider sends note
+	70: function(){
+		CNO=70;
+		cntl = "globl";
+		prm = "atouchspeed";
+		sx[CNO][0]=Number(livid[cntl][prm])-1; //menu in UI starts at 1, but CMD 70 setting starts at 0
+	}
+}; 
