@@ -537,7 +537,7 @@ posi[12].pot=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,2
 posi[12].slide=[0,1,2,3,4,5,6,7,8];
 posi[12].fsr=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
 //DS1
-posi[16].btn=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,21,22,23,24,25,26,27,28];
+posi[16].btn=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28];
 posi[16].enc=[0,1,2,3];
 posi[16].pot=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53];
 //BASE II
@@ -754,7 +754,7 @@ function product(v){
 	is_base = (BASE || BASEII);
 	has_omni = (!is_base); //right now, only Base doesn't have omni.
 	
-	var bankcounts = [0,0,0,0,4,0,0,4,4,0,0,15,7,0,0,0,1,7];
+	var bankcounts = [0,0,0,0,4,0,0,4,4,0,0,15,7,0,0,0,0,7];
 	var bankcount = bankcounts[pid];
 	ledlock(v); //initialize with the led locked to note
 	if(DEBUG || DEBUGMIDI){ //add the console div and testbuttons for debugging
@@ -818,7 +818,7 @@ function product(v){
 	if (!has_omni){
 		$('#omni_li').remove();
 	};
-	if (!has_encflip){ //some have encoders that work backwards and adjustements needed for detented encoders
+	if (!has_encflip){ //some have encoders that work backwards and adjustments needed for detented encoders
 		$('#encflip_li').remove();
 		$('#encoderphys').remove();
 		$('#encoderdet').remove();
@@ -859,6 +859,7 @@ function product(v){
 		$('#ringlocal_slide_li').remove();
 		$('#atouchspeed').remove(); //global control for afterpressure retrigger speed (temporal resolution)
 		$('#indivbank').remove(); //the option to make a button act as an individual bank selector (not bank cycle)
+		$('#atouchspeed_li').remove();
 		//$('#btnlocal_cbtn_li').remove();
 	};
 	//change the LED control buttons in the inspector
@@ -2198,7 +2199,7 @@ function updatectlinspector(type,id){
 	clog(">updatectlinspector() type- "+type+" id- "+id+" (pvs type: "+prev_type+")");
 	//var ctltypes = ["btn","led","ledring","enc","fsr","pot", "slide"]
 	//fade inspectors in/out when type changes
-	var noleds = ( OHM64 && (id>=75 && id<=80) ) || ( BLOCK && (id>=64 && id<=70) ); //some buttons on these devices have no leds to control
+	var noleds = ( OHM64 && (id>=75 && id<=80) ) || ( BLOCK && (id>=64 && id<=70) || ( DS1 && (id>=25 && id<=28) ) ); //some buttons on these devices have no leds to control
 	if(type!=prev_type){
 		var fadedur=250;
 		ledsvisible=false;
@@ -2343,7 +2344,7 @@ function updatectlinspector(type,id){
 			ele_name = this.name;
 			if(ele_name!="ctlid"){
 				thesetting = livid[type][id][ele_name]; //name of html element, such as "nn"or "mode"
-				//clog("raw setting "+type+" "+id+" "+ele_name+" "+thesetting);
+				clog("raw setting "+type+" "+id+" "+ele_name+" "+thesetting);
 			}
 			
 			if(this.type == "select-one" || this.type == "menu"){

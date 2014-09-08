@@ -1869,7 +1869,7 @@ sxToObj[12]={
 //ds1
 sxToObj[16]={
 	4: function(){ //button LED indicators	[8]
-		var pos=[0,2,4,6,1,3,5,7, 8,10,12,14,9,11,13,15];
+		var pos=[0,1,2,3,4,5,6,7, 8,9,10,11,12,13,14,15, 16,17,18, 19,20,21, 22,23,24];
 		CNO=4;
 		var flags = [];
 		var ctl = "led";
@@ -1889,7 +1889,7 @@ sxToObj[16]={
 				}
 				p=p_arr[k%3]; //red,green,or blue
 				livid[ctl][pos[id_]][p]=flagger(val,k); //check if a bit is 1 or 0.
-				//clog("rbg "+pos[id_]+" v "+livid[ctl][pos[id_]][p]);
+				//log("rbg "+pos[id_]+" v "+livid[ctl][pos[id_]][p]);
 			}
 		};
 		//clog("sxToObj"+CNO+' sx: '+sx[CNO]+' len '+sx[CNO].length);
