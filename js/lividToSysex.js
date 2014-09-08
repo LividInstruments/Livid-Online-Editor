@@ -1235,19 +1235,6 @@ lividToSx[16]={
 		CNO=22; //bank ch
 		getone(CNO,"bankch",1);
 	},
-	23: function(){	//[15]
-		CNO=23; //all bank chs
-		cntl="globl";
-		prm="bankchs";
-		//cycle thru all four bank chs.
-		for(var i in livid[cntl][prm]){
-			sx[CNO][i]=livid[cntl][prm][i]-1; //offset by one, since ui shows chs. as 1-16, but sysex wants 0-15
-		}
-	},
-	26: function(){	//[1]
-		CNO=26; //current bank number
-		getone(CNO,"bank",1);
-	},
 	30: function(){	//[30]
 		CNO=30; //encoder speed
 		cntl = "globl";
@@ -1262,9 +1249,6 @@ lividToSx[16]={
 			sx[CNO][j]=speedA;
 			sx[CNO][j+1]=speedB;
 		}
-	},
-	33: function(){	//[] //not yet implemented on alias fw
-		CNO=33; //map expansion analogs
 	},
 	34: function(){	//[8]
 		CNO=34; //map led color scheme
@@ -1281,14 +1265,8 @@ lividToSx[16]={
 		prm="nn";
 		ledmapper(CNO,cntl,prm);
 	},
-	37: function(){	//[120]
-		CNO=37; //LEDs All banks
-	},
 	38: function(){ //[4]
 		CNO=38; //encoder values
-	},
-	39: function(){	//[60]
-		CNO=39; //encoder values all banks
 	},
 	54: function(){	//[6]
 		CNO=54; //button toggle mode
@@ -1314,11 +1292,6 @@ lividToSx[16]={
 		CNO=55; //encoder flip
 		cntl="global";
 		prm="encflip";
-	},
-	56: function(){	//[15]
-		CNO=56; //local control color
-		cntl="globl";
-		prm="localcolor";
 	},
 	76: function(){	//
 		CNO=76; //local control color map

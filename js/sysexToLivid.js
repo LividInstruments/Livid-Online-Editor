@@ -1961,24 +1961,6 @@ sxToObj[16]={
 		//clog("sxToObj"+" "+CNO);
 		mapone(CNO,"bankch",sx[CNO][0],1); //cmd,p,val,dosub
 	},
-	23: function(){ //bank chs	[15]
-		CNO=23;
-		var ctl = "globl";
-		var p = "bankchs";
-		//clog("sxToObj"+" "+CNO+" "+ctl+" "+p);
-		for (var i in sx[CNO]){
-			var val = sx[CNO][i]+1;
-			if(!livid[ctl][p]) livid[ctl][p]={}; //make the object if it's not here
-			livid[ctl][p][i] = val;
-		}
-	},
-	26: function(){ //current bank	[1]
-		CNO=26;
-		var p = "bank";
-		var val = 1+sx[CNO][0];
-		//clog("sxToObj"+" "+CNO);
-		mapone(CNO,p,val); //cmd,p,val
-	},
 	30: function(){ //enc speed	[30]
 		CNO=30;
 		var ctl = "globl";
@@ -1991,11 +1973,6 @@ sxToObj[16]={
 		if(!livid[ctl][p]) livid[ctl][p]={}; 
 		val = sx[CNO][1];
 		livid[ctl][p] = e_speedtoUI[val];
-	},
-	33: function(){ //Expansion analogs	[20]
-		CNO=33;
-		//clog("sxToObj"+" "+CNO);
-		
 	},	
 	34: function(){ //Color map	[8]
 		CNO=34;
@@ -2042,16 +2019,6 @@ sxToObj[16]={
 		};
 		
 	},
-	/*	
-	37: function(){ //LEDS all banks	[120]
-		CNO=37;
-		var ctl = "led";
-		var p; //filled by red,green,blue
-		var p_arr = ["red","green","blue"];
-		//clog("sxToObj"+" "+CNO);
-		
-	},	
-	*/
 	38: function(){ //enc values	[4]
 		CNO=38;
 		var ctl = "enc";
@@ -2061,16 +2028,6 @@ sxToObj[16]={
 			var val = sx[CNO][i];
 			if(!livid[ctl][i]) livid[ctl][i]={};
 			livid[ctl][i][p] = val;
-		}
-	},
-	39: function(){ //enc values all banks	[60]
-		CNO=39;
-		var ctl = "encvalues"; //no "p" because this is just a regular array. probably not used.
-		//clog("sxToObj"+" "+CNO+" "+ctl);
-		for (var i in sx[CNO]){
-			var val = sx[CNO][i];
-			if(!livid[ctl][i]) livid[ctl][i]={}; 
-			livid[ctl][i] = val;
 		}
 	},
 	54: function(){ //button toggle mode	[6]
@@ -2099,11 +2056,6 @@ sxToObj[16]={
 		var p = "encflip";
 		var val = sx[CNO][0];
 		livid[ctl][p] = val;
-	},
-	56: function(){	//local control color	[15]
-		CNO=56;
-		var ctl = "globl";
-		var p = "localcolor";
 	},
 	76: function(){	//local control color map
 		CNO=76;

@@ -276,7 +276,7 @@ requests[11]=[4,8,10,11,12,16,17,22,23,26,30,33,34,35,36,38,39,54,55,56]; //alia
 requests[12]=[4,8,10,11,12,22,23,26,34,35,36,41,49,50,54,56,57,58,59,60,61,66,68,69,70]; //base
 //requests[13]=[4,8,10,11,12,13,16,17,22,26,27,30,31,32,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54]; //brain jr
 requests[13]=[4]; //brain jr abridged
-requests[16]=[4,8,10,11,12,16,17,22,23,26,30,33,34,35,36,38,39,54,55,56,/*76*/]; //ds1
+requests[16]=[4,8,10,11,12,16,17,22,30,34,35,36,38,54,55,76]; //ds1
 requests[17]=[4,8,10,11,12,22,23,26,34,35,36,41,49,50,54,56,57,58,59,60,61,66,68,69,70]; //base
               
 var savecmd = 25; //either 2 or 25. Block and Ohm64 are 2, so we'll make that adjustment on the product detection result.
@@ -289,7 +289,7 @@ sx_send[7]=[4,10,11,12,13,15,22,23,26,33,34,35,36,54]; //ohmrgb
 sx_send[8]=[4,10,11,12,13,17,22,23,26,29,30,31,32,33,34,35,36,50,54,16]; //cntrlr
 sx_send[11]=[4,10,11,12,17,23,30,33,34,35,36,39,54,56,16]; //alias
 sx_send[12]=[4,10,11,12,22,23,34,35,36,41,49,50,54,56,57,58,59,60,61,65,66,67,68,70]; //base
-sx_send[16]=[4,10,11,12,17,23,30,33,34,35,36,39,54,56,/*76*/,16]; //ds1
+sx_send[16]=[4,10,11,12,16,17,22,30,34,35,36,54,55,76,16]; //ds1
 sx_send[17]=[4,10,11,12,22,23,34,35,36,41,49,50,54,56,57,58,59,60,61,65,66,67,68,70]; //base II
 
 var localflags = [1,0,0,0,0,0,1]; //security bit,btn momentary local,btn toggle local,enc abs local,enc rel local,(reserved)
@@ -364,6 +364,7 @@ sx.name = "__received"; //normally used for preset name, but this isn't a preset
 var BANKIN = 113; //sysex ID of message that comes in from controller when you change the bank using a bank cycle button.
 var ACK = 127; //acknowledgement from controller
 var NACK = 126; //negative acknowledgement from controller - some sort of error.
+
 var undobuffer = {};
 undobuffer[0] = [];
 undobuffer[1] = [];
@@ -429,7 +430,8 @@ crtoID[8] = [0,4,8,12,1,5,9,13,2,6,10,14,3,7,11,15,
 			 48,49,50,51, 52,53,54,55, 56,57,58,59];
 crtoID[11] = [0,2,4,6,1,3,5,7,8,10,12,14,9,11,13,15,16,17];
 crtoID[12] = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63];
-crtoID[16] = [0,2,4,6,1,3,5,7,8,10,12,14,9,11,13,15, 16,17,18,19,20,21,22,23,24,25, 26,27,28,29];
+//0 4 8 12 16 20 24 28 32 36 40 44 1 5 9 13 17 21 25 29 33 37 41 45 88 
+crtoID[16] = [0,12,-1,-1,1,13,-1,-1,2,14,-1,-1,3,15,-1,-1,4,16,-1,-1,5,17,-1,-1,6,18,-1,-1,7,19,-1,-1,8,20,-1,-1,9,21,-1,-1,10,22,-1,-1,11,23,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,24];
 crtoID[17] = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63];
 
 //maps ID value to cr value for LEDs:
@@ -535,7 +537,7 @@ posi[12].pot=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,2
 posi[12].slide=[0,1,2,3,4,5,6,7,8];
 posi[12].fsr=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
 //DS1
-posi[16].btn=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,21,21,22,23,24,25,26,27,28];
+posi[16].btn=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,21,22,23,24,25,26,27,28];
 posi[16].enc=[0,1,2,3];
 posi[16].pot=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53];
 //BASE II
@@ -1405,7 +1407,6 @@ function bytemaps(c,t,p){ //sysex command #, node of livid object, like btn, pot
 		var bytei=id;  //byte index: position in sysex string
 		if(type=="btn" || type=="led"){
 			bytei=ipos[pid].btn[id];
-			//log(">> "+type+" put id "+id+" cc "+b1+" into position "+bytei);
 		}else{
 			bytei=ipos[pid][type][id];
 		}
@@ -2233,8 +2234,8 @@ function updatectlinspector(type,id){
 		var ele_type = $(this).attr('type');
 		var ele_name = this.name;
 		if(ele_name!="ctlid"){
+      //clog(">>"+ele_type+" name: "+ele_name+ " - "+ type+ " "+id+ " "+ele_name);
 			thesetting = livid[type][id][ele_name]; //value at name of html element, such as "nn"=5 or "mode"=1
-			//log(">>"+ele_type+" <i>name:</i> "+ele_name);
 		}
 		//we may have an instance where we have symbols where we might want numbers in the web interface or vice versa.
 		if(ele_type == "checkbox"){
@@ -2249,7 +2250,7 @@ function updatectlinspector(type,id){
 			}
 		}
 		if(ele_type == "select-one" || ele_type == "menu"){
-      clog("menu setting "+ele_type+" "+id+" "+ele_name+" "+thesetting);
+      //clog("menu setting "+ele_type+" "+id+" "+ele_name+" "+thesetting);
 			if(this.name=="special"){ //for btns special - look at the settings and populate the menu as needed.
 				var note=livid[type][id]["nn"];
 				var mode=livid[type][id]["mode"];
@@ -2388,7 +2389,6 @@ function updatectlinspector(type,id){
 	}
 	//give the inspector an ID label
 	$(".ctlid").text("[ID: "+id+"]");
-	//log("end select "+"[ID: "+id+"]");
 }
 
 //update the ui for the globals panel
