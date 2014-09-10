@@ -1892,7 +1892,7 @@ sxToObj[16]={
 				//log("rbg "+pos[id_]+" v "+livid[ctl][pos[id_]][p]);
 			}
 		};
-		//clog("sxToObj"+CNO+' sx: '+sx[CNO]+' len '+sx[CNO].length);
+		//clog("      sxToObj"+CNO+' sx: '+sx[CNO]+' len '+sx[CNO].length);
 	},
 	8: function(){ //local control [1]
 		CNO=8;

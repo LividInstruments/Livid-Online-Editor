@@ -1562,16 +1562,7 @@ function beginfaceplate(){
 	  clog("localcolor_off");
 	  localcolors(0);
 	});
-  function localcolors(state){
-    clog("local color");
-	  var LEDCMD = 4;
-	  var LCCMD = 76;
-	  var sxout=head.concat(LCCMD,state,sx[LEDCMD],eom);
-	  midi_o(sxout);
-	  var words = ["OFF","ON"];
-	  alertbox("Local Control colors for "+words[state]+" states have been saved");
-  }
-  
+	
 //any click in a form:
 	$('form').click(function(){
 		//clog('form klik'+' '+this.name);

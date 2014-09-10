@@ -341,6 +341,7 @@ cmds.globl.settingsch_enable=[12];
 cmds.globl.merge=[13];
 cmds.globl.enc_flip=[55];
 cmds.globl.encdet=[75]; //encoder settings for detented encoders
+cmds.globl.localcolor=[76]; //set on and off colors for local control
 cmds.globl.xfadeflip=[15];
 cmds.globl.bank=[26];
 cmds.globl.onech=[12];
@@ -747,6 +748,7 @@ function product(v){
 	has_midi = (OHM64 || CNTRLR || CNTRLR_OLD || OHMRGB || BLOCK || BRAIN || BRAIN2 || CODE); //midi jacks
 	has_local = (OHM64 || BLOCK || OHMRGB_OLD || CNTRLR_OLD || CNTRLR_OLD); //standard local control
 	has_enc = (CNTRLR || CNTRLR_OLD || CODE || ALIAS8 || DS1);
+	has_encadjust = (CNTRLR || CNTRLR_OLD || CODE);
 	has_encflip = (CNTRLR || CNTRLR_OLD || CODE || DS1);
 	has_localcolor = (DS1);
 	var has_encdet = true; //older code firmware <222 doesn't have the command for detented v smooth action
@@ -825,6 +827,10 @@ function product(v){
 		$('#encdet_li').remove();
 	};
 	if (!has_encdet){ //firmware <222 for code doesn't have detent/smooth adjustments
+		$('#encoderdet').remove();
+		$('#encdet_li').remove();
+	};
+	if (!has_encadjust){ //we don't want to expose the encoder adjustments on products that never had smooth encoders in the first place.
 		$('#encoderdet').remove();
 		$('#encdet_li').remove();
 	};
@@ -1148,6 +1154,43 @@ function enc_det(v){
 	//request();
 }
 
+//set on/off local colors, CMD76, new with DS1
+var settinglocalcolor = false;
+function localcolors(state){
+  var tmpmsg = [];
+  var CMD = cmds.globl.localcolor; //76
+  var msgmid = (sx[CMD].length/2);
+  var msgend = sx[CMD].length
+  var oncolors = [];
+  var offcolors = [];
+  //on colors are the first half of CMD 76
+  if(state){
+    lividToSx[pid][4](); //gather current settings into sx[4]
+    oncolors = sx[4];
+    clog("SX4 "+sx[4]);
+    clog("1 on colors "+oncolors);
+    offcolors = sx[CMD].slice(msgmid,msgend-1); //for ds1, from 13 to 26
+    clog("1 off colors "+offcolors);
+  } else {
+    var CMD = cmds.globl.localcolor; //76
+    lividToSx[pid][4](); //gather current settings into sx[4]
+    clog("SX4 "+sx[4]);
+    oncolors = sx[CMD].slice(0,msgmid); //for ds1, from 0 to 12
+    clog("0 on colors "+oncolors);
+    var offcolors = sx[4];
+    clog("0 off colors "+offcolors);
+  }	
+  var currentbank = 0;
+  if(sx[26]){
+    currentbank = sx[26];
+  }
+  sx[CMD] = tmpmsg.concat(oncolors,offcolors);
+  tmpmsg = [];
+  tmpmsg = tmpmsg.concat(head,CMD,currentbank,oncolors,offcolors,eom);
+  midi_o(tmpmsg);
+  var words = ["OFF","ON"];
+  alertbox("Local Control colors for "+words[state]+" states have been saved");
+}
 
 //$$ when a UI element is clicked, or the control's MIDI value is rec'd
 //get the value for a control to update the interface
@@ -2344,7 +2387,7 @@ function updatectlinspector(type,id){
 			ele_name = this.name;
 			if(ele_name!="ctlid"){
 				thesetting = livid[type][id][ele_name]; //name of html element, such as "nn"or "mode"
-				clog("raw setting "+type+" "+id+" "+ele_name+" "+thesetting);
+				//clog("raw setting "+type+" "+id+" "+ele_name+" "+thesetting);
 			}
 			
 			if(this.type == "select-one" || this.type == "menu"){

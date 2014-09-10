@@ -1160,29 +1160,30 @@ lividToSx[12]={ //[4,8,10,11,12,22,23,26,34,35,36,41,49,50,54,56,57,58,59,60,61,
 //ds1
 lividToSx[16]={
 	4: function(){ //[8]
-		var pos=[0,2,0,2,1,3,1,3,4,6,4,6,5,7,5,7];
 		CNO=4;
 		cntl="led";
 		var p_arr = ["red","green","blue"];
 		var rgb_i=0;
 		bitlist=[];
+		clog("     making CMD 4 LEDS");
 		//cycle thru all leds and get the onoff flags. Two ids get packed into 1 byte
 		var j=0;
-		//need to step thru ids in a weird order so the right halves of the bytes can be joined. 
-		var idorder = [0,2,4,6,1,3,5,7,8,10,12,14,9,11,13,15];
-		for (var i=0;i<16;i++){
-			var id = idorder[i];
-			var odd_id = id%2;
+		var ledcount = 25;
+		for (var i=0;i<ledcount;i++){
+			var odd_id = i%2;
 			var odd_i = i%2;
 			//even id's will fill first 3 slots in bitlist, odd id's will fill next 3 slots in bitlist
 			for(var c in p_arr){
 				var clr = p_arr[c];
-				//clog("rgb "+rgb_i+" cntl,id,clr "+cntl+" "+id+" "+clr+" val "+livid[cntl][id][clr]);
-				bitlist[rgb_i]=livid[cntl][id][clr];
+				//clog("-----  RGB "+rgb_i+" cntl,i,clr "+cntl+" "+i+" "+clr+" val "+livid[cntl][i][clr]);
+				bitlist[rgb_i]=livid[cntl][i][clr];
 				rgb_i++;
 			}
 			if(odd_i){
-				sx[CNO][pos[id]]=btod(bitlist.reverse());
+				var pos = (i-1)/2;
+				var val = btod(bitlist.reverse());
+				sx[CNO][pos]=val;
+				//clog(" byte "+sx[CNO][pos]+ " bits "+bitlist.reverse()+ " i "+i);
 				j++;
 				bitlist=[]; //clear it for the next round
 				rgb_i=0;
@@ -1288,7 +1289,7 @@ lividToSx[16]={
 			}
 		}
 	},
-	55: function(){	//[2]
+	55: function(){	// dealt with in function enc_flip() in uitocontroller.js - not a part of the lividToSysex routines.
 		CNO=55; //encoder flip
 		cntl="global";
 		prm="encflip";
