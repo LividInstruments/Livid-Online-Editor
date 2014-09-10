@@ -1165,7 +1165,6 @@ lividToSx[16]={
 		var p_arr = ["red","green","blue"];
 		var rgb_i=0;
 		bitlist=[];
-		clog("     making CMD 4 LEDS");
 		//cycle thru all leds and get the onoff flags. Two ids get packed into 1 byte
 		var j=0;
 		var ledcount = 25;
@@ -1215,22 +1214,16 @@ lividToSx[16]={
 		prm="type";
 		bitlist=[];
 		var j=0;
-		var max_enc = 12;
+		var max_enc = 4;
 		//cycle thru all encoders and get the encoder type flag
 		for (var id in livid[cntl]){ 
 			bitlist[id%8]=livid[cntl][id][prm];
-			if(id%8==7 && id!=0 || id==(max_enc-1) ){
+			if( id==(max_enc-1) ){
 				var firstbyte = bitlist.slice(0,7);
 				sx[CNO][j]=btod(firstbyte.reverse());
-				//clog("\nenc type",j,sx[CNO][j],"..",firstbyte);
-				j++;
-				sx[CNO][j]=bitlist.pop(); //the 2nd byte only uses 1 bit
-				//clog("\nenc type",j,sx[CNO][j]);
-				j++;
 				bitlist=[]; //clear it for the next round
 			}
 		}
-		//clog("\nenc type sx",sx[CNO]);
 	},
 	22: function(){	//[1]
 		CNO=22; //bank ch
@@ -1295,7 +1288,7 @@ lividToSx[16]={
 		prm="encflip";
 	},
 	76: function(){	//
-		CNO=76; //local control color map
+		CNO=76; //local control color map is handled in uitocontroller.js function localcolors()
 		cntl="globl";
 		prm="localcolor";
 	}

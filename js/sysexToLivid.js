@@ -1939,8 +1939,8 @@ sxToObj[16]={
 		var p = "type";
 		//clog("sxToObj"+" "+CNO+" "+ctl+" "+p+"<b> "+livid["enc"].length+"<b/>");
 		var id_=0;
-		var max_id=12; //12 encoders on CNTRL:R
-		//for code and cntrlr
+		var max_id=4; //4 encoders on DS1
+		//for code and cntrlr and DS1
 		for (var i in sx[CNO]){
 			var val = sx[CNO][i];
 			for(var k=0;k<7;k++){ //there are 7 flags in each byte
