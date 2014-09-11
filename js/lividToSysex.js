@@ -1169,7 +1169,6 @@ lividToSx[16]={
 		var j=0;
 		var ledcount = 25;
 		for (var i=0;i<ledcount;i++){
-			var odd_id = i%2;
 			var odd_i = i%2;
 			//even id's will fill first 3 slots in bitlist, odd id's will fill next 3 slots in bitlist
 			for(var c in p_arr){
@@ -1182,10 +1181,18 @@ lividToSx[16]={
 				var pos = (i-1)/2;
 				var val = btod(bitlist.reverse());
 				sx[CNO][pos]=val;
-				//clog(" byte "+sx[CNO][pos]+ " bits "+bitlist.reverse()+ " i "+i);
+				//clog(" byte ODD "+sx[CNO][pos]+ " bits "+bitlist.reverse()+ " i "+i+" pos "+pos+" val "+val);
 				j++;
 				bitlist=[]; //clear it for the next round
 				rgb_i=0;
+			}
+			//if we have an odd number of leds, we need to make special accommodations for the final part of this loop
+			var lasti = ledcount - 1;
+			if(i==lasti && lasti%2==0){  
+				var pos = Math.ceil( (i-1)/2 );
+				var val = btod(bitlist.reverse());
+				//clog(" byte END "+sx[CNO][pos]+ " bits "+bitlist.reverse()+ " i "+i+" pos "+pos+" val "+val);
+				sx[CNO][pos]=val;
 			}
 		}
 	},

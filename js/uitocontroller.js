@@ -1189,7 +1189,7 @@ function localcolors(state){
   tmpmsg = tmpmsg.concat(head,CMD,currentbank,oncolors,offcolors,eom);
   midi_o(tmpmsg);
   var words = ["OFF","ON"];
-  alertbox("Local Control colors for "+words[state]+" states have been saved");
+  alertbox("Local Control colors for "+words[state]+" states have been applied.");
 }
 
 //$$ when a UI element is clicked, or the control's MIDI value is rec'd
