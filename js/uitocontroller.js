@@ -754,6 +754,7 @@ function product(v){
 	var has_encdet = true; //older code firmware <222 doesn't have the command for detented v smooth action
 	is_diy = (BRAIN || BRAINJR || BRAIN2 || GUITARWING);
 	is_base = (BASE || BASEII);
+	is_ds = (DS1);
 	has_omni = (!is_base); //right now, only Base doesn't have omni.
 	
 	var bankcounts = [0,0,0,0,4,0,0,4,4,0,0,15,7,0,0,0,0,7];
@@ -883,6 +884,10 @@ function product(v){
 	}else{
 		$('.ringv1').remove();
 	};
+	//output channel is handled a bit differently for the single-bank DS1. Need to associate a different sysex CMD for it.
+	if(DS1){
+	  cmds.globl.onech=[16];
+	}
 	/*
 	//fix up the browser window:
 		window.moveTo(1,45);

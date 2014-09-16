@@ -141,11 +141,13 @@ function submit_one(ctlindex,ctltype,ctlparam,ctlvalue,formtype){
 				if(!valid){
 					alertbox("Value must be in the range of 0 to "+nnmax);	
 				}
+				
 				if(ctltype=="fsr" && ctlparam=="mode" && ctlvalue=="bend"){
 					alertbox("The </i>bend</i> mode is a weird one! If you want bend, set cc# field to 96-109. There's actually a lot more to this. <a href='http://wiki.lividinstruments.com/wiki/Online_Editor#mode_2'>Read more in the wiki</a>");
 				}
 			  //clog("CHECK "+livid["led"][0].nn+" mode "+livid["led"][0].mode+" onoff "+livid["led"][0].onoff);
 				//SET THE VALUE IN livid object and stringify the midi so it can be sent:
+				
 				if(ctltype=="globl"){
 					if(ctlparam != "encflip" && ctlparam != "encdet_abs" && ctlparam != "encdet_rel"){
 						globl_set(ctlparam,ctlvalue);

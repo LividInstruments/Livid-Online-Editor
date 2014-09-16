@@ -1,15 +1,15 @@
 {
 	"Alias 8" : 0.155,
-	"Base" : 0.130,
+	"Base" : 0.152,
 	"block" : 0.137,
-	"Brain Jr." : 0.211,
-	"Code" : 0.216,
+	"Brain Jr." : 0.213,
+	"Code" : 0.222,
 	"Brain" : 0.125,
-	"BrainV2" : 0.179,
+	"BrainV2" : 0.189,
 	"CNTRL:R" : 0.111,
 	"Ohm64" : 0.223,
 	"OhmRGB" : 0.066,
 	"Guitar Wing" : 0.100,
-	"BaseII" : 0.134,
-	"DS1" : 0.102
+	"BaseII" : 0.244,
+	"DS1" : 0.105
 }
