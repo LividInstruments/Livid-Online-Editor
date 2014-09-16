@@ -1067,6 +1067,9 @@ function globl_set(){
 		clog("encspeed: "+val);
 		val = nanhash[val];
 	}
+	if(DS1 || param=="onech"){
+	  param="bankch"
+	}
 	if(bankscheck[0]=="bankchs"){
 		param=bankscheck[0]; //set param to be "bankchs" so obToSx can do the right thing
 		var ch_slot=parseInt(bankscheck[1]); //find out which slot this is
@@ -1431,12 +1434,12 @@ function ledmapper(CMD,ctl,p){
 }
 //for single byte sysex messages
 function getone(cmd,p,dosub){ //for channels, we need to subtract 1 before we turn it into sysex: display is 1-16, but machine wants 0-15.
-	//clog("getone"+" "+cmd+" "+p+" "+dosub);
 	var oset=0;
 	if(dosub==undefined) oset=0;
 	else oset = dosub;
 	var ctl = "globl";
 	var val=livid[ctl][p]-oset;
+	clog("getone"+" "+cmd+" "+p+" v "+val);
 	if(p=="settingsch"){
 		val = livid.globl.settingsch * livid.globl.settingsch_enable;
 		if(val>0) val = val -1;
