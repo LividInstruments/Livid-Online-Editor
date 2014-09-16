@@ -886,7 +886,7 @@ function product(v){
 	};
 	//output channel is handled a bit differently for the single-bank DS1. Need to associate a different sysex CMD for it.
 	if(DS1){
-	  cmds.globl.onech=[16];
+	  cmds.globl.onech=[22];
 	}
 	/*
 	//fix up the browser window:
