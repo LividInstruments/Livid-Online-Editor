@@ -786,7 +786,7 @@ function product(v){
 		requests[8].pop(); //removes "54" from end of requests since there's no toggle mode in old cntrlr
 		requests[8].pop(); //removes "50" from end of requests since there's no ring style in old cntrlr
 	}
-	if(OHM64 || BLOCK){
+	if(OHM64 || BLOCK || DS1){
 		savecmd=2; //change the command number for saving to the device for these products.
 	}
 	//set up the UI graphics for the detected product:
