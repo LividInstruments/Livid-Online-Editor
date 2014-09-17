@@ -1177,7 +1177,7 @@ function localcolors(state){
     oncolors = sx[4];
     clog("SX4 "+sx[4]);
     clog("1 on colors "+oncolors);
-    offcolors = sx[CMD].slice(msgmid,msgend-1); //for ds1, from 13 to 26
+    offcolors = sx[CMD].slice(msgmid,msgend); //for ds1, from 13 to 26
     clog("1 off colors "+offcolors);
   } else {
     var CMD = cmds.globl.localcolor; //76
@@ -1192,6 +1192,7 @@ function localcolors(state){
   if(sx[26]){
     currentbank = sx[26];
   }
+  clog("LEN on "+oncolors.length+ " off "+offcolors.length);
   sx[CMD] = tmpmsg.concat(oncolors,offcolors);
   tmpmsg = [];
   tmpmsg = tmpmsg.concat(head,CMD,currentbank,oncolors,offcolors,eom);
