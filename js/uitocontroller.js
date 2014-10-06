@@ -424,6 +424,7 @@ crtoID[4] = [  0, 8,16,24,
                6,14,22,30,
                7,15,23,31
               ];
+              
 crtoID[7] = [7,23,39,55,15,31,47,63,6,22,38,54,14,30,46,62,5,21,37,53,13,29,45,61,4,20,36,52,12,28,44,60,3,19,35,51,11,27,43,59,2,18,34,50,10,26,42,58,1,17,33,49,9,25,41,57,0,16,32,48,8,24,40,56,74,77,66,67,75,78,68,69,76,79,64,65,73,72,71,70,80];
 crtoID[8] = [0,4,8,12,1,5,9,13,2,6,10,14,3,7,11,15,
 			 16,32,17,33, 18,34,19,35, 20,36,21,37, 22,38,23,39,
@@ -453,6 +454,7 @@ IDtocr[4] = [ 0, 4, 8, 13,19,23,28,34,
               55,59,63,67,71,75,79,83,
               56,60,64,68,72,76,80,84,
               57,61,65,69,73,77,81,85];
+              
 IDtocr[7] = [ 56,48,40,32,24,16, 8,00,
               60,52,44,36,28,20,12, 4,
               57,49,41,33,25,17,9, 1,
@@ -978,7 +980,7 @@ var bankcycle_id = "";
 //First we update the livid object, then call obToSx to generate all sysex, then send the necessary sysex messages
 function UI(id,type,param,val){ //e.g. 1 btn nn 10
 	if(!requesting) {
-		clog("UI(): t-"+type+" id-"+id+" p-"+param+" v-"+val);
+		clog("UI(): id-"+id+" type-"+type+" p-"+param+" v-"+val);
 		//log("CHECK "+livid["led"][0].nn+" mode "+livid["led"][0].mode+" onoff "+livid["led"][0].onoff);
 		//if param is isbank or isencspeed, make the note 126/7 and mode 1
 		undothis[0] = [id,type,param,val];
@@ -1374,10 +1376,12 @@ function colormapper(CMD){
 //used for converting livid object to Sysex for cmds 35 and 36
 function ledmapper(CMD,ctl,p){
 	//clog("LED cc "+sx[36]);
-	//clog("ledmapper "+CMD+" "+ctl+" "+p+" len "+sx[CMD].length);
 	//first, use the undo buffer that is created in the UI() to determine what note or cc# is being used:
 	var nncheck=undothis[0][2];
+	var editing_id = undothis[0][0];
 	var crcheck=sx[CMD][nncheck]; //what cr is at this note or cc #?
+	clog("  ledmapper "+CMD+" "+ctl+" "+p+" len "+sx[CMD].length+" undothis i,t,p,v "+undothis[0]);
+	
 	//need to find the ID that has this nn/cc assigned to it:	
 	for (var id in livid[ctl]){ 
 		var cr;
@@ -1387,17 +1391,17 @@ function ledmapper(CMD,ctl,p){
       if (ctl=="ledring" && has_ledring){
         var offset;
         switch(pid){
-          case 4:
+          case 4: //code 2
           offset = 45;
           var id_= parseInt(id)+offset;
           cr = IDtocr[pid][id_];
           break;
-          case 8:
+          case 8: //cntrlr
           offset = 60;
           cr = parseInt(id)+offset//simple offset for LED rings
           break;
-          case 12:
-          offset = 32; //base
+          case 12: //base
+          offset = 32; 
           cr = parseInt(id)+offset;//simple offset for LED rings
           break;
         }
@@ -1413,11 +1417,13 @@ function ledmapper(CMD,ctl,p){
 			//post("\ncheck CR:",CR,"index",check);
 			//if(check>0) sx[CMD][check] = 127;
 			//**END probably don't need this
-			//clog("LED note "+nn+" cr "+cr+ " id "+id);
+			clog("- LED note "+nn+" cr "+cr+ " id "+id);
 			sx[CMD][nn] = cr; //put the cr code at the note position
-			var otherCMD = 36;
-			var deassign = 127;
-			sx[otherCMD][nn] = 127; //deassign the corresponding CC so the LED doesn't respond to both note and cc
+			if(id==editing_id){ 
+        var otherCMD = 36;
+        var deassign = 127;
+        sx[otherCMD][nn] = 127; //deassign the corresponding CC so the LED doesn't respond to both note and cc
+			}
 		}
 		if(mode==1 && CMD==36){
 			//**probably don't need this
@@ -1425,10 +1431,13 @@ function ledmapper(CMD,ctl,p){
 			//var check=sx[CMD].indexOf(cr);
 			//if(check>0) sx[CMD][check] = 127;
 			//**END probably don't need this
+			clog("* LED CC "+nn+" cr "+cr+ " id "+id);
 			sx[CMD][nn] = cr; //put the cr code at the cc position
-			var otherCMD = 35;
-			var deassign = 127;
-			sx[otherCMD][nn] = 127; //deassign the corresponding note so the LED doesn't respond to both note and cc
+			if(id==editing_id){
+        var otherCMD = 35;
+        var deassign = 127;
+        sx[otherCMD][nn] = 127; //deassign the corresponding note so the LED doesn't respond to both note and cc
+			}
 		}
 	}
 	//log("ledmapper end "+CMD+" "+ctl+" "+p+" len "+sx[CMD].length);
@@ -1592,15 +1601,24 @@ function somesysex(){
 	var recmd = 35;
   if(sxtosend.indexOf(recmd) >= 0){
     tmp = [];
-    tmp = tmp.concat(head,recmd,sx[35],eom) 
+    tmp = tmp.concat(head,recmd,sx[recmd],eom) 
     midi_o(tmp); //midi out function in midiio.js
   }
   recmd = 36;
   if(sxtosend.indexOf(recmd) >= 0){
     tmp = [];
-    tmp = tmp.concat(head,recmd,sx[36],eom)
+    tmp = tmp.concat(head,recmd,sx[recmd],eom)
     midi_o(tmp); //midi out function in midiio.js
 	}
+	if(pid==4){
+    recmd = 16;
+    if(sxtosend.indexOf(recmd) >= 0){
+      tmp = [];
+      tmp = tmp.concat(head,recmd,sx[recmd],eom)
+      midi_o(tmp); //midi out function in midiio.js
+    }
+	}
+	
 	if(sxtosend.indexOf(LEDcmd) >= 0){
     tmp = [];
     clog("_____SENDING LIGHTS LAST____");
