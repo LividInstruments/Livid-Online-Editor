@@ -1067,7 +1067,7 @@ function globl_set(){
 		clog("encspeed: "+val);
 		val = nanhash[val];
 	}
-	if(DS1 || param=="onech"){
+	if(DS1 && param=="onech"){
 	  param="bankch"
 	}
 	if(bankscheck[0]=="bankchs"){
