@@ -1549,11 +1549,16 @@ function somesysex(){
   var bank_no = sxtosend.indexOf(26);
   var chan_no = sxtosend.indexOf(22);
   var chans_no = sxtosend.indexOf(23);
+  var encflip = sxtosend.indexOf(55);
   clog ("bank and ch command indices "+bank_no+" "+chan_no+" "+chans_no);
   //send the bank number first CMD 26
 	if(bank_no>0){
     midi_o(tmp.concat(head,26,sx[26],eom));
 	  sxtosend.splice(bank_no,1);
+  }
+  //remove encoder flip. that is handled separately  
+	if(encflip>0){
+	  sxtosend.splice(encflip,1);
   }
   //remove CMD 22 "set bank channel" if there's also CMD 23 since that is redundant of 23 "set all bank chs"
 	if(chan_no>0 && chans_no>0){

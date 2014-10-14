@@ -1645,11 +1645,9 @@ function beginfaceplate(){
             clog("Valid preset file: "+truthy);
             if(truthy==true){
               //we'll need to update the preset's sysex input with the current bank value, so let's store that before we parse the JSON:
-              var bankcache = sx[26];
+              var bankcache = sx[26]; //current bank value
               sx = JSON.parse(reader.result);
               sx[26] = bankcache;
-              clog("PRESET sample: Btns "+sx[11]);
-              clog("PRESET sample: LEDs "+sx[4]);
               toobj();
               isfromfile = true; //makes a difference in function somesysex()
               //scheduling this because Mark reported some odd behavior where the new settings wouldn't appear on controller until there was a change made in an inspector:
