@@ -1780,6 +1780,7 @@ function procSysex(){
 					if(i!=2 && i!=10 && i!=12 && i!=13 && i!=14 && i!=15){
 						isLividCtl = Number(sysexb[i] == tomatch[i]);
 					}else{
+					  clearInterval(inquisition);
 						pid = sysexb[10];
 						firmware = sysexb.slice(12,sysexb.length-1);
 						firmware_sym = firmware[3]+"."+firmware[2]+"."+firmware[1]+"."+firmware[0];
@@ -1825,12 +1826,14 @@ function endrequests(){
 
 var cmdno=1;
 var timedreq=0;
+var inquisition;
 function inquire(){
 	clog("INQUIRE BEGIN");
 	cmdno=0;
 	requesting = 1;
 	masterreq = 1; //for displaying MIDI data at startup.
-	cmdout("inquiry"); //sends inquiry sysex to find out the type of Livid controller on the current port
+	setInterval( cmdout("inquiry"),1000 );
+	//cmdout("inquiry"); //sends inquiry sysex to find out the type of Livid controller on the current port
 }
 
 //------------------------------------------------------------------------------------------
