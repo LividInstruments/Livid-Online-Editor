@@ -1665,6 +1665,7 @@ function cmdout(){
 	//now that we know the cmd number of the sysex string,
 	//we can use that to output midi:
 	if(cmd=="inquiry"){
+	  console.log("inquiry sent");
 		midiout = inquiry;
 	}else{
 		if(requesting){
@@ -1832,7 +1833,7 @@ function inquire(){
 	cmdno=0;
 	requesting = 1;
 	masterreq = 1; //for displaying MIDI data at startup.
-	setInterval( cmdout("inquiry"),1000 );
+	inquisition = setInterval( function(){console.log("interval inq");cmdout("inquiry")},1000 );
 	//cmdout("inquiry"); //sends inquiry sysex to find out the type of Livid controller on the current port
 }
 

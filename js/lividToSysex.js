@@ -1276,14 +1276,14 @@ lividToSx[16]={
 		bitlist=[];
 		//cycle thru all buttons and get the toggle flag 
 		var j=0;
-		var lastid=15;
+		var lastid=28;
 		for (var id in livid[cntl]){
 			var bitpos = posi[pid].btn[id];
-			log("\nbtn tog"+" "+id+" "+bitpos+" "+"   "+" "+livid[cntl][id][prm]);
+			clog("\nbtn tog"+" "+id+" "+bitpos+" "+"   "+" "+livid[cntl][id][prm]);
 			bitlist[id%4]=livid[cntl][bitpos][prm];
 			if(id%4==3 && id!=0 || id==lastid){
 				sx[CNO][j]=btod(bitlist.reverse()); //need to reverse the bitlist - easier than creating a new "posi" table!
-				log("\ntog bitlist"+" "+j+" "+sx[CNO][j]+" "+"from list"+" "+bitlist);
+				clog("\ntog bitlist"+" "+j+" "+sx[CNO][j]+" "+"from list"+" "+bitlist);
 				j++;
 				bitlist=[]; //clear it for the next round
 			}
