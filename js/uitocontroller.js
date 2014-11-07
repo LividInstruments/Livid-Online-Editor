@@ -1286,15 +1286,22 @@ function group(type,g_id){
 		var basismode = livid[type][g_id].mode; //note or cc
 		var led_too = (type=="btn" && lock>0); //should we do the LED assignments, too?
 		var skip_led_nn = (type=="led" && lock>0); //if lock is on, and group is pressed in LED panel, we don't want to change the note number
+   
     //figure out the limits of the group
     for (var g in groups[pid][type]){
       for(p in groups[pid][type][g]){
         var gmin = groups[pid][type][g][0];
-        var gmax = groups[pid][type][g][1];
+        var gmax = groups[pid][type][g][1];       
         if(g_id>=gmin && g_id<=gmax){
           idmin = gmin;
           idmax = gmax;
           subgroup = g;
+          //exceptions: some buttons don't have LEDs under them
+          if(led_too){
+            if(pid==16 && g=='Encoder Buttons'){
+              led_too = false;
+            }
+          }
         }else{
           alert_panel("Group values problem");
         }
