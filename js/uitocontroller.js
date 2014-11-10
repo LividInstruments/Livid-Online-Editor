@@ -282,15 +282,15 @@ requests[17]=[4,8,10,11,12,22,23,26,34,35,36,41,49,50,54,56,57,58,59,60,61,66,68
 var savecmd = 25; //either 2 or 25. Block and Ohm64 are 2, so we'll make that adjustment on the product detection result.
 
 var sx_send={}; //CMD numbers that we need to send out on a dump of all sysex
-sx_send[2]=[4,10,11,12,13,15,35,36]; //35 and 36 aren't actually part of Ohm64 spec, but we fake them to make LED handling easier.
-sx_send[3]=[4,10,11,12,13,33,35,36]; //33 is expansion. 
-sx_send[4]=[4,11,12,13,17,23,30,31,35,36,50,54,16]; // 4 is product id of Code. We are excluding 22 Bank Ch and 26 Bank Number. We do 16 last because it needs to come after 35 and 36.
-sx_send[7]=[4,10,11,12,13,15,22,23,26,33,34,35,36,54]; //ohmrgb
-sx_send[8]=[4,10,11,12,13,17,22,23,26,29,30,31,32,33,34,35,36,50,54,16]; //cntrlr
-sx_send[11]=[4,10,11,12,17,23,30,33,34,35,36,39,54,56,16]; //alias
-sx_send[12]=[4,10,11,12,22,23,34,35,36,41,49,50,54,56,57,58,59,60,61,65,66,67,68,70]; //base
-sx_send[16]=[4,10,11,12,16,17,22,30,34,35,36,54,55,76,16]; //ds1
-sx_send[17]=[4,10,11,12,22,23,34,35,36,41,49,50,54,56,57,58,59,60,61,65,66,67,68,70]; //base II
+sx_send[2]=[4,8,10,11,12,13,15,35,36]; //35 and 36 aren't actually part of Ohm64 spec, but we fake them to make LED handling easier.
+sx_send[3]=[4,8,10,11,12,13,33,35,36]; //33 is expansion. 
+sx_send[4]=[4,8,11,12,13,17,23,30,31,35,36,50,54,8,16]; // 4 is product id of Code. We are excluding 22 Bank Ch and 26 Bank Number. We do 16 last because it needs to come after 35 and 36.
+sx_send[7]=[4,8,10,11,12,13,15,22,23,26,33,34,8,35,36,54]; //ohmrgb
+sx_send[8]=[4,8,10,11,12,13,17,22,23,26,29,30,31,32,33,34,8,35,36,50,54,8,16]; //cntrlr
+sx_send[11]=[4,8,10,11,12,17,23,30,33,34,8,35,36,39,54,8,56,16]; //alias
+sx_send[12]=[4,8,10,11,12,22,23,34,8,35,36,41,49,50,54,8,56,57,58,59,60,61,65,66,67,68,70]; //base
+sx_send[16]=[4,8,10,11,12,16,17,22,30,34,8,35,36,54,8,55,76,16]; //ds1
+sx_send[17]=[4,8,10,11,12,22,23,34,35,36,41,49,50,54,56,57,58,59,60,61,65,66,67,68,70]; //base II
 
 var localflags = [1,0,0,0,0,0,1]; //security bit,btn momentary local,btn toggle local,enc abs local,enc rel local,(reserved)
 var livid={};
@@ -1514,6 +1514,13 @@ function localout(){
 	var local = btod(localflags);
 	clog("local out "+localflags+" byte "+local);
 	sendmidi(176+ch,localcc,local);
+	//now request the sysex setting:
+	
+	var midiout = [];
+  var cmd = 8;
+  midiout = midiout.concat(head,7,cmd,eom);
+  midi_o(midiout);//request local control settings from controller so procsysex can make them part of the sx object
+	
 }
 
 //dump all sysex out to controller all at once.**NOT USED
@@ -1580,7 +1587,6 @@ function somesysex(){
 			if(!oldledstyle){
 				tmp = [];
 				sxmsg[i] = tmp.concat(head,cmd,sx[cmd],eom) //e.g., the entire sysex string for commands 10, 11, and 12
-				//clog("somesysex() "+sxmsg[i]);
 				if(sxmsg[i]){
           midi_o(sxmsg[i]); //midi out function in midiio.js
 				}
@@ -1718,6 +1724,7 @@ function procSysex(){
 				var sxid=sysexb[IDat]; //returns the ID of the command, e.g. sx.Map Buttons is 11, Map Analogs is 10
 				var bytestring = sysexb.slice(IDat+1,sysexb.length-1); //the sysex message without the "head" (240 ... CMDID) or end of message (247) bytes.
 				if(sxid != 9){ //9 is the 'single led map' of OHM64 and BLOCK
+				  console.log("sx in "+sxid+" "+bytestring);
 					sx[sxid]=bytestring; //store the string in our sx object
 				//ohm64 and block have a different way of dealing with LEDs:
 				}else{ //our bytestring is a triad: <nn> <note or cc> <cr> e.g. 2 0 66 is note 2 at CR 66

@@ -12,7 +12,7 @@ var downloadFile = function() {
   var container = document.querySelector('#container');
   var output = container.querySelector('output');
   var MIME_TYPE = 'text/plain';
-
+    
   window.URL = window.webkitURL || window.URL;
   var prevLink = output.querySelector('a');
   if (prevLink) {
@@ -27,7 +27,8 @@ var downloadFile = function() {
   }
   sx.name = filename;
   sx.id = pid;
-  sx.mfg = mfg;    
+  sx.mfg = mfg; 
+    
   var tojson = JSON.stringify(sx,null,'\t'); //function is defined in separate file JSONparse
   var bb = new Blob([tojson], {type: MIME_TYPE});
   var a = document.createElement('a');
@@ -39,7 +40,7 @@ var downloadFile = function() {
     a.textContent = 'Click to Download';
   }
   a.dataset.downloadurl = [MIME_TYPE, a.download, a.href].join(':');
-  
+
   output.appendChild(a);
   a.onclick = function(e) {
     if ('disabled' in this.dataset) {

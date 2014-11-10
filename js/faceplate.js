@@ -1647,6 +1647,10 @@ function beginfaceplate(){
               //we'll need to update the preset's sysex input with the current bank value, so let's store that before we parse the JSON:
               var bankcache = sx[26]; //current bank value
               sx = JSON.parse(reader.result);
+              console.log("SX PRESET "+sx);
+              for(i in sx){
+                console.log("sx "+i+" "+sx[i]);
+              }
               sx[26] = bankcache;
               toobj();
               isfromfile = true; //makes a difference in function somesysex()
