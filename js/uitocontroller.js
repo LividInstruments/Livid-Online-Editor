@@ -719,7 +719,7 @@ function isnotcurfw(){
 			curfw_str = curfw_str[0][0]+"."+curfw_str[1][0]+"."+curfw_str[1][1]+"."+last; //reassemble it to make it look nice for user. 
 			var old = Number(firmware_float < curfw); //want 1 or 0 since we'll be using it to get an item from array.
 			clog("FIRMWARE CHECK "+firmware_float+" < "+curfw+" "+old);
-			var fwnote = "Your firmware ("+firmware_sym+") could use an update. The current version is "+curfw_str+". You can update <a href='http://lividinstruments.com/support_downloads.php#firmware'>here</a>";
+			var fwnote = "Your firmware ("+firmware_sym+") could use an update. The current version is "+curfw_str+". You can update <a href='http://wiki.lividinstruments.com/wiki/Updating_Your_Firmware'>here</a>";
 			if(old){
 				alert_panel("Settings requests complete"+"<br>"+fwnote);
 				$('#fwupdate').css({visibility: "visible"});
