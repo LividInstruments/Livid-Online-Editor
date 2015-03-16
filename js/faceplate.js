@@ -1609,11 +1609,12 @@ function beginfaceplate(){
 	$('#fileInput').change(function(e){
     var fileInput = document.getElementById('fileInput');
     var fileDisplayArea = document.getElementById('fileDisplayArea');
-    clog(".........................preset file input.................");
+    clog(".........................preset file input................");
     //clog("reqs "+requests[pid]+" len "+requests[pid].length);
       var file = fileInput.files[0];
       var filename = $('#fileInput').val().split('\\').pop()
       var textType = /text.*/;
+      clog("TYPE "+file.type);
       if ( file.type.match(textType) || file.type.match("application/json") || file.type.match("") || !file.type) {
         var reader = new FileReader();
         reader.onload = function(e) {
@@ -1640,7 +1641,7 @@ function beginfaceplate(){
             }
             if(parseInt(temp.id)!=pid){
               truthy = false;
-              clog('same product '+j+' is '+truthy)
+              clog('same product '+j+' is '+truthy+' pid '+pid)
             }
             clog("Valid preset file: "+truthy);
             if(truthy==true){
