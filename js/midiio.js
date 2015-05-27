@@ -71,7 +71,7 @@ function midioutports(theport){
 	}else{
 		outport=outports.options[outports.selectedIndex].value;
 	}
-	clog("port selected: "+outport);
+	console.log("port selected: "+outport);
 	Jazz.MidiOutOpen(outport);
 	//open the inport with the same name. First, make the menu display this port (even though we are hiding it from view right now!):
 	var doalert=1;
@@ -122,16 +122,16 @@ function midi_o(){
 		if(arg[5]){
 		  sysid = arg[5];
 		}
-		clog("midiout _ ID: "+sysid+" len: "+arg.length+" msg: "+arg);
+		console.log("midiout _ ID: "+sysid+" len: "+arg.length+" msg: "+arg);
 		Jazz.MidiOutLong(arg);
 	}
 }
 
 function connectMidiIn(){
-	clog("attempting to connect to MIDI port");
+	console.log("attempting to connect to MIDI port");
 	try{
 		var str=Jazz.MidiInOpen(current_in,function(t,a){ midiProc(a);});
-		clog("connect midi: "+str+" current "+current_in);
+		console.log("connect midi: "+str+" current "+current_in);
 		for(var i=0;i<inports.length;i++){
 			if(inports[i].value==str) inports[i].selected=1;
 		}
@@ -142,12 +142,12 @@ function connectMidiIn(){
 function disconnectMidiIn(){
 	if(inports[0].selected!=1){
 		current_in=inports.options[inports.selectedIndex].value;
-		clog("inport: "+current_in);
+		console.log("inport: "+current_in);
 	}
 	try{
 		Jazz.MidiInClose(); 
 		inports[0].selected=1;
-		clog("discnx "+inports[0].selected);
+		console.log("discnx "+inports[0].selected);
 	}
 	catch(err){}
 }
@@ -174,7 +174,7 @@ function midiProc(){
 	//function viewmidi is declared in editor.html
 	var arg = Array.prototype.slice.call(arguments, 0);
 	var lasti = (arg[0].length-1);
-	//clog("midi "+arguments[0]);
+	console.log("midi in -- "+arguments[0]);
 	//working around a bug in the MIDI plug in where it breaks up long sysex strings: we detect start and end of sysex, and gather it into a buffer.
 	if(issysex){
 		sysexbuffer = sysexbuffer.concat(arg[0]);
@@ -276,5 +276,5 @@ function midiString(){
 
 
 function testmidiio(){
-	clog("midiio.js is here!");
+	console.log("midiio.js is here!");
 }

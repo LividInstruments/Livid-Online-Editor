@@ -432,15 +432,18 @@ form input[type="text"] {
 #pluginwarning {
 	position:fixed;
 	top:10%;
-	width:100%;
+	width:500px;
 	visibility:visible;
-	text-align: center;
 	background: rgba(255, 255, 255, 0.8);
-	height: 5em;
-	font-size: 2em;
+	font-size: 1.8em;
 	font-style: italic;
 	z-index: 30;
+	display: block;
 	padding: .5em;
+}
+#chromeo {
+  display: block;
+  font-size: 0.7em;
 }
 #contact {
 	background: #E8E8B3;

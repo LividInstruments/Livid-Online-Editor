@@ -679,7 +679,7 @@ function isSafari(v){
 		DO_DISCNXN = true;
 		REQSCHED = 200;
 		SAFARI = true;
-		clog('this is safari');
+		console.log('this is safari');
 	}
 }
 
@@ -691,7 +691,7 @@ function getsx(v){
 	};
 	var sysexfile = ["sx_default.json","sx_dynamic.json"];
 	$.getJSON("js/"+sysexfile[opt], function(bjson) {
-		clog("sx from json read");
+		console.log("sx from json read");
 		sx = bjson;
 	})
 	.success(function() { toobj(); log("CH "+livid.globl.bankchs[0]+' '+livid.globl.bankchs[1]) })
@@ -702,23 +702,23 @@ var fw_versions = {};
 var curfw = 0;
 //store a json file that has all the current firmware verisons in it so we can determine if the user is current or not.
 function isnotcurfw(){
-    clog("CURRENT FIRMWARE?");
+    console.log("CURRENT FIRMWARE?");
 		var cacheavoid = Math.floor( 1000*Math.random() );
 		$.getJSON("cur_fw.json?"+cacheavoid, function(json) {	
-     clog("READING CURRENT FIRMWARE");	
+     console.log("READING CURRENT FIRMWARE");	
 			fw_versions = json;
 			var prodname = products[pid];
 			curfw = fw_versions[prodname];
 			var curfw_str = curfw+''; //make it a symbol by concactenating emtpy string to the number
 			curfw_str = curfw_str.split("."); //ditch the dot
 			var last = curfw_str[1][2];
-      clog("current firmware version: "+curfw_str);
+      console.log("current firmware version: "+curfw_str);
 			if(!curfw_str[1][2]) {
 				last="0"; //do this bc last element might be undef. for versions where that is 0.
 			}
 			curfw_str = curfw_str[0][0]+"."+curfw_str[1][0]+"."+curfw_str[1][1]+"."+last; //reassemble it to make it look nice for user. 
 			var old = Number(firmware_float < curfw); //want 1 or 0 since we'll be using it to get an item from array.
-			clog("FIRMWARE CHECK "+firmware_float+" < "+curfw+" "+old);
+			console.log("FIRMWARE CHECK "+firmware_float+" < "+curfw+" "+old);
 			var fwnote = "Your firmware ("+firmware_sym+") could use an update. The current version is "+curfw_str+". You can update <a href='http://wiki.lividinstruments.com/wiki/Updating_Your_Firmware'>here</a>";
 			if(old){
 				alert_panel("Settings requests complete"+"<br>"+fwnote);
@@ -734,7 +734,7 @@ function isnotcurfw(){
 			}
 			
 		})
-		.error(function() { clog("NO FW JSON"); });
+		.error(function() { console.log("NO FW JSON"); });
 }
 
 //sets up the interface with the right graphics, and requests the settings from the controller.
@@ -781,7 +781,7 @@ function product(v){
 	if(CODE && (firmware[1] < 2)){
     requests[pid].pop(); //remove the last item in requests array (75), which doesn't exist on firmware earlier than 222
     has_encdet = false;
-    clog("OLD CODE "+requests[pid]);
+    console.log("OLD CODE "+requests[pid]);
 	}
 	if(CNTRLR_OLD){
 		requests[8].pop(); //removes "55" from end of requests since there's no enc flip in old cntrlr
@@ -799,7 +799,7 @@ function product(v){
 	$('#paper').height(dim[pid][1]);
 	$('#paper').css({background : 'url(faceplate_'+pid+'.gif)  no-repeat'});
 	$('#inspectors').width(dim[pid][0]);
-	//clog("BANK COUNT "+bankcount);
+	//console.log("BANK COUNT "+bankcount);
 	//remove any extra bank channel inputs (code has less than alias, for example)
 	for(var i=0;i<16;i++){ 
 		if(i>(bankcount-1)){
@@ -901,7 +901,7 @@ function product(v){
 	if(!is_diy){
 		$("#topmiddle").css({position: "static"}); //navigation area starts as fixed so we can put it above the scrim, but needs to go back to static so the UI has the right spacing.
 		beginfaceplate();
-		clog("PRODUCT INITIALIZED "+pid);
+		console.log("PRODUCT INITIALIZED "+pid);
 		$("#fetchsettings").css({visibility: "visible"})
 		$("#saveanddefaults").css({visibility: "visible"})
 		request();
@@ -953,7 +953,7 @@ function undo(){
 	var type = undothis[0][1];
 	var param = undothis[0][2];
 	var val = undobuffer[0][param];
-	//clog("undo to"+" "+id+" "+type+" "+param+" "+val);
+	//console.log("undo to"+" "+id+" "+type+" "+param+" "+val);
 	
 	livid[type][id][param]=val;
 	//send old value back to controller:
@@ -980,7 +980,7 @@ var bankcycle_id = "";
 //First we update the livid object, then call obToSx to generate all sysex, then send the necessary sysex messages
 function UI(id,type,param,val){ //e.g. 1 btn nn 10
 	if(!requesting) {
-		clog("UI(): id-"+id+" type-"+type+" p-"+param+" v-"+val);
+		console.log("UI(): id-"+id+" type-"+type+" p-"+param+" v-"+val);
 		//log("CHECK "+livid["led"][0].nn+" mode "+livid["led"][0].mode+" onoff "+livid["led"][0].onoff);
 		//if param is isbank or isencspeed, make the note 126/7 and mode 1
 		undothis[0] = [id,type,param,val];
@@ -1004,7 +1004,7 @@ function UI(id,type,param,val){ //e.g. 1 btn nn 10
 			cr=sx[CMD][val]; //val is note# or cc#
 			//see what id  is at this cr using  crtoID
 			var ID_=crtoID[pid][cr];
-			//clog("#### LED "+type+" mode "+mode+" CMD "+CMD+" val "+val+" sx "+sx[CMD]+ " cr "+ cr + " id "+ID_);
+			//console.log("#### LED "+type+" mode "+mode+" CMD "+CMD+" val "+val+" sx "+sx[CMD]+ " cr "+ cr + " id "+ID_);
 			//reassign (clear) the nn or cc at that id in livid, only if it has been assigned.
 			if(ID_!=undefined && id!=ID_ && ID_>=0){ //we don't want to alert if the assignment is just a repeat of what's already here.
 				if(livid[type][ID_].nn){
@@ -1024,7 +1024,7 @@ function UI(id,type,param,val){ //e.g. 1 btn nn 10
 		
 		//can only have one bank cycle button, so let's check if that's being assigned, and if it is, clear any pvs bankcycle assgn:
 		if( type=="btn" && (param=="nn" || param=="mode") && (mode=="cc" || mode==1 || val=="cc") && (notepvs==126 || val==126) ){
-			clog("BANKCYCLE "+id+" prev bc id "+bankcycle_id+" test "+(bankcycle_id!=id));
+			console.log("BANKCYCLE "+id+" prev bc id "+bankcycle_id+" test "+(bankcycle_id!=id));
 			if(bankcycle_id != "" && bankcycle_id!=id){
 				//deassign the previous bank cycle id
 				livid[type][bankcycle_id].nn=127;
@@ -1044,11 +1044,11 @@ function UI(id,type,param,val){ //e.g. 1 btn nn 10
 		}
 		
 		//assign value to parameter in livid object:
-		clog("to livid type: "+type+" id: "+id+" param: "+param+" val: "+val);
+		console.log("to livid type: "+type+" id: "+id+" param: "+param+" val: "+val);
 		livid[type][id][param]=val;
 		//update the controller:
 		if(updatenow){
-		  clog("updating controller");
+		  console.log("updating controller");
 			obToSx(cmds[type]);
 			somesysex(cmds[type]);
 			dumpmap();
@@ -1066,7 +1066,7 @@ function globl_set(){
 	//so we have to put the value we get in bankchs_<n> into an array:
 	var bankscheck = param.split("_");
 	if(param=="encspeedA" || param=="encspeedB"){
-		clog("encspeed: "+val);
+		console.log("encspeed: "+val);
 		val = nanhash[val];
 	}
 	if(DS1 && param=="onech"){
@@ -1085,18 +1085,18 @@ function globl_set(){
 	}
 	livid.globl[param]=val; //....here!
 	var thecmd = cmds.globl[param];
-	clog("global: "+param+" val "+val+" cmd "+thecmd+" check "+livid.globl[param]);
+	console.log("global: "+param+" val "+val+" cmd "+thecmd+" check "+livid.globl[param]);
 	if(updatenow){
 		if(thecmd)	
 			obToSx(thecmd);
 		if(param=='omni' || param=='btnlocal' || param=='btnlocal_mom' || param=='btnlocal_tog' || param=='ringlocal_abs' || param=='ringlocal_rel' || param=='ringlocal_slide' || param=='agslocal_fsr'){
-			//clog("use settings ch");
+			//console.log("use settings ch");
 			omniout();
 			localout();
 		}else if(param=='encdet_abs' || param=='encdet_rel'){
-		  clog("encoder detent dummy");
+		  console.log("encoder detent dummy");
 		}else{
-			clog("---global cmd out "+thecmd);
+			console.log("---global cmd out "+thecmd);
 			cmdout(thecmd);
 			if(param=="bank"){
 				//request the settings on bank change
@@ -1109,7 +1109,7 @@ function globl_set(){
 
 //color map is pretty independent, so unlike globals and inspectors, we update the livid and sx objects at the same time 
 function colormap_set(){
-	//clog("colormap_set");
+	//console.log("colormap_set");
 	var colors = [];
 	var CMD = 34;
 	var param = "colormap";
@@ -1138,7 +1138,7 @@ function enc_flip(v){
 	var msg = [];
 	var CMD = cmds.globl.enc_flip; //55
 	var curr_encflip = 1-Number(sx[CMD][0]>1);
-	clog("enc flip called "+curr_encflip+" sx "+sx[CMD][0]);
+	console.log("enc flip called "+curr_encflip+" sx "+sx[CMD][0]);
 	sx[CMD][0] = curr_encflip;
 	msg = msg.concat(head,CMD,curr_encflip,eom);
 	midi_o(msg);
@@ -1150,7 +1150,7 @@ function enc_det(v){
 	var CMD = cmds.globl.encdet; //75
 	var curr_abs = sx[CMD][0];
 	var curr_rel = sx[CMD][1];
-	clog("enc_det BEFORE "+v+" : "+curr_abs+" "+curr_rel+" sx "+sx[CMD][0]+" "+sx[CMD][1]);
+	console.log("enc_det BEFORE "+v+" : "+curr_abs+" "+curr_rel+" sx "+sx[CMD][0]+" "+sx[CMD][1]);
 	if(v=="abs"){
   	curr_abs = 1-Number(sx[CMD][0]>0);
   }
@@ -1158,7 +1158,7 @@ function enc_det(v){
   	curr_rel = 1-Number(sx[CMD][1]>0);
   }
   sx[CMD] = [curr_abs,curr_rel]
-	clog("enc det AFTER "+v+" : "+curr_abs+" "+curr_rel+" sx "+sx[CMD][0]+" "+sx[CMD][1]);
+	console.log("enc det AFTER "+v+" : "+curr_abs+" "+curr_rel+" sx "+sx[CMD][0]+" "+sx[CMD][1]);
 	msg = msg.concat(head,CMD,sx[CMD],eom);
 	midi_o(msg);
 	//request();
@@ -1177,24 +1177,24 @@ function localcolors(state){
   if(state){
     lividToSx[pid][4](); //gather current settings into sx[4]
     oncolors = sx[4];
-    clog("SX4 "+sx[4]);
-    clog("1 on colors "+oncolors);
+    console.log("SX4 "+sx[4]);
+    console.log("1 on colors "+oncolors);
     offcolors = sx[CMD].slice(msgmid,msgend); //for ds1, from 13 to 26
-    clog("1 off colors "+offcolors);
+    console.log("1 off colors "+offcolors);
   } else {
     var CMD = cmds.globl.localcolor; //76
     lividToSx[pid][4](); //gather current settings into sx[4]
-    clog("SX4 "+sx[4]);
+    console.log("SX4 "+sx[4]);
     oncolors = sx[CMD].slice(0,msgmid); //for ds1, from 0 to 12
-    clog("0 on colors "+oncolors);
+    console.log("0 on colors "+oncolors);
     var offcolors = sx[4];
-    clog("0 off colors "+offcolors);
+    console.log("0 off colors "+offcolors);
   }	
   var currentbank = 0;
   if(sx[26]){
     currentbank = sx[26];
   }
-  clog("LEN on "+oncolors.length+ " off "+offcolors.length);
+  console.log("LEN on "+oncolors.length+ " off "+offcolors.length);
   sx[CMD] = tmpmsg.concat(oncolors,offcolors);
   tmpmsg = [];
   tmpmsg = tmpmsg.concat(head,CMD,currentbank,oncolors,offcolors,eom);
@@ -1206,14 +1206,14 @@ function localcolors(state){
 //$$ when a UI element is clicked, or the control's MIDI value is rec'd
 //get the value for a control to update the interface
 function getid(){ 
-  clog("getid() "+requesting);
+  console.log("getid() "+requesting);
 	if(!requesting){	
 		var a = Array.prototype.slice.call(arguments, 0); //arg are sth like "btn_25" or "enc_7" 
 		var p = a[0].split("_");
 		var type = p[0];
 		var id = parseInt(p[1]);
 		undobuffer[0] = clone(livid[type][id]);
-		clog("getid() type: "+type+" id: "+id);
+		console.log("getid() type: "+type+" id: "+id);
 		updatectlinspector(type,id);
 	}	
 }
@@ -1309,7 +1309,7 @@ function group(type,g_id){
     }
     var isspecial=false;
 		for(var id in livid[type]){
-		  //clog("group "+id+" type "+type);
+		  //console.log("group "+id+" type "+type);
 			if(id>=idmin && id<=idmax){
 				for (var p in livid[type][id]){
 					if( p=="nn" || p=="cc"){
@@ -1333,7 +1333,7 @@ function group(type,g_id){
 					  }
 					}else{
 						livid[type][id][p]=basis[p]; //ch and mode are copied
-						//clog("...type "+type+" p "+p+" ob "+livid[type][id][p]);
+						//console.log("...type "+type+" p "+p+" ob "+livid[type][id][p]);
 					}
 				}
 			}
@@ -1362,7 +1362,7 @@ function obToSx(){
 	if(arguments){
 		cmds = Array.prototype.slice.call(arguments, 0); //e.g. [10,11,12]
 		if(cmds.length==1) cmds = cmds[0]; //flatten
-		clog("obtosx cmds "+cmds);
+		console.log("obtosx cmds "+cmds);
 		for(var i=0;i<cmds.length;i++){
 			var thefcn = Number(cmds[i]);
 			if(lividToSx[pid][thefcn])
@@ -1382,12 +1382,12 @@ function colormapper(CMD){
 }
 //used for converting livid object to Sysex for cmds 35 and 36
 function ledmapper(CMD,ctl,p){
-	//clog("LED cc "+sx[36]);
+	//console.log("LED cc "+sx[36]);
 	//first, use the undo buffer that is created in the UI() to determine what note or cc# is being used:
 	var nncheck=undothis[0][2];
 	var editing_id = undothis[0][0];
 	var crcheck=sx[CMD][nncheck]; //what cr is at this note or cc #?
-	clog("  ledmapper "+CMD+" "+ctl+" "+p+" len "+sx[CMD].length+" undothis i,t,p,v "+undothis[0]);
+	console.log("  ledmapper "+CMD+" "+ctl+" "+p+" len "+sx[CMD].length+" undothis i,t,p,v "+undothis[0]);
 	
 	//need to find the ID that has this nn/cc assigned to it:	
 	for (var id in livid[ctl]){ 
@@ -1415,7 +1415,7 @@ function ledmapper(CMD,ctl,p){
       }else{
         cr = IDtocr[pid][id];
       }
-      //clog("CC LED id "+id+" cr "+cr+" mode "+mode+" note# "+nn);
+      //console.log("CC LED id "+id+" cr "+cr+" mode "+mode+" note# "+nn);
 		}
 		if(mode==0 && CMD==35){
 			//**probably don't need to do this check
@@ -1424,7 +1424,7 @@ function ledmapper(CMD,ctl,p){
 			//post("\ncheck CR:",CR,"index",check);
 			//if(check>0) sx[CMD][check] = 127;
 			//**END probably don't need this
-			clog("- LED note "+nn+" cr "+cr+ " id "+id);
+			console.log("- LED note "+nn+" cr "+cr+ " id "+id);
 			sx[CMD][nn] = cr; //put the cr code at the note position
 			if(id==editing_id){ 
         var otherCMD = 36;
@@ -1438,7 +1438,7 @@ function ledmapper(CMD,ctl,p){
 			//var check=sx[CMD].indexOf(cr);
 			//if(check>0) sx[CMD][check] = 127;
 			//**END probably don't need this
-			clog("* LED CC "+nn+" cr "+cr+ " id "+id);
+			console.log("* LED CC "+nn+" cr "+cr+ " id "+id);
 			sx[CMD][nn] = cr; //put the cr code at the cc position
 			if(id==editing_id){
         var otherCMD = 35;
@@ -1456,7 +1456,7 @@ function getone(cmd,p,dosub){ //for channels, we need to subtract 1 before we tu
 	else oset = dosub;
 	var ctl = "globl";
 	var val=livid[ctl][p]-oset;
-	clog("getone"+" "+cmd+" "+p+" v "+val);
+	console.log("getone"+" "+cmd+" "+p+" v "+val);
 	if(p=="settingsch"){
 		val = livid.globl.settingsch * livid.globl.settingsch_enable;
 		if(val>0) val = val -1;
@@ -1469,7 +1469,7 @@ function bytemaps(c,t,p){ //sysex command #, node of livid object, like btn, pot
 	var type=t;
 	var prm="nn";
 	if(p) prm=p;
-	//clog("bytemap "+CMD+" t "+type+" p "+prm);
+	//console.log("bytemap "+CMD+" t "+type+" p "+prm);
 	for (var id in livid[type]){
 		var b2 = livid[type][id].mode; 
 		var b1 = livid[type][id][prm];
@@ -1512,7 +1512,7 @@ function localout(){
 		localflags[6] = livid.globl.agslocal_fsr; //analog local for notes
 	}
 	var local = btod(localflags);
-	clog("local out "+localflags+" byte "+local);
+	console.log("local out "+localflags+" byte "+local);
 	sendmidi(176+ch,localcc,local);
 	//now request the sysex setting:
 	
@@ -1556,9 +1556,9 @@ function somesysex(){
 	//copy the array so we don't alter the object passed this function:
 	for(var i=0;i<theargs.length;i++){
 	  sxtosend[i]=theargs[i];
-	  //clog("sxtosend "+i+" : "+sxtosend[i]);
+	  //console.log("sxtosend "+i+" : "+sxtosend[i]);
 	}
-	clog("somesysex() "+sxtosend+" reps "+sxtosend.length+" current bank "+sx[26]);
+	console.log("somesysex() "+sxtosend+" reps "+sxtosend.length+" current bank "+sx[26]);
 	var sxmsg=[];	
   var bank_no = sxtosend.indexOf(26);
   var chan_no = sxtosend.indexOf(22);
@@ -1582,7 +1582,7 @@ function somesysex(){
 		var cmd = sxtosend[i];
 		var oldledstyle = ( (OHM64 || BLOCK) && (cmd==35 || cmd==36) ); //leds on ohm64 and block are handled differently
 		//check if the cmd number is in the sx_send array for this product. For example, we don't want to try to send 54 to CNTRL:R, because it doesn't reply to that. :
-		//clog("-----cmd "+cmd+" msg "+sx[cmd]);
+		//console.log("-----cmd "+cmd+" msg "+sx[cmd]);
 		if(sx_send[pid].indexOf(cmd) >= 0){
 			if(!oldledstyle){
 				tmp = [];
@@ -1614,7 +1614,7 @@ function somesysex(){
     looper();
     })();
 	*/
-	clog("LED MAP AGAIN "+sxtosend.indexOf(35)+" "+sxtosend.indexOf(36));
+	console.log("LED MAP AGAIN "+sxtosend.indexOf(35)+" "+sxtosend.indexOf(36));
 	//for whatever reason, we need to send 35 and 36 again, something to do with the order of 16, 35, & 36
 	var recmd = 35;
   if(sxtosend.indexOf(recmd) >= 0){
@@ -1639,7 +1639,7 @@ function somesysex(){
 	
 	if(sxtosend.indexOf(LEDcmd) >= 0){
     tmp = [];
-    clog("_____SENDING LIGHTS LAST____");
+    console.log("_____SENDING LIGHTS LAST____");
     midi_o( tmp.concat(head,LEDcmd,sx[LEDcmd],eom) );
   }
 	if(DO_DISCNXN) cnxn = setTimeout(function(){ connectMidiIn() },500); //re-open the MIDI input port
@@ -1674,7 +1674,7 @@ function cmdout(){
 	var cmd = Array.prototype.slice.call(arguments, 0);
 	cmd = cmd[0]; //"flatten" it
 	var midiout=[];	
-	//clog("cmdout "+" cmd "+cmd);
+	//console.log("cmdout "+" cmd "+cmd);
 	//now that we know the cmd number of the sysex string,
 	//we can use that to output midi:
 	if(cmd=="inquiry"){
@@ -1746,13 +1746,13 @@ function procSysex(){
 						clearTimeout(blockhedge); //if we do get a response to cmd 33, then we need to cancel this scheduled process.
 					}
 					req_max=requests[pid][ (requests[pid].length-1) ]; //last reqID
-					clog("req_max "+req_max+" id "+sxid);
+					console.log("req_max "+req_max+" id "+sxid);
 					if(sxid==req_max){
 						endrequests();
 					}
 				}
 				if(sxid==ACK){
-					clog("ACK rec'd");
+					console.log("ACK rec'd");
 					if(resetting_defaults){
 					  request();
 					  resetting_defaults = false;
@@ -1769,7 +1769,7 @@ function procSysex(){
 				}
 				//if we're not in the request loop and the sysex description of LED states comes in, lets update the livid object
 				if(!requesting && (sxid==4 || sxid==31) ){
-				  clog("LED update "+sxid+ " "+sx[sxid]);
+				  console.log("LED update "+sxid+ " "+sx[sxid]);
 				  sxToObj[pid][sxid]();
 				}
 			}
@@ -1779,9 +1779,9 @@ function procSysex(){
 				if(BLOCK && req==33){ //we may not get a response for this because the block may not have expansion jacks
 					blockhedge = setTimeout(function(){ endrequests() },500);
 				}
-				//clog("next "+req+" - "+pid+" - "+cmdno);
+				//console.log("next "+req+" - "+pid+" - "+cmdno);
 				if(!req){ //protection against a problem where it can go to req's out of bounds. not sure why it does this...must track down.
-					clog("undef request");
+					console.log("undef request");
 					endrequests();
 				}else{
 					var output = setTimeout(function(){ cmdout(req) },REQSCHED); //schedule the next one. Mostly need to do this for Safari - Chrome seems ok w/ faster tx.
@@ -1801,12 +1801,12 @@ function procSysex(){
 						firmware_sym = firmware[3]+"."+firmware[2]+"."+firmware[1]+"."+firmware[0];
 						firmware_float = Number( firmware[3]+"."+firmware[2]+firmware[1]+firmware[0] );
 						
-						clog("FIRMWARE RAW: "+firmware)
+						console.log("FIRMWARE RAW: "+firmware)
 						
 						var oldohm = ((pid==7) && (firmware[0] <= 5 && firmware[1] <= 5 && firmware[2] == 0 && firmware[3] == 0) );
 						//var oldcode= blah;
 						var oldcntrlr=((pid==8) && firmware[2] < 1 );
-						//clog("OLD? "+oldcntrlr+" firmw "+firmware);
+						//console.log("OLD? "+oldcntrlr+" firmw "+firmware);
 						if(oldohm || oldcntrlr){
 							firmware_old = true;
 						}
@@ -1829,11 +1829,11 @@ function endrequests(){
 		//alert_panel("Settings requests complete");
 		isnotcurfw();
 		$('#fetchsettings').fadeOut(200);
-		clog("SETTINGS REQUEST IS DONE ");
+		console.log("SETTINGS REQUEST IS DONE ");
 		//convert sysex to livid object when the request is finished.
 		clonesx(); //copy the sx object to a clone so we can revert.
 		toobj();
-		clog("CURRENT BANK "+sx[26]);
+		console.log("CURRENT BANK "+sx[26]);
 		requesting = 0;
 		masterreq = 0; //for displaying MIDI data at startup.
 		setTimeout(function(){viewmidi("-------------")},SCHED);
@@ -1843,7 +1843,7 @@ var cmdno=1;
 var timedreq=0;
 var inquisition;
 function inquire(){
-	clog("INQUIRE BEGIN");
+	console.log("INQUIRE BEGIN");
 	cmdno=0;
 	requesting = 1;
 	masterreq = 1; //for displaying MIDI data at startup.
@@ -1859,23 +1859,23 @@ function request(){
 	Jazz.MidiInClose(); 		
 	//...open up the port with no callback function so we can use QueryMidiIn()
 	Jazz.MidiInOpen(inports.options[inports.selectedIndex].value);
-	clog("BEGIN REQUESTS ROUTINE");
+	console.log("BEGIN REQUESTS ROUTINE every "+SCHED+" ms");
 	requesting = 1;
 	queryd();
 	var reqi=0;
-	clog("requests "+requests[pid]);
+	console.log("requests "+requests[pid]);
 	qreq=setInterval(function(){     // start the polling cycle
 		var req=requests[pid][reqi];
 		reqi++;
 		if(req){
-			clog("->REQ "+req+' i '+reqi);
+			console.log("->REQ "+req+' i '+reqi);
 			cmdout(req);
 		}
 	},SCHED);
 	//delay the cleanup by the correct amount:
 	//var delay = 30*SCHED*(requests[pid].length+1);
 	//if(SAFARI) delay = delay/8; //sched is 10x longer for safari, so we need to shorten the delay
-	//clog("query done delay "+delay);
+	//console.log("query done delay "+delay);
 	//setTimeout(function(){qdone()},delay);
 }
 
@@ -1901,7 +1901,7 @@ function queryd(){
 				if(ID!=9){
 					//sx[ID] = sxb.slice(0);
 					sx[ID] = bytestring;
-					//clog("ID "+ID+" sx "+sx[ID]);
+					//console.log("ID "+ID+" sx "+sx[ID]);
 					//viewmidi("-"+ID+": "+sx[ID]);
 					viewmidi("get "+cmdfriendly[ID]+" ("+ID+")");
 				}else{
@@ -1919,7 +1919,7 @@ function queryd(){
 					}
 				}
 			}
-			//clog("time "+ts+" sx "+msg);
+			console.log("time "+ts+" sx "+msg);
 			//check to see if this is the last request:
 		  var thelast = requests[pid][requests[pid].length-1] == ID;
 		  if(BLOCK){
@@ -1933,7 +1933,7 @@ function queryd(){
 		    }
 		  }
       if(thelast && !OHM64 && !BLOCK){
-        clog("Last Request rec'd "+ID);
+        console.log("Last Request rec'd "+ID);
         setTimeout(qdone(),10);
       }
 		}
@@ -1942,9 +1942,9 @@ function queryd(){
 }
 
 function qdone(){
-	clog("................................. req done");
+	console.log("................................. req done");
 	for(i in sx){
-		clog(">> "+i+" sx "+sx[i]);
+		console.log(">> "+i+" sx "+sx[i]);
 	}
 	clearInterval(qreq);
 	clearInterval(qproc);
@@ -1955,16 +1955,16 @@ function qdone(){
 		var first = sxb[t][0];
 		if(first!=240 || last!=247){
 			sxb[t]=sxb[t].concat(sxb[Number(t)+1]); //merge with the next one
-			//clog("fixed "+ sxb[Number(t)+1]);
+			//console.log("fixed "+ sxb[Number(t)+1]);
 			delete sxb[Number(t)+1]; //delete it
 		}
-		//clog("t "+t+" sx "+sxb[t]);
+		//console.log("t "+t+" sx "+sxb[t]);
 	}
 	//cleanup:
 	for(t in sxb){
 		var IDat=5; //CMD id is at this index in the array
 		var sxid=sxb[t][IDat]; //returns the ID of the command, e.g. sx.Map Buttons is 11, Map Analogs is 10
-		clog("settings: "+sxid+" msg "+sxb[t]);
+		console.log("settings: "+sxid+" msg "+sxb[t]);
 		var bytestring = sxb[t].slice(IDat+1,sxb[t].length-1); //the sysex message without the "head" (240 ... CMDID) or end of message (247) bytes.
 		if(sxid != 9){ //9 is the 'single led map' of OHM64 and BLOCK
 			sx[sxid]=bytestring; //store the string in our sx object
@@ -1997,7 +1997,7 @@ function qdone(){
 
 //request(): dump all sysex requests via handshake with request
 function request_handshake(){
-	//clog("REQUEST BEGIN",requests[pid].length);
+	//console.log("REQUEST BEGIN",requests[pid].length);
 	cmdno=0;
 	requesting = 1;
 	var req=requests[pid][cmdno];
@@ -2021,7 +2021,7 @@ function req_sched(){
 //used in a scheduled request
 function req_next(){
 	var req=requests[pid][cmdi];
-	clog("REQ dump "+req+" of "+req_max);
+	console.log("REQ dump "+req+" of "+req_max);
 	cmdout(req);
 	cmdi++;
 	if(req==req_max){
@@ -2065,7 +2065,7 @@ function revertsx(){
 }
 
 function toobj(){
-	clog("Making objects & UI from sysex data");
+	console.log("Making objects & UI from sysex data");
 	//convert the rec'd sysex into livid object, using functions in sysexToLivid.js
 	for(i in sxToObj[pid]){
 		if(i!="name"){ 
@@ -2076,7 +2076,7 @@ function toobj(){
 	globalsToUI(); //put globl object values into UI
 	colormapToUI(); //put color map values into UI
 	//outlet(3,"done");
-	clog("to obj: done");
+	console.log("to obj: done");
 	dumpmap(); //makes map to interpret MIDI input for UI control
 	//log("toobj: product # "+pid+" ");
 	//selects the first button
@@ -2091,17 +2091,17 @@ function toobj(){
 //update the UI for the various "global" values
 function globalsToUI(){
 	var ctl,val
-	//clog("-->UI for globals");
+	//console.log("-->UI for globals");
 	for(param in livid.globl){
 		if(typeof livid.globl[param] == "object" ){ //only bank channels are reported as an array
 			for(var i in livid.globl[param]){
-				//clog("globalsToUI "+param+" i "+i+ " val "+livid.globl[param][i]);
+				//console.log("globalsToUI "+param+" i "+i+ " val "+livid.globl[param][i]);
 				ctl=param+"_"+i;
 				val=livid.globl[param][i];
 				updateglobalinspector(ctl,val)
 			}
 		}else{
-      //clog("globalsToUI "+param+" val "+livid.globl[param]);
+      //console.log("globalsToUI "+param+" val "+livid.globl[param]);
 			ctl=param;
 			val=livid.globl[param];
 			updateglobalinspector(ctl,val)
@@ -2145,7 +2145,7 @@ function mapbytes(cmd,ctl,p){ //ctl is btn, pot, led, etc.
 	if(p){
 		prm = p;
 	}
-	//clog("map "+cmd+" "+ctl+" param "+prm+" sx "+sx[cmd]);
+	//console.log("map "+cmd+" "+ctl+" param "+prm+" sx "+sx[cmd]);
 	
 	for(var i in sx[cmd]){
 		var j=Math.floor(i/2); //each ID has a pair associated
@@ -2154,7 +2154,7 @@ function mapbytes(cmd,ctl,p){ //ctl is btn, pot, led, etc.
 		if(!livid[ctl][id_]) livid[ctl][id_]={}; //make it if it's not here
 		if(i%2){ //odd numbered bytes are mode
 			livid[ctl][id_]["mode"]=val;
-			//if(ctl=='enc') clog("map mode "+val+" to id "+id_+" at index "+j);
+			//if(ctl=='enc') console.log("map mode "+val+" to id "+id_+" at index "+j);
 			//now that we have the nn and mode, we can check if it's special:
 			if(cmd==11){
 				livid[ctl][id_]["isbank"] = Number(livid[ctl][id_]["nn"]==126 && livid[ctl][id_]["mode"]==1);
@@ -2163,7 +2163,7 @@ function mapbytes(cmd,ctl,p){ //ctl is btn, pot, led, etc.
 			}
 		}else{
 			livid[ctl][id_][prm]=val;
-			//if(ctl=='enc') clog("map nn "+val+" to id "+id_+" at index "+j+" param "+prm);
+			//if(ctl=='enc') console.log("map nn "+val+" to id "+id_+" at index "+j+" param "+prm);
 		}
 	}
 }
@@ -2268,7 +2268,7 @@ function readdump(p) {
 
 //writes json to a file on the server
 function writejson(){
-  clog("Write JSON to server");
+  console.log("Write JSON to server");
   $.post("sysexjson.php", {json : JSON.stringify(sx,null,'\t')});
 }
 
@@ -2289,7 +2289,7 @@ var prev_type="";
 var ledsvisible=false;
 function updatectlinspector(type,id){
 	//show the correct div:
-	clog(">updatectlinspector() type- "+type+" id- "+id+" (pvs type: "+prev_type+")");
+	console.log(">updatectlinspector() type- "+type+" id- "+id+" (pvs type: "+prev_type+")");
 	//var ctltypes = ["btn","led","ledring","enc","fsr","pot", "slide"]
 	//fade inspectors in/out when type changes
 	var noleds = ( OHM64 && (id>=75 && id<=80) ) || ( BLOCK && (id>=64 && id<=70) || ( DS1 && (id>=25 && id<=28) ) ); //some buttons on these devices have no leds to control
@@ -2328,7 +2328,7 @@ function updatectlinspector(type,id){
 		var ele_type = $(this).attr('type');
 		var ele_name = this.name;
 		if(ele_name!="ctlid"){
-      //clog(">>"+ele_type+" name: "+ele_name+ " - "+ type+ " "+id+ " "+ele_name);
+      //console.log(">>"+ele_type+" name: "+ele_name+ " - "+ type+ " "+id+ " "+ele_name);
 			thesetting = livid[type][id][ele_name]; //value at name of html element, such as "nn"=5 or "mode"=1
 		}
 		//we may have an instance where we have symbols where we might want numbers in the web interface or vice versa.
@@ -2344,7 +2344,7 @@ function updatectlinspector(type,id){
 			}
 		}
 		if(ele_type == "select-one" || ele_type == "menu"){
-      //clog("menu setting "+ele_type+" "+id+" "+ele_name+" "+thesetting);
+      //console.log("menu setting "+ele_type+" "+id+" "+ele_name+" "+thesetting);
 			if(this.name=="special"){ //for btns special - look at the settings and populate the menu as needed.
 				var note=livid[type][id]["nn"];
 				var mode=livid[type][id]["mode"];
@@ -2408,10 +2408,10 @@ function updatectlinspector(type,id){
 		if(ele_type!="submit" && ele_type!="hidden"){
 			if(ele_type == "checkbox"){
 				var ischeck = thesetting; //boolean
-				//clog("CHECKBOX type "+type+" name "+ele_name+" setting "+thesetting);
+				//console.log("CHECKBOX type "+type+" name "+ele_name+" setting "+thesetting);
 				$(this).prop("checked",ischeck);
 			}else{
-				//clog("POPULATE: type "+type+" name "+ele_name+" setting "+thesetting);
+				//console.log("POPULATE: type "+type+" name "+ele_name+" setting "+thesetting);
 				$(this).val(thesetting);
 			}
 		}
@@ -2437,7 +2437,7 @@ function updatectlinspector(type,id){
 			ele_name = this.name;
 			if(ele_name!="ctlid"){
 				thesetting = livid[type][id][ele_name]; //name of html element, such as "nn"or "mode"
-				//clog("raw setting "+type+" "+id+" "+ele_name+" "+thesetting);
+				//console.log("raw setting "+type+" "+id+" "+ele_name+" "+thesetting);
 			}
 			
 			if(this.type == "select-one" || this.type == "menu"){
@@ -2468,10 +2468,10 @@ function updatectlinspector(type,id){
 				if(this.type == "checkbox"){
 					var ischeck = thesetting; //boolean
 					$(this).prop("checked",thesetting);
-					//clog("--"+this.type+" : populate "+this.name+" with "+thesetting+" type "+typeof thesetting);
+					//console.log("--"+this.type+" : populate "+this.name+" with "+thesetting+" type "+typeof thesetting);
 				}else{
 					$(this).val(thesetting);
-					//clog("--"+this.type+" : populate "+this.name+" with "+thesetting);
+					//console.log("--"+this.type+" : populate "+this.name+" with "+thesetting);
 				}
 			}
 			if(this.type == "hidden"){
@@ -2490,7 +2490,7 @@ function updateglobalinspector(ctlui,val){
 	var speedhash = ["1x","2x","3x","4x","5x","6x","7x","8x","9x","10x","11x","12x","13x","14x","15x","1/2x","1/3x","1/4x","1/5x","1/6x","1/7x","1/8x","1/9x","1/10x","1/11x","1/12x","1/13x","1/14x","1/15x"];
 	var thesetting=val;
 	var formele = $('#'+ctlui);
-	clog("GLOBALS ui: "+formele.attr('type')+" -- "+ctlui+" v "+val )
+	console.log("GLOBALS ui: "+formele.attr('type')+" -- "+ctlui+" v "+val )
 	switch(formele.attr('type')){
 		case "text":
 		thesetting=parseInt(thesetting); //make sure it is an int
@@ -2507,7 +2507,7 @@ function updateglobalinspector(ctlui,val){
 		break;
 		case "checkbox":
 		var ischeck = thesetting>0; //make it bool
-		clog("Global Form "+ctlui+" setting "+ischeck+ " setting "+thesetting);
+		console.log("Global Form "+ctlui+" setting "+ischeck+ " setting "+thesetting);
 		formele.prop("checked",ischeck);
 		break;
 	}
@@ -2522,18 +2522,18 @@ function notify(note){
 		}
 	}
 	if(note=="done"){
-		clog("done");
+		console.log("done");
 	}
 }
 
 function printsx(){
 	for(i in sx){
-		clog("sx"+' '+i+' '+":"+' '+sx[i]+' '+"-len-"+' '+sx[i].length+" last "+sx[i][(sx[i].length-1)]);
+		console.log("sx"+' '+i+' '+":"+' '+sx[i]+' '+"-len-"+' '+sx[i].length+" last "+sx[i][(sx[i].length-1)]);
 	}
 }
 function printenc(){
 	for(i in livid.enc){
-		clog("enc"+' '+i+' '+":"+' '+livid.enc[i].nn);
+		console.log("enc"+' '+i+' '+":"+' '+livid.enc[i].nn);
 	}
 }
 
@@ -2576,12 +2576,12 @@ function printtype(v){
 			for(var i in livid[type]){
 				//post("\n--",i);
 				for(var p in livid[type][i]){
-					clog(">"+" "+type+" "+i+" "+p+" "+livid[type][i][p]);
+					console.log(">"+" "+type+" "+i+" "+p+" "+livid[type][i][p]);
 				}
 			}
 		}else if(v=="globl"){
 			for(var p in livid[type]){
-				clog(">"+" "+type+" "+i+" "+p+" "+livid[type][p]);
+				console.log(">"+" "+type+" "+i+" "+p+" "+livid[type][p]);
 			}
 		}
 		
@@ -2590,14 +2590,14 @@ function printtype(v){
 
 function printlivid(){
 	for(var type in livid){
-		clog("-"+" "+type);
+		console.log("-"+" "+type);
 		if(type=="globl"){
 			for(var i in livid[type]){
-				clog("--"+" "+i);
-				if(type=="globl") clog(">"+" "+type+" "+i+" "+livid[type][i]);
+				console.log("--"+" "+i);
+				if(type=="globl") console.log(">"+" "+type+" "+i+" "+livid[type][i]);
 				for(var p in livid[type][i]){
 				//	if(type=="toggle") //restrict to a type here!
-						clog(">"+" "+type+" "+i+" "+p+" "+livid[type][i][p]);
+						console.log(">"+" "+type+" "+i+" "+p+" "+livid[type][i][p]);
 				}
 			}
 		}else{
@@ -2612,7 +2612,7 @@ function printlivid(){
 function globlquest(){
 	for(var p in livid.globl){		
 		var tmp=Number(livid.globl[p]);
-		clog("glob"+" "+p+" "+livid.globl[p]+" "+tmp+" "+"type"+" "+typeof livid.globl[p]+" "+typeof tmp);
+		console.log("glob"+" "+p+" "+livid.globl[p]+" "+tmp+" "+"type"+" "+typeof livid.globl[p]+" "+typeof tmp);
 	}
 }
 
@@ -2683,7 +2683,7 @@ function dumpmap(){
  
 //error supressions:
 function start(){
-	clog("START");
+	console.log("START");
 }
 
 var remote_type="";
@@ -2710,5 +2710,5 @@ function mode(v){
 	}
 }
 function bang(){
-	clog("uitocontroller.js: bang");
+	console.log("uitocontroller.js: bang");
 }

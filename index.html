@@ -21,26 +21,28 @@
 			var DEBUG=0;
 			var DEBUGMIDI=0;
 			var SPOOF=0;
-			var NODOWNLOAD = false;
+			
 			//check the user agent string to see if it is a safari browser
-			var ua = navigator.userAgent.toLowerCase(); 
-			if (ua.indexOf('safari')!=-1){
-				if(ua.indexOf('chrome')  == -1){
-					//can establish this again, if needed, but seems ok for now.
-					//isSafari(true); //in uitocontroller.js
-					NODOWNLOAD = true;
-				}else{
-					//alert("chrome"); //if needed we can do something here!
-				}
-			}else{
-				//alert("another browser");
-			}
+			var isSaf = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+			var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+			var isChrome = !!window.chrome && !isOpera;
+			var isFirefox = typeof InstallTrigger !== 'undefined';   // Firefox 1.0+
+			console.log('chrome? '+isChrome+' safari? '+isSaf);
+      if(isSaf){
+        //can establish this again, if needed, but seems ok for now.
+        //isSafari(true); //in uitocontroller.js
+      }
+      if(isFirefox){
+        
+      }
 			
 			window.onload = function () {
-				$("#tagsinput").tagit();
-				user(); //in user.js - sets up user login and stuff.
 				makemidimenu();
-				//if(SAFARI) safarialert(); //no need for this - seems fine on safari
+				
+      if(isChrome){
+        $('#chromeo').append('Chrome users, make sure you enable NPAPI plugins. Enter chrome://flags/#enable-npapi in the location bar.');
+        console.log('added to warning');
+      }
 				if (window.File && window.FileReader && window.FileList && window.Blob) {
           clog("File APIs are supported");// Great success! All the File APIs are supported.
         } else {
@@ -631,9 +633,12 @@
 <!-- MIDI i/o plugin-->		
 		<object id="Jazz1" classid="CLSID:1ACE1618-1C7D-4561-AEE1-34842AA85E90" class="hidden">
 		  <object id="Jazz2" type="audio/x-jazz" class="hidden">
-		  <p id="pluginwarning">
-		  For this MIDI application to work,<br>you'll need to download and install the<br><a href="http://jazz-soft.net">Jazz-Plugin</a>
-		  </p>
+		  <div id="pluginwarning">
+		  For this MIDI application to work,<br>
+		  you'll need to download and install the<br>
+		  <a href="http://jazz-soft.net">Jazz-Plugin</a>
+		  <span id="chromeo"></span>
+		  </div>
 		  </object>
 		</object>
 		
