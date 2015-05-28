@@ -1,3 +1,4 @@
+var NODOWNLOAD = false;
 var cleanUp = function(a) {
   a.textContent = 'Downloaded';
   a.dataset.disabled = true;
