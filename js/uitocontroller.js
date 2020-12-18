@@ -1705,20 +1705,33 @@ var pvsID=-1;
 //accummulated sysex
 //Also detects a response to inquiry so we know what controller is loaded and can setup the interface accordingly.
 function procSysex(){
+		console.log("Processing MIDI Sysex Message...");
 		var blockhedge; //will be used for a setTimeout as a way to deal w/ some blocks having expansions, others not. declare here so we can cancel it later.
 		var sysexb = Array.prototype.slice.call(arguments, 0); //a full sysex message
+		var isLivid=1;
+
 		if(sysexb.length==1){
 			sysexb=sysexb[0];
+			console.log("- Adjusting sysexb!");				
 		}
-		var isLivid=1;
+		if(sysexb.length==1){
+			sysexb=sysexb[0];
+			console.log("- Adjusting sysexb!");				
+		}
+		if(sysexb.length==1){
+			sysexb=sysexb[0];
+			console.log("- Adjusting sysexb!");				
+		}
 		//test the buffer to make sure it is a Livid sysex:
 		for(var i=0;i<head.length;i++){
 			if(sysexb[i] != head[i]){
 				isLivid=0;
 			}
 		}
+
 		//if it's a Livid brand controller, then lets snip out the important parts and put it in the right place:
 		if(isLivid){
+			console.log("- Received a Livid Sysex: " + sysexb);				
 			var IDat=5; //CMD id is at this index in the array
 			if(sysexb.length>5 && sysexb[IDat]!=7){ //7 is a "request" command and shouldn't be considered
 				var sxid=sysexb[IDat]; //returns the ID of the command, e.g. sx.Map Buttons is 11, Map Analogs is 10
@@ -1788,8 +1801,10 @@ function procSysex(){
 				}
 			}
 		}else{
-			//test to see if this is a response identifying the controller [240,126,ch,6,2,0,1,mfg,1,0,pid,0,v1,v2,v3,v4];			
+			//test to see if this is a response identifying the controller [240,126,ch,6,2,0,1,mfg,1,0,pid,0,v1,v2,v3,v4];	
+			console.log("- Identification Inquiry Reply Found");				
 			if(sysexb.length==tomatch.length){
+				console.log("- Sysex Length is appropriate.");				
 				var isLividCtl = 0;
 				for(var i=0;i<sysexb.length;i++){
 					if(i!=2 && i!=10 && i!=12 && i!=13 && i!=14 && i!=15){
@@ -1821,6 +1836,9 @@ function procSysex(){
 				if(isLividCtl){
 					product(pid);
 				}
+			}
+			else {
+				console.log("- Sysex Length is not correct. got: " + sysexb.length + "    expected: " + tomatch.length + "    " + sysexb)
 			}
 		}
 }
@@ -1856,12 +1874,15 @@ function inquire(){
 var qreq = '';
 function request(){
 	//close the port so we can...
-	Jazz.MidiInClose(); 		
+	// !test top.input_port.close()
+	//Jazz.MidiInClose(); 		
 	//...open up the port with no callback function so we can use QueryMidiIn()
-	Jazz.MidiInOpen(inports.options[inports.selectedIndex].value);
+	// !test top.input_port = JZZ().openMidiIn(inports.options[inports.selectedIndex].value);
+	//Jazz.MidiInOpen(inports.options[inports.selectedIndex].value);
 	console.log("BEGIN REQUESTS ROUTINE every "+SCHED+" ms");
 	requesting = 1;
-	queryd();
+	//queryd();  // !start here: queryd overlaps the procSysex function
+	// - merge them into procSysex, so that we can work without using 'array = QueryMidiIn'
 	var reqi=0;
 	console.log("requests "+requests[pid]);
 	qreq=setInterval(function(){     // start the polling cycle
@@ -1883,9 +1904,12 @@ function request(){
 var sxb=[];
 var qproc = '';
 var ID = 0;
-function queryd(){
+function queryd(){  // DEPRECATED
+	console.log("Hi queryd!!!");
+	
 	qproc=setInterval(function(){     // start the polling cycle
 		var arr;
+		//while(arr=top.input_port.)
 		while(arr=Jazz.QueryMidiIn()){  // while the queue is not empty
 			var IDat = 5;
 			var ts = arr[0];            // the first element is the time stamp
@@ -1941,7 +1965,7 @@ function queryd(){
 	
 }
 
-function qdone(){
+function qdone(){ // DEPRECATED along with queryd
 	console.log("................................. req done");
 	for(i in sx){
 		console.log(">> "+i+" sx "+sx[i]);

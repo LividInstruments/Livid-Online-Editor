@@ -1,11 +1,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html lang="en">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- saved from url=(0030)http://lividserver.com/editor/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
         <title>Livid Editor</title>
         <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="css/tagit.ui-zendesk.css">
         <link rel="stylesheet" href="css/jquery.tagit.css">
+		<script src="JZZ.js"></script>
+		<!--<script src="JZZ.synth.OSC.js"></script> -->
         <script src="raphael-min.js" type="text/javascript" charset="utf-8"></script>
         <script src="js/lividToSysex.js"></script>
         <script src="js/sysexToLivid.js"></script>
@@ -37,18 +39,21 @@
       }
 			
 			window.onload = function () {
+				console.log("onload (START)")
+			
 				makemidimenu();
 				
       if(isChrome){
-        $('#chromeo').append('Chrome users, make sure you enable NPAPI plugins. Enter chrome://flags/#enable-npapi in the location bar.');
-        console.log('added to warning');
+        //$('#chromeo').append('Chrome users, make sure you enable NPAPI plugins. Enter chrome://flags/#enable-npapi in the location bar.');
+        //console.log('added to warning');
       }
-				if (window.File && window.FileReader && window.FileList && window.Blob) {
-          clog("File APIs are supported");// Great success! All the File APIs are supported.
-        } else {
-          alert('The File APIs are not fully supported in this browser.');
-        }
-			}
+		if (window.File && window.FileReader && window.FileList && window.Blob) {
+			clog("File APIs are supported");// Great success! All the File APIs are supported.
+		} else {
+			alert('The File APIs are not fully supported in this browser.');
+		}
+		console.log("onload (END)")
+	}
 			
 			function log(s) {
 				if(DEBUG) {
@@ -136,20 +141,20 @@
 		<div id="confirm"><span id="confirmspan">CONFIRM</span><br><input type="button" value="yes" class="submitbtn" id="confirmyes"> <input type="button" value="no" class="submitbtn" id="confirmno"></div>
 		<div id="alerts">ALERT</div>
 		<div id="msg">MSG</div>
-		<div id="safalerts">Safari can be a bit buggy with the Livid Editor. We recommend <a href='https://www.google.com/intl/en/chrome/browser/'>Chrome</a> or <a href='http://www.mozilla.org/en-US/'>Firefox</a></div>
+		<div id="safalerts">Safari can be a bit buggy with the Livid Editor. We recommend <a href="https://www.google.com/intl/en/chrome/browser/">Chrome</a> or <a href="http://www.mozilla.org/en-US/">Firefox</a></div>
 		<!--MIDI io menus -->
 		<div id="midiio">
 		<img src="livid_logo_select.png" style="margin-top:10px;margin-bottom:15px">
-		<span id="midiout" class="hidden"><h2>MIDI out:</h2><br><select id=outports onchange='midioutports();' class="menu" style="margin:3px"></select></span><br>
+		<span id="midiout" class="hidden"><h2>MIDI out:</h2><br><select id="outports" onchange="midioutports();" class="menu" style="margin:3px"></select></span><br>
 		<span id="midihint"><h3 style="margin-top:5px">Select a port.</h3></span><br>
-		<span id="midiin" class="hidden">MIDI In: <select id=inports onchange='midiinports();' class="menu" style="margin:3px"><option value="">Not connected</option></select></span>
+		<span id="midiin" class="hidden">MIDI In: <select id="inports" onchange="midiinports();" class="menu" style="margin:3px"><option value="">Not connected</option></select></span>
 		
 		</div>
 		<!-- midiioscrim is used to screen out the UI until a port has been selected: -->
 		<div id="midiioscrim"></div>
 		<div id="fetchsettings">
-			<img src="t.gif" alt="" style="width:1px; height:99.5%;" align="left" /><br />
-			<span style="font-size:1.5em; margin-top:10%">Fetching settings from controller...</span><br />
+			<img src="t.gif" alt="" style="width:1px; height:99.5%;" align="left"><br>
+			<span style="font-size:1.5em; margin-top:10%">Fetching settings from controller...</span><br>
 			<span id="initmidi">
 			</span>
 		</div>
@@ -159,19 +164,19 @@
 			<!--<li><a href="#" class="show_login">login</a></li>-->
 			<li>  <a href="http://wiki.lividinstruments.com/wiki/Online_Editor">manual</a></li>
 			<li> | <a href="http://lividinstruments.com/helpdesk/open.php?">report problem</a></li>
- 			<li> | <a href="index.html">reload page</a></li>
-			<li> | <a href="src.zip">source (offline)</a></li>
+ 			<li> | <a href="http://lividserver.com/editor/index.html">reload page</a></li>
+			<li> | <a href="http://lividserver.com/editor/src.zip">source (offline)</a></li>
 			<li id="fwupdate" style="visibility:hidden"> | <a href="http://wiki.lividinstruments.com/wiki/Updating_Your_Firmware">firmware update</a></li>
 		</ul>		
 			<div id="saveanddefaults" style="margin-left:1em;visibility:hidden;">
 				<ul id="saveul" class="topnav" style="margin: 0px">
 					<li>
-					<span><form action="#" id="save" method="get">
-					<input type="submit" value="save to device" class="submitbtn importantbtn" style="margin-right:0.5em"/></form></span>
+					<span><form action="http://lividserver.com/editor/#" id="save" method="get">
+					<input type="submit" value="save to device" class="submitbtn importantbtn" style="margin-right:0.5em"></form></span>
 					</li>
 					<li>
-					<span><form action="#" id="defaults" method="get">
-					<input type="submit" value="defaults (reset)" class="submitbtn importantbtn" style="background:rgb(90%,90%,90%);"/></form></span>
+					<span><form action="http://lividserver.com/editor/#" id="defaults" method="get">
+					<input type="submit" value="defaults (reset)" class="submitbtn importantbtn" style="background:rgb(90%,90%,90%);"></form></span>
 					</li>
 				</ul>
 			</div>
@@ -181,63 +186,63 @@
 	<div style="clear:both"></div>
 		<div id="left_container" class="leftpanel" style="z-index:0;opacity: 0.1">
 			<div id="" class="leftmenus">
-				<input type="button" value="Global" name="global" class="submitbtn tabbtn" id="global_tab" />
-				<input type="button" value="Color" name="colormap" class="submitbtn tabbtn" id="colormap_tab" />
-				<input type="button" value="MIDI" name="midimon" class="submitbtn tabbtn" id="midimon_tab" />
+				<input type="button" value="Global" name="global" class="submitbtn tabbtn" id="global_tab">
+				<input type="button" value="Color" name="colormap" class="submitbtn tabbtn" id="colormap_tab">
+				<input type="button" value="MIDI" name="midimon" class="submitbtn tabbtn" id="midimon_tab">
 			</div>
 			<!--global values-->
 			<div class="inspector insp_globals" name="global_insp" id="global_div">
 				<!--form elements have names that are identical to the names in the brain.object-->
 				<h4>global values</h4><br>
-				<form action="#" id="globl" method="get">
+				<form action="http://lividserver.com/editor/#" id="globl" method="get">
 				<ul style="width:92%">
 				<li id="encspeedA_li"><span class="insp_label">enc. speed A</span> <select type="menu" name="encspeedA" class="menu check_local" id="encspeedA"><option>1x</option><option>2x</option><option>3x</option><option>4x</option><option>5x</option><option>6x</option><option>7x</option><option>8x</option><option>9x</option><option>10x</option><option>11x</option><option>12x</option><option>13x</option><option>14x</option><option>15x</option><option>1/2x</option><option>1/3x</option><option>1/4x</option><option>1/5x</option><option>1/6x</option><option>1/7x</option><option>1/8x</option><option>1/9x</option><option>1/10x</option><option>1/11x</option><option>1/12x</option><option>1/13x</option><option>1/14x</option><option>1/15x</option></select></li>
 				<li id="encspeedB_li"><span class="insp_label">enc. speed B</span>  <select type="menu" name="encspeedB" class="menu check_local" id="encspeedB"><option>1x</option><option>2x</option><option>3x</option><option>4x</option><option>5x</option><option>6x</option><option>7x</option><option>8x</option><option>9x</option><option>10x</option><option>11x</option><option>12x</option><option>13x</option><option>14x</option><option>15x</option><option>1/2x</option><option>1/3x</option><option>1/4x</option><option>1/5x</option><option>1/6x</option><option>1/7x</option><option>1/8x</option><option>1/9x</option><option>1/10x</option><option>1/11x</option><option>1/12x</option><option>1/13x</option><option>1/14x</option><option>1/15x</option></select></li>
 				<li id="settingsch_li"><span class="insp_label">settings ch</span>  <select type="menu" name="settingsch" class="menu ch check_local" id="settingsch"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></li>
-				<li id="settingsch_enable_li"><span class="insp_label">use settings ch</span> <input name="settingsch_enable" type="checkbox" class="check" value="no" id="settingsch_enable"/><label for="settingsch_enable" class="check_local">enable</label></li>
-				<li id="omni_li"><span class="insp_label">omni</span> <input name="omni" type="checkbox" class="check" value="no" id="omni"/><label for="omni" class="check_local">enable</label></li>
-				<li id="merge_li"><span class="insp_label">MIDI merge</span> <input name="merge" type="checkbox" class="check" value="no" id="merge"/><label for="merge" class="check_local">enable</label></li>
-				<li id="xfadeflip_li"><span class="insp_label">Crossfader flip</span> <input name="xfadeflip" type="checkbox" class="check" value="no" id="xfadeflip"/><label for="xfadeflip" class="check_local">enable</label></li>
+				<li id="settingsch_enable_li"><span class="insp_label">use settings ch</span> <input name="settingsch_enable" type="checkbox" class="check" value="no" id="settingsch_enable"><label for="settingsch_enable" class="check_local">enable</label></li>
+				<li id="omni_li"><span class="insp_label">omni</span> <input name="omni" type="checkbox" class="check" value="no" id="omni"><label for="omni" class="check_local">enable</label></li>
+				<li id="merge_li"><span class="insp_label">MIDI merge</span> <input name="merge" type="checkbox" class="check" value="no" id="merge"><label for="merge" class="check_local">enable</label></li>
+				<li id="xfadeflip_li"><span class="insp_label">Crossfader flip</span> <input name="xfadeflip" type="checkbox" class="check" value="no" id="xfadeflip"><label for="xfadeflip" class="check_local">enable</label></li>
 				<li id="atouchspeed_li"><span class="insp_label">Afterpress. speed</span><select type="menu" name="atouchspeed" class="menu check_local" id="atouchspeed"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option><option>20</option><option>21</option><option>22</option><option>23</option><option>24</option><option>25</option><option>26</option><option>27</option><option>28</option><option>29</option><option>30</option><option>31</option><option>32</option><option>33</option><option>34</option><option>35</option><option>36</option><option>37</option><option>38</option><option>39</option><option>40</option><option>41</option><option>42</option><option>43</option><option>44</option><option>45</option><option>46</option><option>47</option><option>48</option><option>49</option><option>50</option><option>51</option><option>52</option><option>53</option><option>54</option><option>55</option><option>56</option><option>57</option><option>58</option><option>59</option><option>60</option><option>61</option><option>62</option><option>63</option><option>64</option><option>65</option><option>66</option><option>67</option><option>68</option><option>69</option><option>70</option><option>71</option><option>72</option><option>73</option><option>74</option><option>75</option><option>76</option><option>77</option><option>78</option><option>79</option><option>80</option><option>81</option><option>82</option><option>83</option><option>84</option><option>85</option><option>86</option><option>87</option><option>88</option><option>89</option><option>90</option><option>91</option><option>92</option><option>93</option><option>94</option><option>95</option><option>96</option><option>97</option><option>98</option><option>99</option><option>100</option></select></li>
 				<li style="margin-top:0.8em"><b>LED local control</b></li>
-				<li id="ringlocal_abs_li"><span class="insp_label">LED Ring (abs)</span><input name="ringlocal_abs" type="checkbox" class="check" value="no" id="ringlocal_abs"/><label for="ringlocal_abs" id="ringlocal_abs_lab"class="check_local">enable</label></li>
-				<li id="ringlocal_rel_li"><span class="insp_label">LED Ring (rel)</span><input name="ringlocal_rel" type="checkbox" class="check" value="no" id="ringlocal_rel"/><label for="ringlocal_rel" id="ringlocal_rel_lab"class="check_local">enable</label></li>
-				<li id="ringlocal_slide_li"><span class="insp_label">Touch Faders</span><input name="ringlocal_slide" type="checkbox" class="check" value="no" id="ringlocal_slide"/><label for="ringlocal_slide" id="ringlocal_slide_lab"class="check_local">enable</label></li>
-				<li id="btnlocal_mom_li"><span class="insp_label">Button (mom)</span><input name="btnlocal_mom" type="checkbox" class="check" value="no" id="btnlocal_mom"/><label for="btnlocal_mom" id="btnlocal_mom_lab"class="check_local">enable</label></li>
-				<li id="btnlocal_tog_li"><span class="insp_label">Button (tog)</span><input name="btnlocal_tog" type="checkbox" class="check" value="no" id="btnlocal_tog"/><label for="btnlocal_tog" id="btnlocal_tog_lab"class="check_local">enable</label></li>
+				<li id="ringlocal_abs_li"><span class="insp_label">LED Ring (abs)</span><input name="ringlocal_abs" type="checkbox" class="check" value="no" id="ringlocal_abs"><label for="ringlocal_abs" id="ringlocal_abs_lab" class="check_local">enable</label></li>
+				<li id="ringlocal_rel_li"><span class="insp_label">LED Ring (rel)</span><input name="ringlocal_rel" type="checkbox" class="check" value="no" id="ringlocal_rel"><label for="ringlocal_rel" id="ringlocal_rel_lab" class="check_local">enable</label></li>
+				<li id="ringlocal_slide_li"><span class="insp_label">Touch Faders</span><input name="ringlocal_slide" type="checkbox" class="check" value="no" id="ringlocal_slide"><label for="ringlocal_slide" id="ringlocal_slide_lab" class="check_local">enable</label></li>
+				<li id="btnlocal_mom_li"><span class="insp_label">Button (mom)</span><input name="btnlocal_mom" type="checkbox" class="check" value="no" id="btnlocal_mom"><label for="btnlocal_mom" id="btnlocal_mom_lab" class="check_local">enable</label></li>
+				<li id="btnlocal_tog_li"><span class="insp_label">Button (tog)</span><input name="btnlocal_tog" type="checkbox" class="check" value="no" id="btnlocal_tog"><label for="btnlocal_tog" id="btnlocal_tog_lab" class="check_local">enable</label></li>
 				<!--<li id="btnlocal_cbtn_li"><span class="insp_label"></span><input name="btnlocal_cbtn" type="checkbox" class="check" value="no" id="btnlocal_cbtn"/><label for="btnlocal_cbtn" id="btnlocal_cbtn_lab">Button local control (cbtn)</label></li>-->
-				<li id="agslocal_fsr_li"><span class="insp_label">Drum Pad </span><input name="agslocal_fsr" type="checkbox" class="check" value="no" id="agslocal_fsr"/><label for="agslocal_fsr" id="agslocal_fsr_lab"class="check_local">enable</label></li>
-				<li id="btnlocal_li"><span class="insp_label">Local control</span><input name="btnlocal" type="checkbox" class="check" value="no" id="btnlocal"/><label for="btnlocal" id="btnlocal_lab"class="check_local">enable</label></li>
+				<li id="agslocal_fsr_li"><span class="insp_label">Drum Pad </span><input name="agslocal_fsr" type="checkbox" class="check" value="no" id="agslocal_fsr"><label for="agslocal_fsr" id="agslocal_fsr_lab" class="check_local">enable</label></li>
+				<li id="btnlocal_li"><span class="insp_label">Local control</span><input name="btnlocal" type="checkbox" class="check" value="no" id="btnlocal"><label for="btnlocal" id="btnlocal_lab" class="check_local">enable</label></li>
 				
 				<li id="bankch_head" style="margin-top:0.8em"><b>Bank Channels</b></li>
 				<li class="bankli">
-					<span id='bank_0' class="bankch">1 <select type="menu" name="bankchs_0" class="menu ch" id="bankchs_0"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span> 
-					<span id='bank_5' class="bankch">6 <select type="menu" name="bankchs_5" class="menu ch" id="bankchs_5"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span> 
-					<span id='bank_10' class="bankch">11 <select type="menu" name="bankchs_10" class="menu ch" id="bankchs_10"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span>
+					<span id="bank_0" class="bankch">1 <select type="menu" name="bankchs_0" class="menu ch" id="bankchs_0"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span> 
+					<span id="bank_5" class="bankch">6 <select type="menu" name="bankchs_5" class="menu ch" id="bankchs_5"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span> 
+					<span id="bank_10" class="bankch">11 <select type="menu" name="bankchs_10" class="menu ch" id="bankchs_10"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span>
 				</li>
 				<li class="bankli">
-					<span id='bank_1' class="bankch">2 <select type="menu" name="bankchs_1" class="menu ch" id="bankchs_1"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span> 
-					<span id='bank_6' class="bankch"'>7 <select type="menu" name="bankchs_6" class="menu ch" id="bankchs_6"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span> 
-					<span id='bank_11' class="bankch">12 <select type="menu" name="bankchs_11" class="menu ch" id="bankchs_11"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span>
+					<span id="bank_1" class="bankch">2 <select type="menu" name="bankchs_1" class="menu ch" id="bankchs_1"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span> 
+					<span id="bank_6" class="bankch" '="">7 <select type="menu" name="bankchs_6" class="menu ch" id="bankchs_6"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span> 
+					<span id="bank_11" class="bankch">12 <select type="menu" name="bankchs_11" class="menu ch" id="bankchs_11"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span>
 				</li>
 				<li class="bankli">
-					<span id='bank_2' class="bankch">3 <select type="menu" name="bankchs_2" class="menu ch" id="bankchs_2"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span> 
-					<span id='bank_7' class="bankch">8 <select type="menu" name="bankchs_7" class="menu ch" id="bankchs_7"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span> 
-					<span id='bank_12' class="bankch">13 <select type="menu" name="bankchs_12" class="menu ch" id="bankchs_12"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span>
+					<span id="bank_2" class="bankch">3 <select type="menu" name="bankchs_2" class="menu ch" id="bankchs_2"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span> 
+					<span id="bank_7" class="bankch">8 <select type="menu" name="bankchs_7" class="menu ch" id="bankchs_7"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span> 
+					<span id="bank_12" class="bankch">13 <select type="menu" name="bankchs_12" class="menu ch" id="bankchs_12"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span>
 				</li>
 				<li class="bankli">
-					<span id='bank_3' class="bankch">4 <select type="menu" name="bankchs_3" class="menu ch" id="bankchs_3"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span> 
-					<span id='bank_8' class="bankch">9 <select type="menu" name="bankchs_8" class="menu ch" id="bankchs_8"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span> 
-					<span id='bank_13' class="bankch">14 <select type="menu" name="bankchs_13" class="menu ch" id="bankchs_13"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span>
+					<span id="bank_3" class="bankch">4 <select type="menu" name="bankchs_3" class="menu ch" id="bankchs_3"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span> 
+					<span id="bank_8" class="bankch">9 <select type="menu" name="bankchs_8" class="menu ch" id="bankchs_8"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span> 
+					<span id="bank_13" class="bankch">14 <select type="menu" name="bankchs_13" class="menu ch" id="bankchs_13"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span>
 				</li>
 				<li class="bankli">
-					<span id='bank_4' class="bankch">5 <select type="menu" name="bankchs_4" class="menu ch" id="bankchs_4"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span> 
-					<span id='bank_9' class="bankch">10 <select type="menu" name="bankchs_9" class="menu ch" id="bankchs_9"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span> 
-					<span id='bank_14' class="bankch">15 <select type="menu" name="bankchs_14" class="menu ch" id="bankchs_14"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span>
+					<span id="bank_4" class="bankch">5 <select type="menu" name="bankchs_4" class="menu ch" id="bankchs_4"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span> 
+					<span id="bank_9" class="bankch">10 <select type="menu" name="bankchs_9" class="menu ch" id="bankchs_9"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span> 
+					<span id="bank_14" class="bankch">15 <select type="menu" name="bankchs_14" class="menu ch" id="bankchs_14"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select></span>
 				</li>
 
 				<li id="currentbank_head" style="margin-top:0.8em"><b>Current Bank</b></li>
-				<li id="currentbank_li"><input name="bank" type="text" class="textfield" id="bank"/></li>
+				<li id="currentbank_li"><input name="bank" type="text" class="textfield" id="bank"></li>
 				<li id="onech_head"><b>Channel</b></li>
 				<li id="one_ch">
 				<select type="menu" name="onech" class="menu ch" id="onech"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select>
@@ -245,8 +250,8 @@
 				
 				<li id="encoderdet" style="margin-top:0.8em"><b>Detented or Smooth action</b></li>
 				<li id="encdet_li">
-				<input name="encdet_abs" type="checkbox" class="check" value="no" id="encdet_abs" style="margin-right:0.5em"/><label for="encdet_abs" class="check_local" id="encdet_abs_label">absolute</label>
-				<input name="encdet_rel" type="checkbox" class="check" value="no" id="encdet_rel"/><label for="encdet_rel" class="check_local" id="encdet_rel_label">relative</label>
+				<input name="encdet_abs" type="checkbox" class="check" value="no" id="encdet_abs" style="margin-right:0.5em"><label for="encdet_abs" class="check_local" id="encdet_abs_label">absolute</label>
+				<input name="encdet_rel" type="checkbox" class="check" value="no" id="encdet_rel"><label for="encdet_rel" class="check_local" id="encdet_rel_label">relative</label>
 				</li>
 				
 				<li id="localcolor" class="localcolors" style="margin-top:0.8em"><b>Save Colors for Local Control</b></li>
@@ -257,19 +262,19 @@
 				<ul>
         <li id="encoderphys" style="margin-top:0.8em"><b>Encoder Hardware</b></li>
 				<li id="encflip_li">
-				<input type="button" name="encflip" class="btn" value="Flip Encoders" id="encflip"/>
+				<input type="button" name="encflip" class="btn" value="Flip Encoders" id="encflip">
 				</li>
         <!--
 				<input type="button" name="encdet_abs" class="btn" value="Absolute" id="encdet_abs" style="margin-right:0.5em"/>
 				<input type="button" name="encdet_rel" class="btn" value="Relative" id="encdet_rel"/>-->
-				</li>
+				
 				</ul>
 				<span id="firmware"></span>
 			</div>
 			<!--change color to velocity map-->
 			<div id="color_map" class="inspector globals">
 				<h4>velocity to color</h4>
-				<form action="#" id="colormap" method="get">
+				<form action="http://lividserver.com/editor/#" id="colormap" method="get">
 					<ul class="listv">
 					<li><span class="insp_label">0</span><select type="menu" name="color0" class="menu check_local" id="color_0"><option>off</option><option>red</option><option>green</option><option>yellow</option><option>blue</option><option>magenta</option><option>cyan</option><option>white</option></select></li>
 					<li><span class="insp_label">1-3</span><select type="menu" name="color1" class="menu check_local" id="color_1"><option>off</option><option>red</option><option>green</option><option>yellow</option><option>blue</option><option>magenta</option><option>cyan</option><option>white</option></select></li>
@@ -288,10 +293,10 @@
 			
 			<div name="sendsysex_insp" id="sendsysex_div" class="inspector" style="margin-top:3%">
 				<h4>send sysex</h4>
-				<form action="#" id="sendsysex" method="get">
+				<form action="http://lividserver.com/editor/#" id="sendsysex" method="get">
 				<ul class="listv">				
         <li><input type="text" value="" placeholder="sysex" style="width:10em;height:3em" id="sysexvalue"></li>
-				<li><input type="submit" value="send" class="submitbtn" style="float:right"/></li>
+				<li><input type="submit" value="send" class="submitbtn" style="float:right"></li>
 				</ul>
 				</form>
 			</div>
@@ -318,20 +323,20 @@
 		</div>
 		<div id="right_container" class="rightpanel" style="opacity: 0.1">
 			<div id="righttabs" class="rightmenus">
-				<input type="button" value="Inspector" name="inspector" class="submitbtn tabbtn" id="inspector_tab" />
+				<input type="button" value="Inspector" name="inspector" class="submitbtn tabbtn" id="inspector_tab">
 				<!--<input type="button" value="Presets" name="pst" class="submitbtn tabbtn" id="preset_tab" />-->
 			</div>
 			<div id="inspectors_container">
 				<!--ledring inspector-->
 				<div class="inspector ctlinspector insp_ledrings" name="ledring_insp" id="ledring_div">
-					<input type="button" value="group" name="group" class="group_btn" id="ledring_group" />
+					<input type="button" value="group" name="group" class="group_btn" id="ledring_group">
 					<!--form elements have names that are identical to the names in the brain.object-->
 					<h4>ledrings</h4>
 					<span class="ctlid">[ID: x]</span><br>
-					<form action="#" id="ledring" method="get">
+					<form action="http://lividserver.com/editor/#" id="ledring" method="get">
 					<input type="hidden" name="ctlid" value="0">
 					<ul class="listv" style="width:70%">
-					<li><span class="insp_label">cc#</span>  <input name="nn" type="text" class="textfield check_local" id="ledringmidi"/></li>
+					<li><span class="insp_label">cc#</span>  <input name="nn" type="text" class="textfield check_local" id="ledringmidi"></li>
 					<li><span class="insp_label">style</span> <select type="menu" name="style" class="menu check_local" id="ledringmode"><option>walk</option><option>fill</option><option>eq</option><option>spread</option></select></li>
 					<!--<li><input type="submit" value="update" class="submitbtn" /></li>-->
 					</ul>
@@ -339,14 +344,14 @@
 				</div>
 				<!--encoder inspector-->
 				<div class="inspector ctlinspector insp_encs" name="enc_insp" id="enc_div">
-					<input type="button" value="group" name="group" class="group_btn" id="enc_group" />
+					<input type="button" value="group" name="group" class="group_btn" id="enc_group">
 					<!--form elements have names that are identical to the names in the brain.object-->
 					<h4>encoders</h4>
 					<span class="ctlid">[ID: x]</span><br>
-					<form action="#" id="enc" method="get">
+					<form action="http://lividserver.com/editor/#" id="enc" method="get">
 					<input type="hidden" name="ctlid" value="0">
 					<ul class="listv">
-					<li><span class="insp_label">note/cc#</span> <input name="nn" type="text" class="textfield check_local" id="encsmidi"/></li>
+					<li><span class="insp_label">note/cc#</span> <input name="nn" type="text" class="textfield check_local" id="encsmidi"></li>
 					<li><span class="insp_label">mode</span> <select type="menu" name="mode" class="menu check_local" id="encsmode" style="width:45%"><option>note</option><option>cc</option></select></li>
 					<li><span class="insp_label">type</span> <select type="menu" name="type" class="menu check_local" id="encsmode"><option>absolute</option><option>relative</option></select></li>
 					<li class="ringv1"><span class="insp_label">ring</span> <select type="menu" name="style" class="menu check_local" id="encsring"><option>walk</option><option>fill</option></select></li>
@@ -356,19 +361,19 @@
 				</div>
 				<!--fsr inspector-->
 				<div class="inspector ctlinspector insp_fsrs" name="fsr_insp" id="fsr_div">
-					<input type="button" value="group" name="group" class="group_btn" id="fsr_group" />
+					<input type="button" value="group" name="group" class="group_btn" id="fsr_group">
 					<!--form elements have names that are identical to the names in the brain.object-->
 					<h4>drum pads</h4>
 					<span class="ctlid">[ID: x]</span><br>
-					<form action="#" id="fsr" method="get">
+					<form action="http://lividserver.com/editor/#" id="fsr" method="get">
 					<input type="hidden" name="ctlid" value="0">
 					<ul class="listv">
-					<li><span class="insp_label">note#</span> <input name="nn" type="text" class="textfield check_local" id="fsrnote"/></li>
-					<li><span class="insp_label">note output</span> <input name="nn_enable" type="checkbox" class="check" value="no" id="fsrnnenable"/><label for="fsrnnenable" class="check_local">enable</label></li>
-					<li><span class="insp_label">fixed note velocity</span> <input name="nvel_enable" type="checkbox" class="check" value="no" id="nvelenable"/><label for="nvelenable" class="check_local">enable</label></li>
-					<li><span class="insp_label">toggle mode</span> <input name="ntog_enable" type="checkbox" class="check" value="no" id="ntogenable"/><label for="ntogenable" class="check_local">enable</label></li>
-					<li><span class="insp_label">cc# (pressure)</span> <input name="cc" type="text" class="textfield check_local" id="fsrcc"/></li>
-					<li><span class="insp_label">cc</span><input name="cc_enable" type="checkbox" class="check" value="no" id="fsrccenable"/><label for="fsrccenable" class="check_local">enable</label></li>
+					<li><span class="insp_label">note#</span> <input name="nn" type="text" class="textfield check_local" id="fsrnote"></li>
+					<li><span class="insp_label">note output</span> <input name="nn_enable" type="checkbox" class="check" value="no" id="fsrnnenable"><label for="fsrnnenable" class="check_local">enable</label></li>
+					<li><span class="insp_label">fixed note velocity</span> <input name="nvel_enable" type="checkbox" class="check" value="no" id="nvelenable"><label for="nvelenable" class="check_local">enable</label></li>
+					<li><span class="insp_label">toggle mode</span> <input name="ntog_enable" type="checkbox" class="check" value="no" id="ntogenable"><label for="ntogenable" class="check_local">enable</label></li>
+					<li><span class="insp_label">cc# (pressure)</span> <input name="cc" type="text" class="textfield check_local" id="fsrcc"></li>
+					<li><span class="insp_label">cc</span><input name="cc_enable" type="checkbox" class="check" value="no" id="fsrccenable"><label for="fsrccenable" class="check_local">enable</label></li>
 					<!--<li><input name="cvel_enable" type="checkbox" class="check" value="no" id="cvelenable"/><label for="cvelenable">fixed cc value</label></li>-->
 					
 					<li><span class="insp_label">sensitivity</span> <select type="menu" name="filter" class="menu check_local" id="fsrfilter"><option>Low</option><option>Mid</option><option>Medium</option><option>High</option><option>Highest</option></select></li>
@@ -379,14 +384,14 @@
 				</div>
 				<!--pot analog inspector-->
 				<div class="inspector ctlinspector insp_pots" name="pot_insp" id="pot_div">
-					<input type="button" value="group" name="group" class="group_btn" id="pot_group" />
+					<input type="button" value="group" name="group" class="group_btn" id="pot_group">
 					<!--form elements have names that are identical to the names in the brain.object-->
-					<div><h4>knobs & </h4><br><h4>faders</h4></div>
+					<div><h4>knobs &amp; </h4><br><h4>faders</h4></div>
 					<span class="ctlid">[ID: x]</span><br>
-					<form action="#" id="pot" method="get">
+					<form action="http://lividserver.com/editor/#" id="pot" method="get">
 					<input type="hidden" name="ctlid" class="cid" id="crap" value="0">
 					<ul class="listv">
-					<li><span class="insp_label">note/cc#</span> <input name="nn" type="text" class="textfield" id="potsmidi"/></li>
+					<li><span class="insp_label">note/cc#</span> <input name="nn" type="text" class="textfield" id="potsmidi"></li>
 					<li><span class="insp_label">mode</span> <select type="menu" name="mode" class="menu" id="potsmode"><option>cc.</option><option>bend</option></select></li>
 					<!--<li><input type="submit" value="update" class="submitbtn" /></li>-->
 					</ul>
@@ -394,19 +399,19 @@
 				</div>
 				<!--touch slider inspector-->
 				<div class="inspector ctlinspector insp_slides" name="slide_insp" id="slide_div">
-					<input type="button" value="group" name="group" class="group_btn" id="slide_group" />
+					<input type="button" value="group" name="group" class="group_btn" id="slide_group">
 					<!--form elements have names that are identical to the names in the brain.object-->
 					<h4>touch sliders</h4>
 					<span class="ctlid">[ID: x]</span><br>
-					<form action="#" id="slide" method="get">
+					<form action="http://lividserver.com/editor/#" id="slide" method="get">
 					<input type="hidden" name="ctlid" class="cid" id="crap" value="0">
 					<ul class="listv">
-					<li><span class="insp_label">cc#</span> <input name="cc" type="text" class="textfield check_local" id="slidecc"/></li>
+					<li><span class="insp_label">cc#</span> <input name="cc" type="text" class="textfield check_local" id="slidecc"></li>
 					<li><span class="insp_label">mode</span> <select type="menu" name="mode" class="menu check_local" id="slidemode"><option>cc.</option><option>bend</option><option>aftertouch</option></select></li>
 					<li><span class="insp_label">output</span> <select type="menu" name="output" class="menu check_local" id="slideoutput"><option>abs+fine</option><option>precision</option><option>fine</option><option>inc/dec</option></select></li>
-					<li><span class="insp_label">note#</span> <input name="nn" type="text" class="textfield check_local" id="slidenote"/></li>
-					<li class="btog"><span class="insp_label">send note on</span><input name="sendnote" type="checkbox" class="check" value="no" id="sendsnote"/><label for="sendsnote" class="check_local">enable</label></li>
-					<li class="btog"><span class="insp_label">fixed note vel.</span><input name="fixvel" type="checkbox" class="check" value="no" id="fixedveloc"/><label for="fixedveloc" class="check_local">enable</label></li>
+					<li><span class="insp_label">note#</span> <input name="nn" type="text" class="textfield check_local" id="slidenote"></li>
+					<li class="btog"><span class="insp_label">send note on</span><input name="sendnote" type="checkbox" class="check" value="no" id="sendsnote"><label for="sendsnote" class="check_local">enable</label></li>
+					<li class="btog"><span class="insp_label">fixed note vel.</span><input name="fixvel" type="checkbox" class="check" value="no" id="fixedveloc"><label for="fixedveloc" class="check_local">enable</label></li>
 					<li><span class="insp_label">led style</span> <select type="menu" name="style" class="menu check_local" id="slideled"><option>walk</option><option>fill</option><option>spread</option><option>eq</option></select></li>
 					<li><span class="insp_label">color</span> <select type="menu" name="color" class="menu check_local" id="slidecolor"><option>invert</option><option>red</option><option>green</option><option>yellow</option><option>blue</option><option>magenta</option><option>cyan</option><option>white</option></select></li>
 					<!--<li><input type="submit" value="update" class="submitbtn" /></li>-->
@@ -415,14 +420,14 @@
 				</div>
 				<!--expansion jack inspector-->
 				<div class="inspector ctlinspector insp_exps" name="exp_insp" id="exp_div">
-					<input type="button" value="group" name="group" class="group_btn" id="exp_group" />
+					<input type="button" value="group" name="group" class="group_btn" id="exp_group">
 					<!--form elements have names that are identical to the names in the brain.object-->
 					<div><h4>analog</h4><br><h4>expansion</h4><br><h4>jacks</h4></div>
 					<span class="ctlid">[ID: x]</span><br>
-					<form action="#" id="exp" method="get">
+					<form action="http://lividserver.com/editor/#" id="exp" method="get">
 					<input type="hidden" name="ctlid" class="cid" id="crap" value="0">
 					<ul class="listv">
-					<li><span class="insp_label">note/cc#</span> <input name="nn" type="text" class="textfield" id="expsmidi"/></li>
+					<li><span class="insp_label">note/cc#</span> <input name="nn" type="text" class="textfield" id="expsmidi"></li>
 					<li><span class="insp_label">mode</span> <select type="menu" name="mode" class="menu" id="expsmode"><option>cc.</option><option>bend</option></select></li>
 					<!--<li><input type="submit" value="update" class="submitbtn" /></li>-->
 					</ul>
@@ -430,16 +435,16 @@
 				</div>
 				<!--button inspector-->
 				<div class="inspector ctlinspector insp_btns" name="btn_insp" id="btn_div">    	
-					<input type="button" value="group" name="group" class="group_btn" id="btn_group" />
+					<input type="button" value="group" name="group" class="group_btn" id="btn_group">
 					<!--form elements have names that are identical to the names in the brain.object-->
-					<form action="#" id="btn" method="get">
+					<form action="http://lividserver.com/editor/#" id="btn" method="get">
 					<input type="hidden" name="ctlid" id="ctlid" value="0"> <!--hidden must be first in the form-->
 					<h4>buttons</h4>
 					<span class="ctlid">[ID: x]</span><br>
 					<ul class="listv">
-					<li><span class="insp_label">note/cc#</span> <input name="nn" type="text" class="textfield check_local" id="btnsmidi"/></li>
+					<li><span class="insp_label">note/cc#</span> <input name="nn" type="text" class="textfield check_local" id="btnsmidi"></li>
 					<li><span class="insp_label">mode</span> <select type="menu" name="mode" class="menu check_local" id="btnsmode"><option>note</option><option>cc</option></select></li>
-					<li class="btog"><span class="insp_label">toggle</span><input name="toggle" type="checkbox" class="check" value="no" id="btnstoggle"/><label for="btnstoggle" class="check_local">enable</label></li>
+					<li class="btog"><span class="insp_label">toggle</span><input name="toggle" type="checkbox" class="check" value="no" id="btnstoggle"><label for="btnstoggle" class="check_local">enable</label></li>
 					<li><span class="insp_label">special</span> <select type="menu" name="special" class="menu check_local" id="btnsspecial"><option>---</option><option>bank</option><option id="indivbank">indiv. bank</option><option>enc. speed</option><option>mmc-start</option><option>mmc-cont.</option><option>mmc-stop</option></select></li>
 					<!--<li><input type="submit" value="update" class="submitbtn" /></li>-->
 					</ul>
@@ -447,24 +452,24 @@
 				</div>
 				<!--leds inspector-->
 				<div class="inspector ctlinspector insp_leds" name="led_insp" id="led_div" style="margin-top: 3%">
-					<input type="button" value="group" name="group" class="group_btn" id="led_group" />
+					<input type="button" value="group" name="group" class="group_btn" id="led_group">
 					<!--form elements have names that are identical to the names in the brain.object-->
-					<form action="#" id="lock" method="get" style="float: left; display: inline-block; margin-right: 3px;">
-					<input name="lock_led" type="checkbox" class="check" value="no" checked="true" id="lockled"/><label for="lockled" id="lockledlabel">x</label>
+					<form action="http://lividserver.com/editor/#" id="lock" method="get" style="float: left; display: inline-block; margin-right: 3px;">
+					<input name="lock_led" type="checkbox" class="check" value="no" checked="true" id="lockled"><label for="lockled" id="lockledlabel">x</label>
 					</form>
 					<h4>leds</h4>
 					<span class="ctlid">[ID: x]</span><br>
-					<form action="#" id="led" method="get">
+					<form action="http://lividserver.com/editor/#" id="led" method="get">
 					<input type="hidden" name="ctlid" value="0">
 					<ul class="listv">
-						<li><span class="insp_label">note/cc#</span> <input name="nn" type="text" class="textfield check_local" id="ledsmidi"/></li>
+						<li><span class="insp_label">note/cc#</span> <input name="nn" type="text" class="textfield check_local" id="ledsmidi"></li>
 						<li><span class="insp_label">mode</span> <select type="menu" name="mode" class="menu check_local" id="ledsmode"><option>note</option><option>cc</option></select></li>
-						<li class="mono"><span class="insp_label"><input name="onoff" type="checkbox" class="check" value="no" id="ledonoff"/><label for="ledonoff" id="ledonoff_label">on/off</label></li>
+						<li class="mono"><span class="insp_label"><input name="onoff" type="checkbox" class="check" value="no" id="ledonoff"><label for="ledonoff" id="ledonoff_label">on/off</label></span></li>
 					</ul>
 					<ul class="rgb">
-						<li class="rgb"><input name="red" type="checkbox" class="check" value="no" id="redonoff"/><label for="redonoff" id="redonoff_label">R</label></li>
-						<li class="rgb"><input name="green" type="checkbox" class="check" value="no" id="greenonoff"/><label for="greenonoff" id="greenonoff_label">G</label></li>
-						<li class="rgb"><input name="blue" type="checkbox" class="check" value="no" id="blueonoff"/><label for="blueonoff" id="blueonoff_label">B</label></li>
+						<li class="rgb"><input name="red" type="checkbox" class="check" value="no" id="redonoff"><label for="redonoff" id="redonoff_label">R</label></li>
+						<li class="rgb"><input name="green" type="checkbox" class="check" value="no" id="greenonoff"><label for="greenonoff" id="greenonoff_label">G</label></li>
+						<li class="rgb"><input name="blue" type="checkbox" class="check" value="no" id="blueonoff"><label for="blueonoff" id="blueonoff_label">B</label></li>
 						<!--<li><input type="submit" value="update" class="submitbtn" /></li>-->
 					</ul>
 					</form>
@@ -473,15 +478,15 @@
 			<!--midi sender-->
 			<div name="send_insp" id="send_div" class="inspector" style="margin-top:3%">
 				<h4>send MIDI</h4>
-				<form action="#" id="sendmidi" method="get">
+				<form action="http://lividserver.com/editor/#" id="sendmidi" method="get">
 				<ul class="listv">
-				<li><span class="insp_label">note/cc#</span> <input name="nn" type="text" class="textfield check_local" id="sendnote"/></li>
-				<li><span class="insp_label">vel/val#</span> <input name="vel" type="text" class="textfield check_local" id="sendval"/></li>
+				<li><span class="insp_label">note/cc#</span> <input name="nn" type="text" class="textfield check_local" id="sendnote"></li>
+				<li><span class="insp_label">vel/val#</span> <input name="vel" type="text" class="textfield check_local" id="sendval"></li>
 				<li><span class="insp_label">channel</span> <select type="menu" name="bankchs_2" class="menu ch check_local" id="sendch"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option></select>
 				<!--<input name="ch" type="text" class="textfield" id="sendch"/>-->
 				</li>
 				<li><span class="insp_label">mode</span> <select type="menu" name="mode" class="menu check_local" id="sendmode"><option>note</option><option>cc</option></select></li>
-				<li><input type="submit" value="send" class="submitbtn" style="float:right"/></li>
+				<li><input type="submit" value="send" class="submitbtn" style="float:right"></li>
 				</ul>
 				</form>
 			</div>
@@ -561,16 +566,16 @@
 		
         <!--login panel-->
 		<div id="login" class="usermanage">
-			 <span class="closex"><a href="#" class="close_modal">X</a></span>
+			 <span class="closex"><a href="http://lividserver.com/editor/#" class="close_modal">X</a></span>
 			<h4 style="float: left">login</h4><span class="proto" style="color:red;">(not currently functional)</span>
-			<form action="#" id="loginform" method="get">
+			<form action="http://lividserver.com/editor/#" id="loginform" method="get">
 			<ul class="listv">
-			<li>username <input name="nn" type="text" class="textfield" id="username" style="width:8em;"/></li>
-			<li>password <input name="nn" type="text" class="textfield" id="password" style="width:8em;"/></li>
+			<li>username <input name="nn" type="text" class="textfield" id="username" style="width:8em;"></li>
+			<li>password <input name="nn" type="text" class="textfield" id="password" style="width:8em;"></li>
 			<li>
-				<span style="float: left"><a href="#" class="show_register">register </a></span>
-				<span style="float: left">|<a href="#" id="recoverpwd"> get password</a></span>
-				<input type="button" value="log in" name="loginbtn" class="submitbtn" id="login_btn" />
+				<span style="float: left"><a href="http://lividserver.com/editor/#" class="show_register">register </a></span>
+				<span style="float: left">|<a href="http://lividserver.com/editor/#" id="recoverpwd"> get password</a></span>
+				<input type="button" value="log in" name="loginbtn" class="submitbtn" id="login_btn">
 			</li>
 			</ul>
 			</form>
@@ -578,31 +583,31 @@
 		
 		<!--reg panel-->
 		<div id="register" class="usermanage">
-			 <span class="closex"><a href="#" class="close_modal">X</a></span>
+			 <span class="closex"><a href="http://lividserver.com/editor/#" class="close_modal">X</a></span>
 			<h4 style="float: left">register</h4><span class="proto" style="color:red;">(not currently functional)</span>
-			<form action="#" id="loginform" method="get">
+			<form action="http://lividserver.com/editor/#" id="loginform" method="get">
 			<ul class="listv">
-			<li>username <input name="nn" type="text" class="textfield" id="username" style="width:8em;"/></li>
-			<li>password <input name="nn" type="text" class="textfield" id="password" style="width:8em;"/></li>
+			<li>username <input name="nn" type="text" class="textfield" id="username" style="width:8em;"></li>
+			<li>password <input name="nn" type="text" class="textfield" id="password" style="width:8em;"></li>
 			<li>
-				<span style="float: left"><a href="#" class="show_login">login </a></span>
-				<input type="button" value="register" name="registerbtn" class="submitbtn" id="reg_btn" />
+				<span style="float: left"><a href="http://lividserver.com/editor/#" class="show_login">login </a></span>
+				<input type="button" value="register" name="registerbtn" class="submitbtn" id="reg_btn">
 			</li>
 			</ul>
 			</form>
 		</div>
 		
 		<div id="register_thanks" class="usermanage">
-			<h4 style="float: left">You'll soon receive an email to confirm your registration.<br />
-			You'll then be able to add more info to your profile.</h4><br />
+			<h4 style="float: left">You'll soon receive an email to confirm your registration.<br>
+			You'll then be able to add more info to your profile.</h4><br>
 			<span class="proto" style="color:red;">(not currently functional)</span>
-			<input type="button" value="close" name="close" class="submitbtn close_modal" id="close_btn" style="float: right" />
+			<input type="button" value="close" name="close" class="submitbtn close_modal" id="close_btn" style="float: right">
 		</div>
 		
 		<div id="recoverpwd_note" class="usermanage">
-			<h4 style="float: left">You'll soon receive an email with a new password.</h4><br />
+			<h4 style="float: left">You'll soon receive an email with a new password.</h4><br>
 			<span class="proto" style="color:red;">(not currently functional)</span>
-			<input type="button" value="close" name="close" class="submitbtn close_modal" id="close_btn" style="float: right" />
+			<input type="button" value="close" name="close" class="submitbtn close_modal" id="close_btn" style="float: right">
 		</div>
 		
         <div id="result_details" class="usermanage">
@@ -614,35 +619,37 @@
     	
     	<!--used if in debug mode-->
     	<div id="testbuttons">
-			<form action="#" id="printlivid" method="get">
-			<input type="submit" value="print livid" class="submitbtn" />
+			<form action="http://lividserver.com/editor/#" id="printlivid" method="get">
+			<input type="submit" value="print livid" class="submitbtn">
 			</form>
-			<form action="#" id="printsx" method="get">
-			<input type="submit" value="print sx" class="submitbtn" />
+			<form action="http://lividserver.com/editor/#" id="printsx" method="get">
+			<input type="submit" value="print sx" class="submitbtn">
 			</form>
-			<form action="#" id="product" method="get">
-			<input type="submit" value="product" class="submitbtn" />
+			<form action="http://lividserver.com/editor/#" id="product" method="get">
+			<input type="submit" value="product" class="submitbtn">
 			</form>
-			<form action="#" id="writefile" method="get">
-			<input type="submit" value="write json file" class="submitbtn" />
+			<form action="http://lividserver.com/editor/#" id="writefile" method="get">
+			<input type="submit" value="write json file" class="submitbtn">
 			</form>
       </div>
       <!--end debug div mode-->
 </div> <!--end "create_container" div-->
 
 <!-- MIDI i/o plugin-->		
-		<object id="Jazz1" classid="CLSID:1ACE1618-1C7D-4561-AEE1-34842AA85E90" class="hidden">
+	<!--	<object id="Jazz1" classid="clsid:1ACE1618-1C7D-4561-AEE1-34842AA85E90" class="hidden">
 		  <object id="Jazz2" type="audio/x-jazz" class="hidden">
 		  <div id="pluginwarning">
 		  For this MIDI application to work,<br>
 		  you'll need to download and install the<br>
-		  <a href="http://jazz-soft.net">Jazz-Plugin</a>
-		  <span id="chromeo"></span>
+		  <a href="http://jazz-soft.net/">Jazz-Plugin</a>
+		 <span id="chromeo">Chrome users, make sure you enable NPAPI plugins. Enter chrome://flags/#enable-npapi in the location bar.</span>
 		  </div>
 		  </object>
 		</object>
+	!revision: reimplement me. It's nice to provide the jazz link when jazz does not exist on the system'
+	-->
 		
-		<script><!--
+		<script> <!--
 		var Jazz = document.getElementById("Jazz1"); if(!Jazz || !Jazz.isJazz) Jazz = document.getElementById("Jazz2");
 		if(Jazz && Jazz.isJazz){
 			var version = Number(Jazz.version);
@@ -653,7 +660,7 @@
 				alertbox(msg,1);
 			}
 			
-		}
-		--></script>
-    </body>
-</html>
+		}	
+		--> </script>
+    
+</body></html>
