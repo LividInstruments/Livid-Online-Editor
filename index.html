@@ -17,6 +17,11 @@
         <script src="js/midiio.js"></script>
         <script src="js/jquery-1.11.0.min.js"></script>
         <script src="js/jquery-ui-1.10.4.custom.min.js"></script>
+		<script>
+			function ReloadLocation() {
+				location.reload();
+			}
+		</script>
 
         <script src="js/tag-it.js"></script>
 		<script type="text/javascript" charset="utf-8">
@@ -162,11 +167,10 @@
 		<ul id="navigation" class="topnav">
 			<li><img src="livid_logo_corner.png" style="margin-right:2em"> </li>
 			<!--<li><a href="#" class="show_login">login</a></li>-->
-			<li>  <a href="http://wiki.lividinstruments.com/wiki/Online_Editor">manual</a></li>
-			<li> | <a href="http://lividinstruments.com/helpdesk/open.php?">report problem</a></li>
- 			<li> | <a href="http://lividserver.com/editor/index.html">reload page</a></li>
-			<li> | <a href="http://lividserver.com/editor/src.zip">source (offline)</a></li>
-			<li id="fwupdate" style="visibility:hidden"> | <a href="http://wiki.lividinstruments.com/wiki/Updating_Your_Firmware">firmware update</a></li>
+			<li>  <a href="https://web.archive.org/web/20150819021230/http://wiki.lividinstruments.com/wiki/Online_Editor">manual</a></li>		
+			<li> | <a onclick="ReloadLocation()">reload page</a></li>
+			<li> | <a href="https://github.com/LividInstruments/Livid-Online-Editor/archive/refs/heads/master.zip">source (offline)</a></li>
+			<li> | <a href="https://web.archive.org/web/20150511092429/http://wiki.lividinstruments.com/wiki/Updating_Your_Firmware">firmware update</a></li>
 		</ul>		
 			<div id="saveanddefaults" style="margin-left:1em;visibility:hidden;">
 				<ul id="saveul" class="topnav" style="margin: 0px">
